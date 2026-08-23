@@ -1,6 +1,8 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { NAV_ITEMS } from '@/content/nav';
 import { BRAND, CONTACT } from '@/content/site';
+import { LOGO } from '@/content/media';
 import { FOOTER_CREDIT_PLACEHOLDER } from '@/content/placeholders';
 import { Marquee } from '@/components/motion';
 
@@ -36,6 +38,13 @@ export function Footer() {
 
       <div className="shell grid gap-12 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-5">
+          <Image
+            src={LOGO.markLarge}
+            alt={LOGO.alt}
+            width={512}
+            height={512}
+            className="mb-7 h-20 w-20"
+          />
           <p className="display text-[clamp(1.75rem,4vw,2.75rem)]">
             {BRAND.wordmark.map((line) => (
               <span key={line} className="block">

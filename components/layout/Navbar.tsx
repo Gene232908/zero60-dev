@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion';
 import { NAV_ITEMS } from '@/content/nav';
+import { LOGO } from '@/content/media';
 import { DUR, EASE } from '@/components/motion/motion-tokens';
 import { useReducedMotionSafe } from '@/components/motion/use-reduced-motion';
 import { MobileMenu } from './MobileMenu';
@@ -58,15 +60,23 @@ export function Navbar() {
             aria-label="Primary"
             className="shell flex items-center justify-between gap-6 py-5 md:py-6"
           >
-            {/* Wordmark — small by design; the hero carries the brand voice. */}
+            {/* Brand mark — small by design; the hero carries the brand voice. */}
             <Link
               href="/"
-              className="display text-[0.95rem] leading-none tracking-[-0.02em] text-fg"
-              aria-label="ZeroSixtyThree — home"
+              className="group flex items-center gap-2.5"
+              aria-label="Zero-Sixty-Three Productions — home"
             >
-              <span className="text-accent">063</span>
-              <span className="ml-1.5 text-fg-muted">/</span>
-              <span className="ml-1.5 hidden sm:inline">ZEROSIXTYTHREE</span>
+              <Image
+                src={LOGO.mark}
+                alt=""
+                width={160}
+                height={160}
+                priority
+                className="h-8 w-8 shrink-0 md:h-9 md:w-9"
+              />
+              <span className="display hidden text-[0.9rem] leading-none tracking-[-0.02em] text-fg sm:inline">
+                ZERO-SIXTY-THREE
+              </span>
             </Link>
 
             {/* Desktop nav */}
