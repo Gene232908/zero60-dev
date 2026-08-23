@@ -1,0 +1,84 @@
+rules_version = '2';
+
+// =============================================================================
+// ZeroSixtyThree — Firestore security rules
+// docs/plan.md §4 Milestone 3 (Developer 1, HARD)
+//
+// The rule the whole project rests on:
+//   "public may CREATE a validated inquiry only; read/update/delete are
+//    admin-only."
+//
+// This is the guardrail Developer 2's admin side depends on. A visitor can post
+// an enquiry and nothing else — they cannot list other people's enquiries, edit
+// their own after the fact, or delete anything.
+//
+// NOTE: the Admin SDK used by /api/inquiry bypasses these rules entirely, which
+// is why that route validates against the shared Zod schema before writing.
+// These rules protect the *direct client* path. Both layers are required.
+//
+// Deploy:  firebase deploy --only firestore:rules
+// =============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- Identity -----------------------------------------------------------
+    // Admin is a custom claim, not an email allowlist — claims cannot be spoofed
+    // by the client and can be revoked centrally.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // ---- Inquiry shape validation ------------------------------------------
+    // Mirrors lib/validation/inquiry.ts. If the approved field list changes
+    // (BLOCKER B13), change it in BOTH places.
+    function isValidInquiry(data) {
+      return data.keys().hasAll(['name', 'email', 'mobile', 'eventType', 'services', 'source', 'status', 'createdAt', 'fromWebsite'])
+        && data.keys().hasOnly(['name', 'email', 'mobile', 'eventType', 'date', 'location', 'services', 'guests', 'notes', 'source', 'status', 'createdAt', 'fromWebsite'])
+
+        // Required fields, with the same bounds the Zod schema enforces.
+        && data.name is string && data.name.size() >= 2 && data.name.size() <= 120
+        && data.email is string && data.email.size() <= 200 && data.email.matches('.*@.*[.].*')
+        && data.mobile is string && data.mobile.size() >= 6 && data.mobile.size() <= 32
+        && data.eventType is string && data.eventType.size() <= 80
+        && data.services is list && data.services.size() >= 1 && data.services.size() <= 20
+        && data.source in ['productions', 'society']
+
+        // Server-stamped fields. A submitter must not be able to forge a status
+        // of 'paid', backdate an enquiry, or deny it came from the website.
+        && data.status == 'new'
+        && data.createdAt is string
+        && data.fromWebsite == true
+
+        // Optional fields, bounded when present.
+        && (!('date' in data.keys()) || (data.date is string && data.date.size() <= 10))
+        && (!('location' in data.keys()) || (data.location is string && data.location.size() <= 200))
+        && (!('guests' in data.keys()) || (data.guests is int && data.guests >= 1 && data.guests <= 1000000))
+        && (!('notes' in data.keys()) || (data.notes is string && data.notes.size() <= 2000));
+    }
+
+    // ---- Inquiries: public may create a valid one, nothing more -------------
+    match /inquiries/{inquiryId} {
+      allow create: if isValidInquiry(request.resource.data);
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ---- Booking records: admin only ---------------------------------------
+    // Status, amount collected and the returning-customer flag all live here.
+    // Developer 2's admin side reads and writes these once authenticated.
+    match /bookings/{bookingId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ---- Customer records: admin only --------------------------------------
+    match /customers/{customerId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ---- Default deny -------------------------------------------------------
+    // Anything added later is closed until somebody deliberately opens it.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

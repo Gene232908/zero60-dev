@@ -45,6 +45,22 @@ Status legend: 🔴 blocking now · 🟠 blocks an upcoming milestone · ✅ rec
 | B8 | Collaboration / partner logos + which projects sit under each | Collaborations page (Dev 2) |
 | B9 | YouTube account access — **typed by management themselves** on the dev machine | Upload session, then the video links Dev 2 needs for the lite embeds |
 
+## 🔴 Milestone 3 — built, but switched off pending credentials
+
+The booking form, the Firestore structure, the security rules and the email
+notification are all **built and verified**. The flow is inert only because three
+values are missing. Supply them and it goes live with no code change:
+
+| Need | Variable(s) | What happens without it |
+|---|---|---|
+| Firebase **service account** | `FIREBASE_ADMIN_*` | `/api/inquiry` answers `503` with "not fully configured yet". Nothing is silently lost |
+| **SMTP** credentials | `SMTP_*` | The enquiry still saves; the notification email is skipped and the failure is logged |
+| **Notification mailbox** | `INQUIRY_NOTIFICATION_EMAIL` | As above |
+
+Verified today without credentials: invalid submissions return `422` with per-field
+messages, bot submissions are silently absorbed by the honeypot, and a valid
+submission returns the `503` above rather than pretending to succeed.
+
 ## 🟠 Milestone 3
 
 | # | Item | Blocks |

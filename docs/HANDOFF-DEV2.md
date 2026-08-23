@@ -132,3 +132,46 @@ Collaborations and Contact are all `productions`.
 `docs/ASSET-REQUEST.md` §62 — the supplied logo is white and lime, so it disappears against the 063
 Society off-white background. We need a dark variant before Society mode reaches the header and footer.
 Affects your Contact page too, if it ever runs in Society mode.
+
+---
+
+## 6. Milestone 3 additions — what the admin side connects to
+
+The inquiry flow is built. Your admin screens read the collections it writes.
+
+### Collections — `lib/firebase/collections.ts`
+Import `COLLECTIONS`; never hardcode a collection name.
+
+| Collection | Who can touch it |
+|---|---|
+| `inquiries` | Public may **create** a validated document. Read/update/delete: **admin only** |
+| `bookings` | Admin only |
+| `customers` | Admin only |
+
+`BookingRecord` and `CustomerRecord` types are in the same file, including
+`amountCollected`, `fromWebsite` and `returningCustomer` — the fields your
+partnership computation and Returning Customer tag need.
+
+### Security rules — `firestore.rules`
+Admin is a **custom claim** (`request.auth.token.admin == true`), not an email
+allowlist. Your admin login must mint that claim, or every admin read fails.
+Deploy with `firebase deploy --only firestore:rules`.
+
+There is a default-deny catch-all at the bottom. Any collection you add is closed
+until you deliberately open it.
+
+### Booking status — `lib/booking/status.ts`
+`BOOKING_STATUSES` is the single source of truth (New / Confirmed / Paid /
+Cancelled / Refunded). Marco may cut this to New/Paid/Cancelled — plan.md R-5
+requires that to be a one-line edit, so drive your status control off this array
+rather than hardcoding options.
+
+### The partnership computation is yours
+Task Division Rev 2 p.4 assigns it to you (HARD). I have deliberately not
+implemented it — the M3 scope guard fails my build if I do. `REVENUE_STATUSES`
+in `lib/booking/status.ts` records which statuses qualify, so we agree on the
+input; the arithmetic and the cap are yours.
+
+### Environment variables
+See `.env.example` for every name. Values come from me, never from the client
+directly, and never into git.

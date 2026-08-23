@@ -46,3 +46,6 @@ loop-engineering/
 # Gate run artifacts (regenerated every run)
 .claude/last-report.txt
 .claude/loop-state.json
+
+# ...but the example file must be committed (names only, no values)
+!.env.example
