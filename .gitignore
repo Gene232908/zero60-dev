@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Cloned skill repo — has its own .git, not part of this project
+loop-engineering/
+
+# Gate run artifacts (regenerated every run)
+.claude/last-report.txt
+.claude/loop-state.json
