@@ -2,7 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { KineticHeading, Parallax, Reveal } from '@/components/motion';
 import { BrandProvider } from '@/components/layout/BrandProvider';
-import { DUAL_BRAND_PLACEHOLDER } from '@/content/placeholders';
+import { BRAND } from '@/content/site';
+import { PLACEHOLDER_IMAGES, SOCIETY_PLACEHOLDER } from '@/content/placeholders';
 
 /**
  * DualBrandSplit — the signature section of the landing page.
@@ -16,9 +17,35 @@ import { DUAL_BRAND_PLACEHOLDER } from '@/content/placeholders';
  *
  * Aligned, but distinct — proving the token system works before Milestone 2
  * builds the full 063 Society page on top of it.
+ *
+ * Note the content asymmetry: the Productions copy is the client's own, from the
+ * live site. Nothing about 063 Society exists in the supplied material, so that
+ * half is honestly labelled placeholder (BLOCKER B4).
  */
 
-type Panel = typeof DUAL_BRAND_PLACEHOLDER.productions;
+type Panel = {
+  name: string;
+  mood: string;
+  blurb: string;
+  href: string;
+  image: { src: string; alt: string };
+};
+
+const PRODUCTIONS: Panel = {
+  name: '063 Productions',
+  mood: 'Rugged',
+  blurb: BRAND.intro,
+  href: '/services',
+  image: PLACEHOLDER_IMAGES.productions,
+};
+
+const SOCIETY: Panel = {
+  name: SOCIETY_PLACEHOLDER.name,
+  mood: SOCIETY_PLACEHOLDER.mood,
+  blurb: SOCIETY_PLACEHOLDER.blurb,
+  href: '/society',
+  image: PLACEHOLDER_IMAGES.society,
+};
 
 function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
   return (
@@ -47,7 +74,7 @@ function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
 
       <div className="pt-24">
         <KineticHeading lines={[panel.name]} size="md" className="mb-6" />
-        <p className="max-w-[38ch] text-sm leading-relaxed text-fg-muted">{panel.blurb}</p>
+        <p className="max-w-[42ch] text-sm leading-relaxed text-fg-muted">{panel.blurb}</p>
 
         <span className="mt-8 inline-flex items-center gap-3 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-fg">
           Enter
@@ -64,8 +91,6 @@ function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
 }
 
 export function DualBrandSplit() {
-  const { productions, society } = DUAL_BRAND_PLACEHOLDER;
-
   return (
     <section aria-label="The two houses" className="relative">
       <Reveal variant="fade" weight="tertiary" className="shell py-10">
@@ -78,11 +103,11 @@ export function DualBrandSplit() {
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Same component, same markup — only the brand token map differs. */}
         <BrandProvider brand="productions" className="border-b border-line lg:border-b-0 lg:border-r">
-          <BrandPanel panel={productions} index="01" />
+          <BrandPanel panel={PRODUCTIONS} index="01" />
         </BrandProvider>
 
         <BrandProvider brand="society">
-          <BrandPanel panel={society} index="02" />
+          <BrandPanel panel={SOCIETY} index="02" />
         </BrandProvider>
       </div>
     </section>

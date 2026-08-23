@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { KineticHeading, MagneticButton, Parallax, Reveal } from '@/components/motion';
-import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
+import { PLACEHOLDER_IMAGES, SOCIETY_PLACEHOLDER } from '@/content/placeholders';
 
 /**
  * 063 Society — elegant mode (data-brand="society", set in ./layout.tsx).
@@ -34,9 +34,7 @@ export default function SocietyPage() {
           <div className="max-w-[46ch]">
             <Reveal variant="rise" weight="secondary">
               <p className="border-t border-line pt-5 text-sm leading-relaxed text-fg-muted">
-                PLACEHOLDER — 063 Society introduction. Final copy, service categories
-                (weddings, corporate, event programme support, music &amp; entertainment,
-                AV/production) and photography arrive in Milestone 2 (BLOCKERS B2, B4).
+                {SOCIETY_PLACEHOLDER.intro}
               </p>
             </Reveal>
 

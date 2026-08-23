@@ -31,8 +31,8 @@ const SIZE: Record<KineticSize, string> = {
 };
 
 export interface KineticHeadingProps {
-  /** One string per visual line. */
-  lines: string[];
+  /** One string per visual line. Readonly so `as const` content arrays fit. */
+  lines: readonly string[];
   as?: ElementType;
   size?: KineticSize;
   /** Scroll-linked horizontal drift in px (0 disables). */

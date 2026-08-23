@@ -8,35 +8,42 @@ Status legend: 🔴 blocking now · 🟠 blocks an upcoming milestone · ✅ rec
 
 ---
 
-## Confirmed — no longer blocking
+## ✅ Received — no longer blocking
 
-| Item | Value | Source |
+| Item | Value / location | Source |
 |---|---|---|
 | ✅ Theme colours | `#ADFF2A` lime · `#FFFFFF` white · `#000000` black | Client call + Task Division Rev 2 p.2 |
 | ✅ Database | Firebase, Spark (free) tier — not Supabase | Client call |
 | ✅ Hosting | Vercel (free tier) | Client call + Task Division Rev 2 |
 | ✅ Domain decision | Connect existing `zerosixtythree.com` in M4 (Rev 2 supersedes the v1 "Vercel URL only" note) | Task Division Rev 2 p.1 / p.5 |
+| ✅ **Brand story / "What we do" copy** | `content/site.ts` → `BRAND.intro`, `BRAND.tagline` | Live-site export, 2026-08-23 |
+| ✅ **Service descriptions (063 Productions)** | `content/site.ts` → `SERVICES` — all 8 lines, verbatim | Live-site export |
+| ✅ **Event categories** | `content/site.ts` → `EVENT_TYPES` — 6 types with their provisions, verbatim | Live-site export |
+| ✅ **Testimonials** | `content/site.ts` → `TESTIMONIALS` — 3, verbatim. Handed to Dev 2 for the Testimonials page | Live-site export |
+| ✅ **Contact details** | `content/site.ts` → `CONTACT`: +971 58 512 4365 · info@zerosixtythree.com · www.zerosixtythree.com | Live-site export |
+| ✅ **Bookable service list** | `content/site.ts` → `BOOKABLE_SERVICES` — seeds the M3 form's "requested services" field | Live-site contact section |
+| ✅ Firebase web config | Stored in gitignored `.env.local` (project `zero60dev`) — see B10a before relying on it | Developer 1, 2026-08-23 |
 
 ---
 
-## 🔴 Milestone 1 — blocking now
+## 🔴 Blocking now
 
 | # | Item | Why it blocks | Current stand-in |
 |---|---|---|---|
-| B1 | **Logo files** — ZeroSixtyThree **and** 063 Society (PDF / hi-res) | Cannot finalise the wordmark lockup, favicon or nav mark | Type-set wordmark from the confirmed palette |
-| B2 | **Sample photos** for visual direction | Hero, dual-brand split and work index all have image slots | Labelled SVG frames in `public/placeholders/` |
+| B1 | **Logo files** — ZeroSixtyThree **and** 063 Society (vector / PDF / hi-res) | The circular mic-and-headphones badge is visible in the supplied screenshots but only as flattened raster. Cannot produce the favicon, nav mark, or `StickerSpin` seal without the source art | Type-set wordmark in the confirmed palette |
+| B2 | **Original photography** | ⚠️ The supplied `current website/` files are **flattened section screenshots with the headings and body copy baked into the JPEGs**. They were perfect for transcribing the copy, but they cannot be used as site imagery — they would render the OLD site's text inside the new one. Un-composited source images are still needed | Labelled SVG frames in `public/placeholders/` |
 | B3 | **Footer credit banner** — our agency name, logo asset and destination URL | The "Developed by" banner is a contracted M1 deliverable | Renders the banner with an inert, labelled placeholder — no invented URL |
+| B4 | **063 Society — everything** | The supplied material covers 063 Productions only. No Society copy, service categories, or imagery exists anywhere in the source. This is the M2 HARD task and it is fully blocked | `SOCIETY_PLACEHOLDER` in `content/placeholders.ts` |
+| B5 | **Social profile URLs** | The live site shows Facebook and Instagram icons but exposes no links | Inert labels, no invented hrefs |
+| B6 | **City / office location** | Only the `+971` dialing code is evidenced, so the site says "United Arab Emirates". A specific city would be an invention | Region only |
 
 ## 🟠 Milestone 2
 
 | # | Item | Blocks |
 |---|---|---|
-| B4 | Final service descriptions (063 Productions **and** 063 Society) | Services page, Society page, ticker copy |
-| B5 | Portfolio photos + videos | Portfolio gallery (Dev 2), work index imagery |
-| B6 | Testimonials | Portfolio/Testimonials page (Dev 2) |
-| B7 | Collaboration / partner logos + which projects sit under each | Collaborations page (Dev 2) |
-| B8 | YouTube account access — **typed by management themselves** on the dev machine | Upload session, then the video links Dev 2 needs for the lite embeds |
-| B9 | Brand story copy for About | About page |
+| B7 | Portfolio photos + videos | Portfolio gallery (Dev 2) |
+| B8 | Collaboration / partner logos + which projects sit under each | Collaborations page (Dev 2) |
+| B9 | YouTube account access — **typed by management themselves** on the dev machine | Upload session, then the video links Dev 2 needs for the lite embeds |
 
 ## 🟠 Milestone 3
 
@@ -47,9 +54,9 @@ Status legend: 🔴 blocking now · 🟠 blocks an upcoming milestone · ✅ rec
 | B10b | **Firebase Admin service-account** credentials (project id, client email, private key) | Server-side validated inquiry writes |
 | B11 | **SMTP** credentials — host, port, user, password, sender | Nodemailer notification route |
 | B12 | Notification email address that receives new inquiries | Email template target |
-| B13 | Final booking/admin field list | Locks the inquiry schema and the validated-create security rule |
+| B13 | Final booking/admin field list | Locks the inquiry schema and the validated-create security rule. `BOOKABLE_SERVICES` is a starting point taken from the live contact section |
 
-> All of B10–B12 are **environment variables only**. Never committed. See `.env.example` when M3 opens.
+> All of B10–B12 are **environment variables only**. Never committed.
 
 ## 🟠 Milestone 4
 
