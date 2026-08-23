@@ -2,8 +2,8 @@ import { Hero } from '@/components/sections/Hero';
 import { ServiceTicker } from '@/components/sections/ServiceTicker';
 import { Manifesto } from '@/components/sections/Manifesto';
 import { DualBrandSplit } from '@/components/sections/DualBrandSplit';
-import { WorkIndex } from '@/components/sections/WorkIndex';
-import { CapabilitiesLedger } from '@/components/sections/CapabilitiesLedger';
+import { EventIndex } from '@/components/sections/EventIndex';
+import { ServicesLedger } from '@/components/sections/ServicesLedger';
 import { FinalCTA } from '@/components/sections/FinalCTA';
 
 /**
@@ -13,13 +13,16 @@ import { FinalCTA } from '@/components/sections/FinalCTA';
  * every section changes the shape of the page rather than repeating
  * image → title → paragraph → button.
  *
- *   Hero                opening composition, oversized type, asymmetric
- *   ServiceTicker       dense full-bleed seam
- *   Manifesto           near-empty, one huge statement
- *   DualBrandSplit      the two moods side by side — the signature section
- *   WorkIndex           structured editorial list, imagery on hover
- *   CapabilitiesLedger  sticky heading + dense rows, closing full-bleed visual
- *   FinalCTA            the climax
+ *   Hero            opening composition, oversized type, asymmetric
+ *   ServiceTicker   dense full-bleed seam
+ *   Manifesto       near-empty, one huge statement
+ *   DualBrandSplit  the two moods side by side — the signature section
+ *   EventIndex      structured editorial list, imagery on hover
+ *   ServicesLedger  sticky heading + dense rows, closing full-bleed visual
+ *   FinalCTA        the climax
+ *
+ * All copy is the client's own, transcribed from the live site into
+ * content/site.ts. Imagery is still labelled placeholder (BLOCKER B2).
  *
  * The lower landing sections (services preview, about preview, CTA block,
  * footer content) and the composed landing scroll choreography are Developer 2's
@@ -34,8 +37,8 @@ export default function HomePage() {
       <ServiceTicker />
       <Manifesto />
       <DualBrandSplit />
-      <WorkIndex />
-      <CapabilitiesLedger />
+      <EventIndex />
+      <ServicesLedger />
       <FinalCTA />
     </>
   );

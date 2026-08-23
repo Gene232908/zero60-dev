@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { KineticHeading, MagneticButton, Parallax, Reveal, StickerSpin } from '@/components/motion';
-import { HERO_PLACEHOLDER, PLACEHOLDER_IMAGES } from '@/content/placeholders';
+import { BRAND, CONTACT } from '@/content/site';
+import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
 
 /**
  * Hero — the opening visual composition (design brief §7, §8).
@@ -9,6 +10,10 @@ import { HERO_PLACEHOLDER, PLACEHOLDER_IMAGES } from '@/content/placeholders';
  * deliberately runs past the right edge of the type column, the image slot
  * overlaps it, and the bottom rail carries the small supporting facts. The
  * empty upper-right quadrant is intentional — the composition needs the air.
+ *
+ * Copy is the client's own, from the live site. Imagery is still a labelled
+ * placeholder: the supplied section exports are flattened screenshots with the
+ * text baked in, so they cannot be used as photography (BLOCKER B2).
  *
  * Entrance is choreographed, not simultaneous (§8):
  *   0.05s  meta rail
@@ -26,9 +31,9 @@ export function Hero() {
       {/* --- top meta rail --- */}
       <Reveal variant="fade" weight="tertiary" delay={0.05} className="shell">
         <div className="flex items-start justify-between gap-6 border-b border-line pb-4">
-          <p className="eyebrow max-w-[16ch]">{HERO_PLACEHOLDER.location}</p>
-          <p className="eyebrow hidden max-w-[24ch] text-right sm:block">{HERO_PLACEHOLDER.meta}</p>
-          <p className="eyebrow text-right">{HERO_PLACEHOLDER.since}</p>
+          <p className="eyebrow max-w-[16ch]">{CONTACT.region}</p>
+          <p className="eyebrow hidden text-center sm:block">{BRAND.suffix}</p>
+          <p className="eyebrow text-right">{CONTACT.website}</p>
         </div>
       </Reveal>
 
@@ -38,12 +43,17 @@ export function Hero() {
         <div className="col-span-12 lg:col-span-8">
           <KineticHeading
             as="h1"
-            lines={HERO_PLACEHOLDER.wordmark}
+            lines={BRAND.wordmark}
             size="mega"
             delay={0.25}
             className="relative z-10 -ml-[0.06em]"
-            lineClassName="text-fg"
+            lineClassName="text-fg [&:last-child]:text-accent"
           />
+          <Reveal variant="rise" weight="tertiary" delay={0.5}>
+            <p className="display mt-2 text-[clamp(0.9rem,2.2vw,1.9rem)] tracking-[0.34em] text-fg-muted">
+              {BRAND.suffix}
+            </p>
+          </Reveal>
         </div>
 
         {/* Image slot — overlaps the type on desktop, sits below it on mobile. */}
@@ -66,7 +76,7 @@ export function Hero() {
 
         {/* Rotating seal, tucked into the negative space. */}
         <div className="pointer-events-none absolute bottom-0 right-[38%] hidden lg:block">
-          <StickerSpin text="063 · ZEROSIXTYTHREE · 063 · ZEROSIXTYTHREE · " size={124} />
+          <StickerSpin text="ZERO-SIXTY-THREE &#183; PRODUCTIONS &#183; " size={124} />
         </div>
       </div>
 
@@ -74,12 +84,18 @@ export function Hero() {
       <div className="shell">
         <div className="flex flex-col gap-8 border-t border-line pt-6 md:flex-row md:items-end md:justify-between">
           <Reveal variant="rise" weight="secondary" delay={0.55} className="max-w-[46ch]">
-            <p className="text-sm leading-relaxed text-fg-muted">{HERO_PLACEHOLDER.strapline}</p>
+            <p className="text-sm leading-relaxed text-fg-muted">{BRAND.tagline}</p>
           </Reveal>
 
-          <Reveal variant="rise" weight="tertiary" delay={0.7} stagger="tight" className="flex flex-wrap items-center gap-4">
+          <Reveal
+            variant="rise"
+            weight="tertiary"
+            delay={0.7}
+            stagger="tight"
+            className="flex flex-wrap items-center gap-4"
+          >
             <MagneticButton href="/contact" cursorLabel="Enquire">
-              Start a conversation
+              Get in touch
             </MagneticButton>
             <MagneticButton href="/portfolio" cursorLabel="View" className="border-line">
               View portfolio
