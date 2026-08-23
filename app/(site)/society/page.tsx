@@ -1,74 +1,43 @@
-import Image from 'next/image';
-import { KineticHeading, MagneticButton, Parallax, Reveal } from '@/components/motion';
-import { PLACEHOLDER_IMAGES, SOCIETY_PLACEHOLDER } from '@/content/placeholders';
+import { SocietyHero } from '@/components/sections/SocietyHero';
+import { SocietyStatement } from '@/components/sections/SocietyStatement';
+import { SocietyCategories } from '@/components/sections/SocietyCategories';
+import { SocietyGallery } from '@/components/sections/SocietyGallery';
+import { SocietyCTA } from '@/components/sections/SocietyCTA';
 
 /**
- * 063 Society — elegant mode (data-brand="society", set in ./layout.tsx).
+ * 063 Society — Milestone 2, Developer 1 (HARD).
  *
- * Milestone 1 scope: prove the second mood exists and reads as a different world
- * while staying obviously the same brand family. The full Society page — service
- * categories, its own content layout, the complete section set — is Developer 1's
- * Milestone 2 HARD task, and it will be shown to management early for alignment.
+ * Elegant mode. `data-brand="society"` is set once on ./layout.tsx and every
+ * token beneath it re-maps: paper ground, Fraunces serif display, lime demoted
+ * to a hairline, `--motion-scale` down to 0.62, `--grain-opacity` to 0.
  *
- * Note what is NOT here: no grain (the society token sets --grain-opacity to 0),
- * no heavy grotesque, no aggressive marquee. Same components, restrained subset.
+ * This is the milestone's real argument: not one component here is
+ * Society-specific in its behaviour. The same KineticHeading, Reveal, Parallax
+ * and MagneticButton that build the rugged Productions pages build this one —
+ * they simply read the other token set. Aligned, but distinct.
+ *
+ * Composition, deliberately paced against the Productions landing:
+ *   SocietyHero        opens with air rather than impact
+ *   SocietyStatement   the pause — mostly whitespace
+ *   SocietyCategories  the five named categories as a quiet index
+ *   SocietyGallery     asymmetric two-frame composition
+ *   SocietyCTA         the quiet close
+ *
+ * ⚠️ CONTENT: every word and every image on this page is a labelled
+ * PLACEHOLDER. The client has supplied nothing for 063 Society — the only real
+ * facts are the brand name, the elegant mood, and the five category names from
+ * plan.md §4 M2. See BLOCKERS.md B4. The architecture and art direction are
+ * reviewable now; the content drops in without touching a component.
  */
 
 export default function SocietyPage() {
-  const image = PLACEHOLDER_IMAGES.society;
-
   return (
-    <section className="shell flex min-h-[92svh] flex-col justify-between pb-20 pt-36 md:pt-44">
-      <Reveal variant="fade" weight="tertiary">
-        <div className="flex items-baseline justify-between border-b border-line pb-4">
-          <p className="eyebrow">06</p>
-          <p className="eyebrow">Elegant mode &#183; data-brand=&quot;society&quot;</p>
-        </div>
-      </Reveal>
-
-      <div className="grid grid-cols-12 items-center gap-y-14 py-16">
-        <div className="col-span-12 lg:col-span-7">
-          {/* Same KineticHeading component — the serif comes from the token map. */}
-          <KineticHeading as="h1" lines={['063', 'Society']} size="xl" className="mb-10" />
-
-          <div className="max-w-[46ch]">
-            <Reveal variant="rise" weight="secondary">
-              <p className="border-t border-line pt-5 text-sm leading-relaxed text-fg-muted">
-                {SOCIETY_PLACEHOLDER.intro}
-              </p>
-            </Reveal>
-
-            <Reveal variant="rise" weight="tertiary" delay={0.1} className="mt-10">
-              <MagneticButton href="/contact" cursorLabel="Enquire">
-                Enquire
-              </MagneticButton>
-            </Reveal>
-          </div>
-        </div>
-
-        <div className="col-span-12 lg:col-span-4 lg:col-start-9">
-          <Parallax strength="subtle">
-            <Reveal variant="mask" weight="primary">
-              <div className="relative aspect-[4/5] w-full overflow-hidden">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 33vw"
-                  className="object-cover"
-                />
-              </div>
-            </Reveal>
-          </Parallax>
-        </div>
-      </div>
-
-      <Reveal variant="fade" weight="tertiary">
-        <p className="border-t border-line pt-5 text-xs leading-relaxed text-fg-faint">
-          <span className="text-accent">Status:</span> Milestone 1 delivers the elegant token
-          mode and this route. The full 063 Society page is Developer 1&apos;s Milestone 2 build.
-        </p>
-      </Reveal>
-    </section>
+    <>
+      <SocietyHero />
+      <SocietyStatement />
+      <SocietyCategories />
+      <SocietyGallery />
+      <SocietyCTA />
+    </>
   );
 }

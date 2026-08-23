@@ -38,6 +38,20 @@ export const PLACEHOLDER_IMAGES: Record<string, PlaceholderImage> = {
     height: 1750,
     placeholder: true,
   },
+  societyWide: {
+    src: '/placeholders/frame-society-b.svg',
+    alt: 'PLACEHOLDER — 063 Society wide image slot, no Society photography supplied',
+    width: 1600,
+    height: 1067,
+    placeholder: true,
+  },
+  societyTall: {
+    src: '/placeholders/frame-society-c.svg',
+    alt: 'PLACEHOLDER — 063 Society secondary image slot, no Society photography supplied',
+    width: 1200,
+    height: 1500,
+    placeholder: true,
+  },
 };
 
 /**

@@ -69,6 +69,20 @@ Status legend: 🔴 blocking now · 🟠 blocks an upcoming milestone · ✅ rec
 
 ---
 
+## Open items raised during Milestone 2
+
+- **OI-2 — Which content belongs on the Services page?** Task Division Rev 2 p.3 lists the Services
+  page as "weddings, corporate events, event program support, music & entertainment, AV/production".
+  plan.md §4 M2 assigns those same five to the **063 Society** page and describes Services as a
+  "bento-grid of the service lines". The documents disagree.
+  **Our call: follow plan.md.** `/services` shows the eight service lines the client actually
+  publishes on the live site (audio rental, singers/performers, DJ, sound engineering, sports
+  announcing, hosting/emcee, videography, photography); the five categories are on `/society`.
+  Needs management confirmation — if Rev 2 is correct, the two pages swap content.
+- **OI-3 — YouTube upload session not yet possible.** The M2 EASY task requires management to type
+  their own YouTube password on the developer machine. That session has not happened, so there are no
+  video links, and Developer 2 cannot finish the portfolio video sections. Needs scheduling.
+
 ## Open items carried from plan.md §7
 
 - **OI-1 — Domain conflict.** Task Division **v1** said "no custom domain this phase";
