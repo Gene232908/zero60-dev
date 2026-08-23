@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1750" viewBox="0 0 1400 1750" role="img" aria-label="Placeholder image slot">
+  <rect width="1400" height="1750" fill="#0A0A0A"/>
+  <g stroke="rgba(255,255,255,0.14)" stroke-width="2" fill="none">
+    <rect x="63" y="63" width="1274" height="1624"/>
+    <line x1="63" y1="63" x2="1337" y2="1687"/>
+    <line x1="1337" y1="63" x2="63" y2="1687"/>
+  </g>
+  <g stroke="#ADFF2A" stroke-width="3" fill="none">
+    <path d="M63 146.3 L63 63 L146.3 63"/>
+    <path d="M1253.7 1687 L1337 1687 L1337 1603.7"/>
+  </g>
+  <text x="50%" y="859.4" text-anchor="middle" fill="#ADFF2A" font-family="Arial Black, Arial, sans-serif" font-size="119" font-weight="900" letter-spacing="4.76">PLACEHOLDER</text>
+  <text x="50%" y="988.05" text-anchor="middle" fill="rgba(255,255,255,0.42)" font-family="Arial, sans-serif" font-size="39" letter-spacing="10.920000000000002">063 PRODUCTIONS &#183; 1400&#215;1750</text>
+  <text x="50%" y="1062.1499999999999" text-anchor="middle" fill="rgba(255,255,255,0.42)" font-family="Arial, sans-serif" font-size="31.200000000000003" letter-spacing="7.800000000000001">AWAITING CLIENT PHOTOGRAPHY</text>
+</svg>

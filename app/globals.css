@@ -1,26 +1,149 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* -----------------------------------------------------------------------------
+   Tailwind v4 theme bridge — expose the brand tokens as utilities so page code
+   can use `bg-bg`, `text-accent`, `border-line` instead of raw var() soup.
+   -------------------------------------------------------------------------- */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-lime: var(--brand-lime);
+  --color-ink-900: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-paper: var(--paper);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* -----------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+html {
+  /* Oversized display type intentionally breaks the container (design brief §2).
+     Clip sideways so it never turns into a horizontal scrollbar (§25). */
+  overflow-x: clip;
+  scroll-behavior: auto; /* Lenis owns smooth scrolling; native smooth would fight it */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: clip;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color var(--dur-slow) var(--ease-in-out),
+    color var(--dur-slow) var(--ease-in-out);
+}
+
+::selection {
+  background: var(--brand-lime);
+  color: var(--brand-black);
+}
+
+/* Keyboard focus must stay obvious on a black canvas. */
+:focus-visible {
+  outline: 2px solid var(--brand-lime);
+  outline-offset: 3px;
+}
+
+/* -----------------------------------------------------------------------------
+   Typographic primitives — the display voice swaps with the brand mode
+   -------------------------------------------------------------------------- */
+.display {
+  font-family: var(--display-family);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  line-height: var(--display-leading);
+  text-transform: var(--display-transform);
+  text-wrap: balance;
+}
+
+.eyebrow {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: clamp(0.625rem, 0.75vw, 0.75rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.hairline {
+  border: 0;
+  border-top: 1px solid var(--line);
+  width: 100%;
+}
+
+/* -----------------------------------------------------------------------------
+   Marquee track — see components/motion/Marquee.tsx
+
+   The track holds exactly two copies of the content and travels -50%, so the
+   loop closes seamlessly at any width. Animating `transform` only keeps this on
+   the compositor: no layout, no paint, no main-thread cost.
+   -------------------------------------------------------------------------- */
+@keyframes zs-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.zs-marquee-track {
+  animation: zs-marquee var(--marquee-duration, 32s) linear infinite;
+  animation-direction: var(--marquee-direction, normal);
+}
+
+/* The editorial container: wide, asymmetric-friendly, never centred-by-default. */
+.shell {
+  width: 100%;
+  padding-inline: var(--gutter);
+  margin-inline: auto;
+  max-width: 96rem;
+}
+
+/* -----------------------------------------------------------------------------
+   ACCESSIBILITY — global reduced-motion policy (docs/plan.md §2.4, non-negotiable)
+
+   Primitives degrade individually in JS (useReducedMotionSafe); this block is the
+   belt-and-braces CSS backstop so nothing animated can slip through. Content and
+   functionality are preserved — only movement is removed.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Marquees stop translating rather than snapping through their loop. */
+  [data-motion="marquee"] > * {
+    transform: none !important;
+  }
+
+  /* Grain and the custom cursor are pure decoration — remove them entirely. */
+  [data-motion="grain"],
+  [data-motion="cursor"] {
+    display: none !important;
+  }
+}
+
+/* Touch devices never get the custom cursor (design brief §18). */
+@media (hover: none), (pointer: coarse) {
+  [data-motion="cursor"] {
+    display: none !important;
+  }
 }

@@ -1,0 +1,112 @@
+/* =============================================================================
+   ZeroSixtyThree — Design Tokens
+   Milestone 1 · Developer 1 · docs/plan.md §2
+
+   ONE component library, TWO token sets, ONE accent colour.
+   Any page *or section* switches mood by setting data-brand — no new components.
+
+     data-brand="productions"  → rugged / maximalist  (063 Productions)
+     data-brand="society"      → elegant / restrained (063 Society)
+
+   Brand colours are CONFIRMED by the client: #ADFF2A / #FFFFFF / #000000.
+   Everything else here is a system-derived neutral, not a new brand colour.
+   ============================================================================= */
+
+:root {
+  /* ---- Confirmed brand palette (client-approved, do not substitute) ---- */
+  --brand-lime: #ADFF2A;
+  --brand-white: #FFFFFF;
+  --brand-black: #000000;
+
+  /* ---- System-derived neutrals (layered blacks + Society paper) ---- */
+  --ink-900: #0A0A0A;
+  --ink-800: #141414;
+  --ink-700: #1E1E1E;
+  --ink-600: #2A2A2A;
+  --paper: #F7F7F4;
+
+  /* ---- Motion tokens: one grammar for the whole site ----
+     Micro 150-300ms · UI 300-600ms · Large 600-1200ms (design brief §22) */
+  --dur-micro: 200ms;
+  --dur-fast: 320ms;
+  --dur-base: 520ms;
+  --dur-slow: 820ms;
+  --dur-cinematic: 1200ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.55, 0, 1, 0.45);
+
+  /* ---- Stagger rhythm for choreographed entrances (design brief §8) ---- */
+  --stagger-tight: 60ms;
+  --stagger-base: 110ms;
+  --stagger-loose: 180ms;
+
+  /* ---- Editorial spacing scale ---- */
+  --gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --section-y: clamp(6rem, 14vh, 14rem);
+  --measure: 62ch;
+}
+
+/* =============================================================================
+   BRAND MODE — PRODUCTIONS (rugged, maximalist, loud)
+   Black canvas · heavy grotesque display · exposed hairlines · grain · bold lime
+   ============================================================================= */
+[data-brand="productions"] {
+  --bg: var(--brand-black);
+  --bg-raised: var(--ink-800);
+  --fg: var(--brand-white);
+  --fg-muted: rgba(255, 255, 255, 0.58);
+  --fg-faint: rgba(255, 255, 255, 0.32);
+  --accent: var(--brand-lime);
+  --accent-fg: var(--brand-black);
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.28);
+  --display-family: var(--font-display), "Arial Black", sans-serif;
+  --display-weight: 800;
+  --display-tracking: -0.045em;
+  --display-leading: 0.82;
+  --display-transform: uppercase;
+  --grain-opacity: 0.055;
+  --motion-scale: 1;
+  --reveal-distance: 42px;
+  --radius: 0px;
+}
+
+/* =============================================================================
+   BRAND MODE — SOCIETY (elegant, restrained, refined)
+   Paper or near-black · high-contrast serif · generous air · lime as hairline only
+   ============================================================================= */
+[data-brand="society"] {
+  --bg: var(--paper);
+  --bg-raised: #FFFFFF;
+  --fg: var(--ink-900);
+  --fg-muted: rgba(10, 10, 10, 0.62);
+  --fg-faint: rgba(10, 10, 10, 0.38);
+  --accent: var(--brand-lime);
+  --accent-fg: var(--ink-900);
+  --line: rgba(10, 10, 10, 0.14);
+  --line-strong: rgba(10, 10, 10, 0.26);
+  --display-family: var(--font-serif), Georgia, serif;
+  --display-weight: 300;
+  --display-tracking: -0.018em;
+  --display-leading: 0.95;
+  --display-transform: none;
+  --grain-opacity: 0;
+  --motion-scale: 0.62;
+  --reveal-distance: 22px;
+  --radius: 0px;
+}
+
+/* Society on a dark stage — used when an elegant section sits inside a dark page. */
+[data-brand="society"][data-surface="dark"] {
+  --bg: var(--ink-900);
+  --bg-raised: var(--ink-800);
+  --fg: var(--paper);
+  --fg-muted: rgba(247, 247, 244, 0.6);
+  --fg-faint: rgba(247, 247, 244, 0.34);
+  --line: rgba(247, 247, 244, 0.16);
+  --line-strong: rgba(247, 247, 244, 0.3);
+  --accent-fg: var(--ink-900);
+}
