@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { KineticHeading, MagneticButton, Parallax, Reveal, StickerSpin } from '@/components/motion';
 import { BRAND, CONTACT } from '@/content/site';
-import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
+import { TILES } from '@/content/media';
 
 /**
  * Hero — the opening visual composition (design brief §7, §8).
@@ -24,7 +24,7 @@ import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
  */
 
 export function Hero() {
-  const image = PLACEHOLDER_IMAGES.heroPrimary;
+  const image = TILES.cameraOp;
 
   return (
     <section className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden pb-10 pt-28 md:pt-36">

@@ -31,53 +31,11 @@ export type PlaceholderImage = {
  * inside the new one. Original, un-composited image files are still required.
  */
 export const PLACEHOLDER_IMAGES: Record<string, PlaceholderImage> = {
-  heroPrimary: {
-    src: '/placeholders/frame-hero.svg',
-    alt: 'PLACEHOLDER — hero image slot, awaiting original client photography',
-    width: 1600,
-    height: 2000,
-    placeholder: true,
-  },
-  heroSecondary: {
-    src: '/placeholders/frame-wide.svg',
-    alt: 'PLACEHOLDER — full-bleed image slot, awaiting original client photography',
-    width: 2000,
-    height: 1200,
-    placeholder: true,
-  },
-  productions: {
-    src: '/placeholders/frame-productions.svg',
-    alt: 'PLACEHOLDER — 063 Productions image slot, awaiting original client photography',
-    width: 1400,
-    height: 1750,
-    placeholder: true,
-  },
   society: {
     src: '/placeholders/frame-society.svg',
-    alt: 'PLACEHOLDER — 063 Society image slot, awaiting original client photography',
+    alt: 'PLACEHOLDER — 063 Society image slot, no Society photography supplied',
     width: 1400,
     height: 1750,
-    placeholder: true,
-  },
-  workA: {
-    src: '/placeholders/frame-work-a.svg',
-    alt: 'PLACEHOLDER — event image slot A, awaiting original client photography',
-    width: 1200,
-    height: 1500,
-    placeholder: true,
-  },
-  workB: {
-    src: '/placeholders/frame-work-b.svg',
-    alt: 'PLACEHOLDER — event image slot B, awaiting original client photography',
-    width: 1200,
-    height: 1500,
-    placeholder: true,
-  },
-  workC: {
-    src: '/placeholders/frame-work-c.svg',
-    alt: 'PLACEHOLDER — event image slot C, awaiting original client photography',
-    width: 1200,
-    height: 1500,
     placeholder: true,
   },
 };

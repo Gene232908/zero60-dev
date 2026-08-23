@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { KineticHeading, Parallax, Reveal } from '@/components/motion';
 import { BrandProvider } from '@/components/layout/BrandProvider';
 import { BRAND } from '@/content/site';
+import { SCENES } from '@/content/media';
 import { PLACEHOLDER_IMAGES, SOCIETY_PLACEHOLDER } from '@/content/placeholders';
 
 /**
@@ -36,7 +37,7 @@ const PRODUCTIONS: Panel = {
   mood: 'Rugged',
   blurb: BRAND.intro,
   href: '/services',
-  image: PLACEHOLDER_IMAGES.productions,
+  image: SCENES.soundEngineer,
 };
 
 const SOCIETY: Panel = {

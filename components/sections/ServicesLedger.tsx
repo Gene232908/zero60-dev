@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Parallax, Reveal } from '@/components/motion';
 import { SERVICES } from '@/content/site';
-import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
+import { SCENES } from '@/content/media';
 
 /**
  * ServicesLedger — structured information (design brief §3 "Section C").
@@ -20,7 +20,7 @@ import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
  */
 
 export function ServicesLedger() {
-  const image = PLACEHOLDER_IMAGES.heroSecondary;
+  const image = SCENES.stageTruss;
 
   return (
     <section className="border-t border-line">

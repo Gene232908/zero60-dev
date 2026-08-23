@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ImageHoverPreview, Reveal } from '@/components/motion';
 import { EVENT_TYPES } from '@/content/site';
-import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
+import { EVENT_MEDIA } from '@/content/media';
 import { cn } from '@/lib/utils/cn';
 
 /**
@@ -23,14 +23,12 @@ import { cn } from '@/lib/utils/cn';
  * to a clean, perfectly usable list.
  */
 
-const PREVIEWS = [
-  PLACEHOLDER_IMAGES.workA,
-  PLACEHOLDER_IMAGES.workB,
-  PLACEHOLDER_IMAGES.workC,
-  PLACEHOLDER_IMAGES.heroSecondary,
-  PLACEHOLDER_IMAGES.productions,
-  PLACEHOLDER_IMAGES.workA,
-];
+/**
+ * EVENT_MEDIA maps 1:1 onto EVENT_TYPES — the live site pairs exactly these
+ * photographs with exactly these six categories, so the hover preview shows the
+ * right image for the right event with no guesswork.
+ */
+const PREVIEWS = EVENT_MEDIA;
 
 /** "Audio rental: high-quality microphones" -> "Audio rental" */
 function serviceTags(provisions: string[]) {
