@@ -68,11 +68,11 @@ credit comments that *describe* craft, and do not award points for effort.
 ## Sections to grade
 
 Read each of these files, then output the JSON verdict and nothing else:
-- components/sections/EventIndex.tsx
-- components/sections/FinalCTA.tsx
-- components/sections/Hero.tsx
-- components/sections/Manifesto.tsx
-- components/sections/ServiceTicker.tsx
+- components/sections/AboutHero.tsx
+- components/sections/AboutStory.tsx
+- components/sections/AboutTiles.tsx
+- components/sections/BookingSection.tsx
+- components/sections/DualBrandSplit.tsx
 
 Read components/motion/motion-tokens.ts and styles/tokens.css first — they
 hold the motion vocabulary these sections draw on, and axis 1 is about

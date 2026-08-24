@@ -68,6 +68,21 @@ body {
   text-wrap: balance;
 }
 
+/* Outlined display type — the ghost layer a maximalist composition stacks
+   behind its real headline. Stroke only, no fill, so it reads as structure
+   rather than as a second thing to read. Paired with aria-hidden at every
+   call site: it is texture, not content. */
+.display-ghost {
+  -webkit-text-stroke: 1px var(--line-strong);
+  color: transparent;
+}
+
+@supports not (-webkit-text-stroke: 1px black) {
+  .display-ghost {
+    color: var(--line);
+  }
+}
+
 .eyebrow {
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: clamp(0.625rem, 0.75vw, 0.75rem);
