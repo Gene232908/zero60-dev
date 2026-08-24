@@ -89,7 +89,7 @@ One image per service line, matching the eight descriptions already on your site
 | # | Item | Status | Notes |
 |---|---|---|---|
 | 61 | Logo — main mark | ✅ received | `zero63logo.png`, 2000×2000, transparent. In use in the header and footer |
-| 62 | **Logo — dark version for light backgrounds** | 🔴 needed | ⚠️ **Important:** the current logo is white and lime. 063 Society uses an off-white background, so the white parts of the logo become invisible on it. We need a black/dark version of the same mark |
+| 62 | **Logo — dark version for light backgrounds** | ✅ received | Supplied as `public/zero63logo-black.png` (2000×2000). Trimmed and resized to `public/brand/logo-mark-dark.{webp,png}` by `scripts/generate-society-mark.mjs`; 063 Society now loads it in the header |
 | 63 | **Logo — vector source** | 🔴 needed | AI, EPS, SVG or PDF. Required for a crisp favicon and for any print use |
 | 64 | 063 Society logo | 🔴 needed | If Society has its own mark, in both light and dark versions |
 | 65 | Social share image | 🟠 Milestone 4 | 1200 × 630. We can compose this from the assets above if you prefer |
@@ -140,5 +140,5 @@ group them into folders by event or by service — that tells us what each pictu
 
 Nothing here blocks us from continuing to build — every missing slot renders as a labelled placeholder,
 and swapping in the real file later is a one-line change per image. The two that matter most are
-**063 Society (§3)**, which is a whole page we cannot start, and the **dark logo variant (§62)**, which is
-a visual bug on any light background.
+**063 Society (§3)**, which is a whole page we cannot start. The **dark logo variant (§62)** has since been
+supplied and is live in Society mode.

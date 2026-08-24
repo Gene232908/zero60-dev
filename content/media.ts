@@ -68,9 +68,28 @@ export const EVENT_MEDIA: Media[] = [
   m('ev-themed', 200, 142, 'Audio equipment set up for an outdoor themed event'),
 ];
 
-/** The brand mark. Source: public/zero63logo.png, trimmed and resized. */
+/**
+ * The brand mark, in both moods.
+ *
+ * `mark` is the supplied white-and-lime logo, correct on the black Productions
+ * ground. It disappears against 063 Society's paper ground, which is exactly the
+ * problem docs/ASSET-REQUEST.md §62 and docs/HANDOFF-DEV2.md §5 raised. The dark
+ * variant has since been supplied by management and is derived by
+ * scripts/generate-society-mark.mjs.
+ *
+ * Sources: public/zero63logo.png and public/zero63logo-black.png, both trimmed
+ * and resized rather than shipped raw.
+ */
 export const LOGO = {
   mark: '/brand/logo-mark.webp',
   markLarge: '/brand/logo-mark.png',
+  /** Dark mark — for the paper ground of 063 Society. */
+  markDark: '/brand/logo-mark-dark.webp',
+  markDarkLarge: '/brand/logo-mark-dark.png',
   alt: 'Zero-Sixty-Three Productions',
 } as const;
+
+/** The mark that stays legible in a given brand mood. */
+export function logoForBrand(brand: 'productions' | 'society'): string {
+  return brand === 'society' ? LOGO.markDark : LOGO.mark;
+}

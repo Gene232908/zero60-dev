@@ -129,9 +129,15 @@ Collaborations and Contact are all `productions`.
 
 ## 5. Open question for management
 
-`docs/ASSET-REQUEST.md` §62 — the supplied logo is white and lime, so it disappears against the 063
-Society off-white background. We need a dark variant before Society mode reaches the header and footer.
-Affects your Contact page too, if it ever runs in Society mode.
+~~`docs/ASSET-REQUEST.md` §62 — the supplied logo is white and lime, so it disappears against the 063
+Society off-white background. We need a dark variant before Society mode reaches the header and footer.~~
+
+**✅ RESOLVED.** Management supplied `public/zero63logo-black.png`.
+`scripts/generate-society-mark.mjs` trims and resizes it to
+`public/brand/logo-mark-dark.{webp,png}`, and `logoForBrand()` in `content/media.ts`
+picks the legible mark per mood. The Navbar re-declares `data-brand` from
+`content/nav.ts`, so any page that runs in Society mode — including Contact, if it
+ever does — gets the dark mark and a near-black nav automatically.
 
 ---
 

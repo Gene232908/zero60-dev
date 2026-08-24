@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion';
 import { NAV_ITEMS } from '@/content/nav';
-import { LOGO } from '@/content/media';
+import { logoForBrand } from '@/content/media';
 import { DUR, EASE } from '@/components/motion/motion-tokens';
 import { useReducedMotionSafe } from '@/components/motion/use-reduced-motion';
 import { MobileMenu } from './MobileMenu';
@@ -47,6 +47,7 @@ function brandForPath(pathname: string): 'productions' | 'society' {
 export function Navbar() {
   const pathname = usePathname();
   const brand = brandForPath(pathname);
+  const isSociety = brand === 'society';
   const reduced = useReducedMotionSafe();
   const { scrollY, scrollYProgress } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -87,8 +88,10 @@ export function Navbar() {
               className="group flex items-center gap-2.5"
               aria-label="Zero-Sixty-Three Productions — home"
             >
+              {/* The white-and-lime mark vanishes on Society's paper ground, so
+                  each mood loads the mark that stays legible on it. */}
               <Image
-                src={LOGO.mark}
+                src={logoForBrand(brand)}
                 alt=""
                 width={160}
                 height={160}
@@ -110,9 +113,14 @@ export function Navbar() {
                       href={item.href}
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'group relative inline-block py-1 text-[0.68rem] font-medium uppercase tracking-[0.18em]',
+                        'group relative inline-block py-1 text-[0.68rem] uppercase tracking-[0.18em]',
                         'transition-colors duration-[var(--dur-micro)]',
-                        active ? 'text-accent' : 'text-fg-muted hover:text-fg',
+                        // Lime on the black Productions ground is the signature
+                        // accent; on Society's paper it is barely legible, so the
+                        // current page is marked by weight and near-black instead.
+                        active && isSociety && 'font-bold text-fg',
+                        active && !isSociety && 'font-medium text-accent',
+                        !active && 'font-medium text-fg-muted hover:text-fg',
                       )}
                     >
                       {item.label}
@@ -120,7 +128,8 @@ export function Navbar() {
                       <span
                         aria-hidden="true"
                         className={cn(
-                          'absolute -bottom-0.5 left-0 h-px w-full origin-left bg-accent',
+                          'absolute -bottom-0.5 left-0 h-px w-full origin-left',
+                          isSociety ? 'bg-fg' : 'bg-accent',
                           'scale-x-0 transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]',
                           'group-hover:scale-x-100',
                           active && 'scale-x-100',
