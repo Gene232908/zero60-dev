@@ -78,3 +78,91 @@ brand mode.
 but they are crops from 1366px-wide screenshots and go soft when enlarged. The
 layout deliberately keeps every frame small and leans on no single hero image.
 When the originals arrive they drop straight in; no layout change needed.
+
+---
+
+## Milestone 2 — Portfolio/Testimonials, Home final sections, Collaborations, Contact, nav
+
+**Scope checked:** `/portfolio`, `/collaborations`, `/contact`, the landing page's new
+proof section, and all seven navigation destinations.
+
+### Navigation
+
+All seven destinations in `content/nav.ts` open and render a real page — `RouteStub` is
+fully retired. Verified mechanically: gate checks `E1`/`E2` assert no page renders the
+stub, and the runtime stage crawls every internal `href` on every rendered page and
+fails on any status ≥ 400.
+
+| Destination | State |
+|---|---|
+| `/` Home | ✅ real page, productions |
+| `/about` | ✅ Developer 1 |
+| `/services` | ✅ Developer 1 |
+| `/portfolio` | ✅ **built this milestone** |
+| `/collaborations` | ✅ **built this milestone** |
+| `/society` | ✅ Developer 1, society mode |
+| `/contact` | ✅ **layout built this milestone**, Developer 1's form retained |
+
+### Portfolio
+
+- Pinned index (`StickySection` → GSAP ScrollTrigger, loaded dynamically) followed by a
+  parallaxed layered collage — two different shapes, not one grid twice.
+- `ImageHoverPreview` supplies imagery on hover; it returns `null` on touch and under
+  reduced motion, so the list stays a plain readable list there.
+- All three testimonials render verbatim from `content/site.ts`. No quote is duplicated
+  into a component — asserted by gate check `A5`.
+- **Video reel: lite embeds.** Nothing is requested from youtube.com on load. The gate
+  asserts this two ways: the `<iframe>` must sit behind an activation state (`A3`), and
+  no `youtube.com/embed` URL may appear in the server-rendered HTML of any page
+  (route `forbid`, re-checked in M4 as a page-speed probe).
+- Play control is a real `<button>` with an `aria-label`, so the video is keyboard
+  reachable. `youtube-nocookie.com` is used, so no tracking cookie is set until the
+  visitor deliberately presses play.
+
+### Collaborations
+
+- Partner marquee, logo ticker and bulletin-board project grid are all built and driven
+  by `PARTNERS` in `content/collaborations.ts`.
+- A partner is only displayed when `displayPermission` is true — permission is per
+  partner, not blanket.
+- The page does not dead-end on the blank section: it leads with the real service
+  disciplines and routes on to `/portfolio` and `/contact`.
+
+### Contact
+
+- Layout, contact-details block, and the "what you can book" list all read from
+  `content/site.ts`.
+- Developer 1's `<BookingSection />` is mounted unchanged, at `#enquiry` — gate check
+  `D2` fails the milestone if it is ever removed.
+- Phone and email are reachable above the form, so a visitor who only wants a number
+  never scrolls past a form to find one.
+
+### Reduced motion
+
+- `StickySection` does not pin and does not load GSAP at all; the section becomes
+  ordinary flow content and every caption stays readable.
+- `ImageHoverPreview` renders nothing; the index stays a typographic list.
+- `Marquee` on the partner board stops translating; `Parallax` on the gallery and
+  testimonials renders static.
+- `LiteYouTube` has nothing to reduce — the facade is static and activation is always a
+  deliberate click, never an autoplay on scroll.
+
+### Responsive
+
+| Page | Phone | Tablet | Desktop | Note |
+|---|---|---|---|---|
+| `/portfolio` | ✅ | ✅ | ✅ | gallery goes 1-up → 2-up → asymmetric 12-col; pinned index scrolls normally on phone |
+| `/collaborations` | ✅ | ✅ | ✅ | discipline list wraps; empty-state panel keeps its padding at every width |
+| `/contact` | ✅ | ✅ | ✅ | three detail columns stack to one below `md` |
+
+### Blocked assets — shipped as labelled empty slots, not filler
+
+| Blocker | What is missing | What ships today |
+|---|---|---|
+| **B9** | YouTube video links (upload session never happened, OI-3) | `PORTFOLIO_VIDEOS` is `[]`; the reel renders a labelled empty panel. Paste the ids in and the section fills itself — no code change |
+| **B7** | High-resolution portfolio photography | Gallery runs on the client's own screen-resolution frames, never enlarged past native size; the shortfall is stated on the page |
+| **B8** | Partner logos, project mapping, display permission | `PARTNERS` is `[]`; the board lists exactly what is awaited from management |
+| **B5** | Social profile URLs | Rendered as inert labels. No URL is invented |
+
+Gate checks `A7`, `C4` and `E4` fail the build if invented video ids, partner names or
+placeholder filler ever appear.

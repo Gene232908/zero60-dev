@@ -1,13 +1,84 @@
-import { RouteStub } from '@/components/sections/RouteStub';
+import { KineticHeading, Reveal } from '@/components/motion';
+import { Button, Col, Divider, Grid, Section } from '@/components/ui';
+import { PartnerBoard } from '@/components/sections/PartnerBoard';
+import { BRAND, SERVICES } from '@/content/site';
+
+/**
+ * Collaborations — Milestone 2, Developer 2 (MEDIUM).
+ *
+ * Task Division Rev 2, p.3: "partner-logo marquee and the linked project photos
+ * (bulletin-board feel)". Runs in productions mode.
+ *
+ * The page is honest about its current state: the partner board is built but
+ * empty pending BLOCKER B8, so the page leads with what collaboration actually
+ * means here — the disciplines 063 brings to a job — and routes the reader on to
+ * the work and the enquiry form rather than dead-ending on a blank section.
+ */
 
 export default function CollaborationsPage() {
   return (
-    <RouteStub
-      index="05"
-      title={['COLLAB', 'ORATIONS']}
-      milestone="Milestone 2"
-      owner="Developer 2"
-      scope="Partner-logo marquee and the linked project photos, bulletin-board feel. Blocked on partner logos and which projects sit under each partner (BLOCKER B7)."
-    />
+    <>
+      <Section space="flush" className="pb-[var(--space-lg)] pt-32 md:pt-44">
+        <Reveal variant="fade" weight="tertiary">
+          <div className="flex items-baseline justify-between border-b border-line pb-4">
+            <p className="eyebrow">05 — Collaborations</p>
+            <p className="eyebrow">{BRAND.short}</p>
+          </div>
+        </Reveal>
+
+        <div className="pt-[var(--space-lg)]">
+          <KineticHeading
+            as="h1"
+            lines={['COLLAB', 'ORATIONS']}
+            size="xl"
+            delay={0.15}
+            lineClassName="text-fg [&:last-child]:text-accent"
+          />
+        </div>
+
+        <Grid align="end" className="mt-[var(--space-lg)]">
+          <Col span={4} md={5} lg={6}>
+            <Reveal variant="rise" weight="secondary" delay={0.22}>
+              <p className="zs-measure text-[length:var(--text-lg)] leading-relaxed text-fg-muted">
+                Most events are built by more than one team. These are the disciplines we bring to
+                the table — and the partners we bring them alongside.
+              </p>
+            </Reveal>
+          </Col>
+
+          <Col span={4} md={3} lg={4} lgStart={9}>
+            <Reveal variant="rise" weight="tertiary" delay={0.3}>
+              <div className="flex flex-wrap gap-[var(--space-xs)] md:justify-end">
+                <Button href="/portfolio" variant="outline" size="sm">
+                  See the work
+                </Button>
+                <Button href="/contact" variant="solid" size="sm">
+                  Work with us
+                </Button>
+              </div>
+            </Reveal>
+          </Col>
+        </Grid>
+      </Section>
+
+      {/* What we bring — real client content, so the page stands up while B8 is open. */}
+      <Section space="loose" divided>
+        <Divider label="What we bring" meta={`${SERVICES.length} disciplines`} space="none" />
+        <Reveal variant="rise" weight="secondary" stagger className="mt-[var(--space-md)] block">
+          <ul className="flex flex-wrap gap-x-[var(--space-md)] gap-y-[var(--space-2xs)]">
+            {SERVICES.map((service) => (
+              <li
+                key={service.id}
+                className="display text-[clamp(1.1rem,2.8vw,2rem)] text-fg-muted transition-colors duration-[var(--dur-fast)] hover:text-accent"
+              >
+                {service.label}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </Section>
+
+      <PartnerBoard />
+    </>
   );
 }

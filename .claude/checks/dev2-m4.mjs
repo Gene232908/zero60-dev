@@ -211,7 +211,7 @@ export const checks = [
     desc: 'A shared SEO helper exists so titles and descriptions cannot drift apart',
     run: (c) => {
       const f = c.walk('lib/seo').find((p) => /\.ts$/.test(p));
-      return f || 'lib/seo/ is empty — plan.md §3 reserves it for the metadata helpers';
+      return Boolean(f) || 'lib/seo/ is empty — plan.md §3 reserves it for the metadata helpers';
     },
   },
   {

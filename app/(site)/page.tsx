@@ -8,6 +8,7 @@ import { FinalCTA } from '@/components/sections/FinalCTA';
 import { ServicesPreview } from '@/components/sections/ServicesPreview';
 import { AboutPreview } from '@/components/sections/AboutPreview';
 import { CTABand } from '@/components/sections/CTABand';
+import { TestimonialsTeaser } from '@/components/sections/TestimonialsTeaser';
 
 /**
  * Landing page — Milestone 1, Developer 1.
@@ -37,6 +38,7 @@ import { CTABand } from '@/components/sections/CTABand';
  *   ServicesPreview  what we do — full-bleed service rail, then editorial rows
  *   AboutPreview     who we are — layered parallax collage against the real copy
  *   CTABand          the mid-page conversion band, in Society mode
+ *   TestimonialsTeaser  the lead testimonial, routing on to /portfolio (M2)
  *
  * They are interleaved rather than appended: each one lands between two of
  * Developer 1's sections so the page alternates dense → open → dense all the way
@@ -54,6 +56,7 @@ export default function HomePage() {
       <AboutPreview />
       <EventIndex />
       <CTABand />
+      <TestimonialsTeaser />
       <ServicesLedger />
       <FinalCTA />
     </>
