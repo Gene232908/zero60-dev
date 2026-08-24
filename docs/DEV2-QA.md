@@ -166,3 +166,99 @@ fails on any status ≥ 400.
 
 Gate checks `A7`, `C4` and `E4` fail the build if invented video ids, partner names or
 placeholder filler ever appear.
+
+---
+
+## Milestone 3 — admin side: partnership computation, login, records, status control
+
+**Scope checked:** `lib/utils/partnership.ts`, `/admin`, `/admin/login`, `/admin/bookings`.
+
+### The partnership computation — verified by execution, not by reading
+
+The 2% / AED 250 logic is the one place in this project where "the code looks right"
+is worth nothing. It is pinned by `.claude/checks/partnership.test.mjs`, which the gate
+runs on every build through Node's TypeScript stripping — importing the real source
+file, not a copy. **The test was written before the implementation existed.**
+
+Cases pinned:
+
+| Case | Expected |
+|---|---|
+| 2% of 10,000 | 200 |
+| 2% of 333 (rounding to fils) | 6.66 |
+| 12,500 — the exact cap boundary | 250 |
+| 12,501 / 20,000 / 1,000,000 | 250 (capped) |
+| Off-website booking | 0 |
+| Every non-revenue status | 0 (driven by `REVENUE_STATUSES`) |
+| Qualified returning customer | still earns |
+| `null` / `undefined` / negative / `NaN` / string amount | 0, never `NaN` |
+| **Two capped bookings in one month** | **500, not 250 — the cap is per booking** |
+| Invoice total vs monthly summary | identical |
+| Records passed in | not mutated |
+
+That last-but-one row is the expensive bug this file exists to prevent: applying the
+ceiling to the monthly total instead of to each booking would under-bill the partnership
+every month, and it would look perfectly reasonable in review.
+
+### Admin login
+
+- Firebase Auth email/password. **Authorisation is the `admin` custom claim**, not an
+  email allowlist — `firestore.rules` authorises on `request.auth.token.admin == true`,
+  so anything else would be UI theatre over a database that still says no.
+- `getIdTokenResult(true)` forces a refresh, so a freshly minted claim works without
+  signing out and back in.
+- Four states are distinguished rather than collapsed into "access denied":
+  *loading*, *unconfigured* (B10a/B10b), *signed-out*, *signed in but not an admin*.
+  They need different actions, so they say different things.
+- The sign-in route is the only admin path the guard passes through — guarding it would
+  redirect it to itself.
+
+### Separate and unlinked
+
+- `/admin` appears nowhere in `content/nav.ts`, the Navbar, the Footer, or any public
+  page. Gate check `B4` scans all public source and fails the build if a link appears.
+- `robots: { index: false, follow: false }` on the admin layout. Being unlinked is not
+  enough — a URL that leaks once is crawled forever. M4 adds the matching
+  `Disallow: /admin` and excludes it from the sitemap.
+- The admin sits outside the `(site)` route group, so it inherits no public chrome.
+
+### Records screen
+
+- Search across reference and enquiry id; filter by status; filter to website-sourced only.
+- **Status control is config-driven.** Every option renders from `BOOKING_STATUSES`.
+  Trimming the set to New/Paid/Cancelled is a one-line deletion in
+  `lib/booking/status.ts` (docs/plan.md R-5) — gate check `D2` fails the build if a
+  status list is ever hardcoded in the admin.
+- Editable amount-collected field; Returning Customer tag; website-origin indicator.
+- The commission column calls the shared helper, so the number in the table is the same
+  number the invoice bills. There is no second implementation.
+- Edits apply optimistically and **roll back** if Firestore rejects them — the rules are
+  the authority, so a refused write must not leave the screen showing a change that
+  did not happen.
+
+### Honest degradation — no invented records
+
+Three credentials are still outstanding, so the most likely thing management sees on the
+review call is an empty-state panel rather than a table. That is deliberate: seeding the
+screen with sample bookings would put invented customer records in front of the client,
+indistinguishable from real ones. Gate check `C4` fails the build if sample-looking data
+appears.
+
+| State | What is shown |
+|---|---|
+| Firebase not configured (B10a/B10b) | "No database connected yet", naming the blocker and who is chasing it |
+| Read refused | The Firestore error, plus the hint that the account may be missing the admin claim |
+| Connected and empty | "No bookings yet" — the collection is live and waiting |
+
+### Responsive & accessibility
+
+| Screen | Phone | Tablet | Desktop |
+|---|---|---|---|
+| `/admin` overview | ✅ stat grid 1-up | ✅ 2-up | ✅ 4-up |
+| `/admin/bookings` | ✅ table scrolls in its own container | ✅ | ✅ |
+| `/admin/login` | ✅ | ✅ | ✅ |
+
+- Every control has a bound label; per-row controls use `sr-only` labels naming the
+  booking, so a screen reader never hears six unlabelled "Status" selects.
+- Wide tables scroll inside `overflow-x-auto`; the page body never scrolls sideways.
+- Errors are announced with `role="alert"`.
