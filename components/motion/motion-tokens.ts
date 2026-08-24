@@ -79,5 +79,7 @@ export const TRANSITION = {
 export const CLIP = {
   hiddenUp: 'inset(100% 0% 0% 0%)',
   hiddenDown: 'inset(0% 0% 100% 0%)',
+  /** Collapsed to the left edge — for rules and hairlines that draw across. */
+  hiddenRight: 'inset(0% 100% 0% 0%)',
   visible: 'inset(0% 0% 0% 0%)',
 } as const;

@@ -24,7 +24,7 @@ import { cn } from '@/lib/utils/cn';
  * arrive first and be felt, `settle` is for supporting content that should look
  * like it was placed rather than faded in.
  */
-export type RevealVariant = 'fade' | 'rise' | 'mask' | 'clip' | 'lead' | 'settle';
+export type RevealVariant = 'fade' | 'rise' | 'mask' | 'clip' | 'lead' | 'settle' | 'draw';
 export type MotionWeight = 'primary' | 'secondary' | 'tertiary';
 
 export interface RevealProps {
@@ -61,6 +61,17 @@ function buildVariants(variant: RevealVariant, distance: number, delay: number):
       return {
         hidden: { clipPath: CLIP.hiddenDown },
         shown: { clipPath: CLIP.visible, transition: slow },
+      };
+    case 'draw':
+      // For rules, hairlines and dividers: draws left-to-right rather than
+      // fading in. The site's identity leans on exposed hairlines, and a rule
+      // that arrives by being drawn reads as made rather than placed.
+      return {
+        hidden: { clipPath: CLIP.hiddenRight },
+        shown: {
+          clipPath: CLIP.visible,
+          transition: { duration: DUR.slow, ease: EASE.signature, delay },
+        },
       };
     case 'lead':
       // Travels further than anything around it and lands on the house curve,

@@ -30,13 +30,21 @@ export function Manifesto() {
 
       <div className="grid grid-cols-12">
         <Reveal
-          variant="rise"
+          variant="settle"
           weight="secondary"
+          delay={0.18}
           className="col-span-12 md:col-span-5 md:col-start-8"
         >
-          <p className="border-t border-line pt-5 text-sm leading-relaxed text-fg-muted">
-            {BRAND.intro}
-          </p>
+          {/* The rule above this paragraph was a static border. It now draws
+              itself across as the block settles — in a section this quiet, the
+              one line that moves is the whole point. Reveal's `draw` variant
+              handles the reduced-motion case by rendering the finished rule. */}
+          <div>
+            <Reveal variant="draw" delay={0.32}>
+              <span aria-hidden="true" className="block h-px w-full bg-line" />
+            </Reveal>
+            <p className="pt-5 text-sm leading-relaxed text-fg-muted">{BRAND.intro}</p>
+          </div>
         </Reveal>
       </div>
     </section>

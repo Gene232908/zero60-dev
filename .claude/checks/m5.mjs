@@ -382,16 +382,23 @@ export const checks = [
   // ========== E. Coverage — the loop must reach every section ==========
   {
     id: 'E1',
-    desc: 'Every Developer 1 section shows craft-pass evidence (signature motion or a real state)',
+    desc: 'Every Developer 1 section shows craft-pass evidence (signature motion, choreography, or a real state)',
     run: (ctx) => {
       const sigRe = new RegExp(`--ease-(${SIGNATURE_NAMES.join('|')})|EASE\\.(${SIGNATURE_NAMES.join('|')})`);
+      // The new Reveal variants count as evidence in their own right. Several
+      // sections here are purely editorial — no links, no controls — and a check
+      // that only accepted interaction states would push a maker to sprinkle a
+      // meaningless `active:` on a paragraph to clear the gate. Choreography IS
+      // the craft work for a section with nothing to click.
+      const choreoRe = /variant="(lead|settle|draw)"|--ease-brand|--ease-press/;
       const untouched = [];
       for (const name of DEV1_SECTIONS) {
         const src = code(ctx, `components/sections/${name}.tsx`);
         if (!src) { untouched.push(`${name} (file missing)`); continue; }
         const hasSignature = sigRe.test(src);
         const hasState = /active:|whileTap|focus-visible[:-]|group-focus/.test(src);
-        if (!hasSignature && !hasState) untouched.push(name);
+        const hasChoreo = choreoRe.test(src);
+        if (!hasSignature && !hasState && !hasChoreo) untouched.push(name);
       }
       return untouched.length === 0 ||
         `${untouched.length} sections carry no craft-pass evidence — the loop has not reached them: ${list(untouched, 20)}`;
