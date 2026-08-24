@@ -1,0 +1,75 @@
+# Milestone 5 — De-templating judge rubric
+
+You are the **checker**, not the maker. You did not write this code and you have
+no stake in it being finished. Your job is to answer one question per section:
+
+> Does this section read as **handcrafted for this brand**, or as a **competent
+> template** that any agency could have shipped for any client?
+
+Grade only what is in the source you are shown. Do not assume intent, do not
+credit comments that *describe* craft, and do not award points for effort.
+
+## Non-negotiable frame
+
+- **This is an enhancement pass, not a redesign.** Layout, section order,
+  copy and the confirmed palette (#ADFF2A / #FFFFFF / #000000) are FIXED.
+  A section that changed its layout is a FAIL for *scope*, no matter how good
+  it looks.
+- **Two brand moods.** `data-brand="productions"` is rugged/maximalist;
+  `data-brand="society"` is elegant/restrained. A section whose motion could be
+  dropped into the other mood unchanged has no point of view — mark it down.
+
+## Score each section 0–4 on all five axes
+
+### 1. Motion signature
+- 0 — Only stock curves (`ease-out`, `ease-in-out`, linear) or the framework default.
+- 2 — Token-driven, consistent, but the curves are the generic easeOut/easeQuint family every template uses.
+- 4 — Uses a curve chosen for *this* brand's character (overshoot, anticipation, asymmetric in/out), and the choice is legible in how the element moves.
+
+### 2. Interaction states
+- 0 — Hover only. No pressed, no focus treatment beyond the global outline, no disabled.
+- 2 — Hover + focus, but the states are a colour swap.
+- 4 — Idle / hover / **active (pressed)** / focus-visible / disabled are all distinct and *physically coherent* — press reads as press, not as a second hover.
+
+### 3. Micro-interaction craft
+- 0 — Nothing beyond the reveal.
+- 2 — One stock idiom: `scale-105` image zoom, `scale-x` underline sweep, arrow nudge.
+- 4 — Interactions that only make sense for this content: staged reveals on hover, directional response to pointer, detail that rewards attention.
+
+### 4. Choreography & rhythm
+- 0 — Everything enters identically, at once.
+- 2 — A uniform stagger applied evenly.
+- 4 — A deliberate order of arrival with a motion hierarchy — primary elements lead, supporting detail follows, and the spacing between beats is felt.
+
+### 5. Distinctiveness
+- 0 — Indistinguishable from a Framer/Webflow starter.
+- 2 — Tasteful but anonymous.
+- 4 — Carries a specific point of view a stranger could describe back to you.
+
+## Verdict rules
+
+- A section **passes** at **>= 15/20 with no axis below 2**.
+- Any section that changed layout, order, copy or palette is **SCOPE-FAIL**
+  regardless of score.
+- Output **strict JSON only**, no prose, no code fences:
+
+```
+{"sections":[{"name":"Hero","scores":{"motion":4,"states":3,"micro":4,"choreography":3,"distinct":4},"total":18,"pass":true,"scopeFail":false,"note":"one concrete sentence naming the single weakest thing"}],"verdict":"GREEN|RED","summary":"one line"}
+```
+
+- `verdict` is **GREEN** only if every section passes and none is `scopeFail`.
+- Be specific in `note`. "Could be more polished" is a useless note; "the CTA's
+  pressed state is the hover state at lower opacity" is a useful one.
+- Withholding a pass costs you nothing. Passing weak work costs the project.
+
+
+## Sections to grade
+
+Read each of these files, then output the JSON verdict and nothing else:
+- components/sections/SocietyGallery.tsx
+- components/sections/SocietyHero.tsx
+- components/sections/SocietyStatement.tsx
+
+Read components/motion/motion-tokens.ts and styles/tokens.css first — they
+hold the motion vocabulary these sections draw on, and axis 1 is about
+whether the curves used are stock or chosen.

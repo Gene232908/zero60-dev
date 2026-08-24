@@ -1,0 +1,258 @@
+{
+  "judgedAt": "2026-08-24T12:18:56.288Z",
+  "sections": [
+    {
+      "name": "AboutHero",
+      "scores": {
+        "motion": 2,
+        "states": 0,
+        "micro": 0,
+        "choreography": 2,
+        "distinct": 2
+      },
+      "total": 6,
+      "pass": false,
+      "scopeFail": false,
+      "note": "No interactive elements; heading word reveals use entrance curve that's applied uniformly across all content."
+    },
+    {
+      "name": "AboutStory",
+      "scores": {
+        "motion": 2,
+        "states": 0,
+        "micro": 0,
+        "choreography": 3,
+        "distinct": 2
+      },
+      "total": 7,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Sticky column and image are passive; parallax and reveals follow stock patterns with no interaction states."
+    },
+    {
+      "name": "AboutTiles",
+      "scores": {
+        "motion": 2,
+        "states": 0,
+        "micro": 0,
+        "choreography": 2,
+        "distinct": 2
+      },
+      "total": 6,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Alternating parallax strengths are compositional, not interactive; images are purely passive reveal targets."
+    },
+    {
+      "name": "BookingSection",
+      "scores": {
+        "motion": 2,
+        "states": 1,
+        "micro": 0,
+        "choreography": 2,
+        "distinct": 1
+      },
+      "total": 6,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Contact links have color-only hover with no press/focus distinction; form lacks any affordance feedback on interaction."
+    },
+    {
+      "name": "DualBrandSplit",
+      "scores": {
+        "motion": 2,
+        "states": 1,
+        "micro": 1,
+        "choreography": 1,
+        "distinct": 2
+      },
+      "total": 7,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Both panels enter identically with no stagger; arrow nudge is stock idiom, motion does not differentiate the two moods."
+    },
+    {
+      "name": "Hero",
+      "scores": {
+        "motion": 3,
+        "states": 2,
+        "micro": 3,
+        "choreography": 4,
+        "distinct": 4
+      },
+      "total": 16,
+      "pass": true,
+      "scopeFail": false,
+      "note": "MagneticButton states underdeveloped—hover and active are not visibly distinct in code"
+    },
+    {
+      "name": "ServiceTicker",
+      "scores": {
+        "motion": 1,
+        "states": 1,
+        "micro": 3,
+        "choreography": 0,
+        "distinct": 3
+      },
+      "total": 8,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Motion signature is stock marquee (no custom easing); choreography absent—both tracks enter simultaneously, continuous scroll"
+    },
+    {
+      "name": "Manifesto",
+      "scores": {
+        "motion": 3,
+        "states": 0,
+        "micro": 2,
+        "choreography": 3,
+        "distinct": 3
+      },
+      "total": 11,
+      "pass": false,
+      "scopeFail": false,
+      "note": "No interactive elements; section is passive reveal with horizontal drift—engagement is missing"
+    },
+    {
+      "name": "FinalCTA",
+      "scores": {
+        "motion": 2,
+        "states": 2,
+        "micro": 2,
+        "choreography": 2,
+        "distinct": 3
+      },
+      "total": 11,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Staircase indentation is visual only; heading lacks delay, links have only color-swap hover"
+    },
+    {
+      "name": "EventIndex",
+      "scores": {
+        "motion": 3,
+        "states": 3,
+        "micro": 2,
+        "choreography": 1,
+        "distinct": 3
+      },
+      "total": 12,
+      "pass": false,
+      "scopeFail": true,
+      "note": "Layout changed from boxes to numbered list per comment; choreography absent—all items enter at once"
+    },
+    {
+      "name": "ServicesBento",
+      "scores": {
+        "motion": 2,
+        "states": 1,
+        "micro": 1,
+        "choreography": 2,
+        "distinct": 1
+      },
+      "total": 7,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Scale-105 image zoom and accent-icon fade are stock idioms; hover-only state change; stagger pattern (i % 3) chunks entries but creates no motion hierarchy."
+    },
+    {
+      "name": "ServicesHero",
+      "scores": {
+        "motion": 2,
+        "states": 1,
+        "micro": 2,
+        "choreography": 2,
+        "distinct": 1
+      },
+      "total": 8,
+      "pass": false,
+      "scopeFail": false,
+      "note": "KineticHeading and Marquee components defer motion implementation opaquely; pauseOnHover is the only visible interaction; no focus or active states."
+    },
+    {
+      "name": "ServicesLedger",
+      "scores": {
+        "motion": 2,
+        "states": 1,
+        "micro": 2,
+        "choreography": 2,
+        "distinct": 1
+      },
+      "total": 8,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Sticky column + scrolling ledger is a template pattern; service label color-on-hover is the only interaction; uniform stagger provides no motion hierarchy."
+    },
+    {
+      "name": "SocietyCTA",
+      "scores": {
+        "motion": 2,
+        "states": 1,
+        "micro": 2,
+        "choreography": 2,
+        "distinct": 2
+      },
+      "total": 9,
+      "pass": false,
+      "scopeFail": false,
+      "note": "MagneticButton motion is opaque; contact links are color-on-hover only; intentional restraint is a design choice but does not carry a specific brand voice."
+    },
+    {
+      "name": "SocietyCategories",
+      "scores": {
+        "motion": 2,
+        "states": 1,
+        "micro": 2,
+        "choreography": 2,
+        "distinct": 2
+      },
+      "total": 9,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Hairline scale-x-100 on hover is content-specific but applies generic ease-out curve; hover-only interaction; loose stagger is clean but not orchestrated."
+    },
+    {
+      "name": "SocietyGallery",
+      "scores": {
+        "motion": 2,
+        "states": 0,
+        "micro": 2,
+        "choreography": 2,
+        "distinct": 2
+      },
+      "total": 8,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Asymmetric parallax gallery is a stock pattern; lacks interactive states and motion vocabulary distinctive to the mood."
+    },
+    {
+      "name": "SocietyHero",
+      "scores": {
+        "motion": 2,
+        "states": 0,
+        "micro": 2,
+        "choreography": 2,
+        "distinct": 4
+      },
+      "total": 10,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Restraint in not drifting the heading correctly expresses Society's voice, but quick animation timing and missing interactive states obscure the intention."
+    },
+    {
+      "name": "SocietyStatement",
+      "scores": {
+        "motion": 2,
+        "states": 0,
+        "micro": 2,
+        "choreography": 4,
+        "distinct": 4
+      },
+      "total": 12,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Indent progression and 0.35s pause before tagline create felt rhythm; restraint on heading drift is deliberate, but no interactive states."
+    }
+  ],
+  "verdict": "RED"
+}
