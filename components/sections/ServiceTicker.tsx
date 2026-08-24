@@ -37,7 +37,7 @@ export function ServiceTicker() {
       </Reveal>
 
       <Reveal variant="settle" weight="tertiary" delay={0.22}>
-        <Marquee duration={52} direction="right" className="mt-3 opacity-45">
+        <Marquee duration={52} direction="right" repeat={3} className="mt-3 opacity-45">
           {SERVICE_RAIL.map((item) => (
             <span key={`b-${item}`} className="flex items-center">
               <span className="mx-8 text-[0.7rem] font-medium uppercase tracking-[0.3em] text-fg-muted">

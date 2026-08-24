@@ -27,9 +27,16 @@ export function Footer() {
   return (
     <footer className="border-t border-line bg-bg text-fg">
       {/* Brand ticker doubles as the seam between the CTA and the practical block. */}
-      <Marquee duration={44} className="border-b border-line py-4">
+      {/* repeat=4 -> ~16 phrases per copy, wider than any realistic screen, so the
+          -50% loop never exposes a gap. leading-[1.6] because `.display` sets a
+          0.82 line-height for headlines, which crops small caps inside the
+          overflow-hidden band. */}
+      <Marquee duration={44} repeat={4} className="border-b border-line py-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <span key={i} className="display mx-6 text-[0.8rem] tracking-[0.28em] text-fg-faint">
+          <span
+            key={i}
+            className="display mx-6 whitespace-nowrap text-[0.8rem] leading-[1.6] tracking-[0.28em] text-fg-faint"
+          >
             ZERO-SIXTY-THREE <span className="text-accent">&#9670;</span> 063 SOCIETY{' '}
             <span className="text-accent">&#9670;</span>
           </span>

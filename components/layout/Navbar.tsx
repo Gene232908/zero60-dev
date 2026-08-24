@@ -21,12 +21,32 @@ import { cn } from '@/lib/utils/cn';
  * on Productions pages and elegant inside 063 Society.
  *
  * Reduced motion: the bar simply stays put and stays visible.
+ *
+ * BRAND MODE. The bar is `fixed`, so it lives outside the route's
+ * BrandProvider and cannot inherit the mood of the page scrolling under it.
+ * On 063 Society that meant white-on-paper: an invisible header. It therefore
+ * re-declares `data-brand` itself, read from the destination's own `brand`
+ * field in content/nav.ts — the same single source the links come from, so a
+ * page added there brings its mood with it and this never needs touching.
  */
 
 const MENU_ID = 'primary-mobile-menu';
 
+/**
+ * The mood of the route currently on screen.
+ * Longest matching href wins, so a nested path resolves to its section rather
+ * than falling back to "/".
+ */
+function brandForPath(pathname: string): 'productions' | 'society' {
+  const match = NAV_ITEMS.filter((item) => item.href !== '/')
+    .filter((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))
+    .sort((a, b) => b.href.length - a.href.length)[0];
+  return match?.brand ?? 'productions';
+}
+
 export function Navbar() {
   const pathname = usePathname();
+  const brand = brandForPath(pathname);
   const reduced = useReducedMotionSafe();
   const { scrollY, scrollYProgress } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -45,7 +65,8 @@ export function Navbar() {
   return (
     <>
       <motion.header
-        className="fixed inset-x-0 top-0 z-50"
+        data-brand={brand}
+        className="fixed inset-x-0 top-0 z-50 text-fg"
         initial={false}
         animate={{ y: hidden ? '-101%' : '0%' }}
         transition={{ duration: DUR.fast, ease: EASE.out }}

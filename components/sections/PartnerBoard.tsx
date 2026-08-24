@@ -37,7 +37,7 @@ export function PartnerBoard() {
         <>
           {/* Logo ticker — the bulletin-board seam. */}
           <div className="mt-[var(--space-lg)]">
-            <Marquee duration={40} pauseOnHover className="border-y border-line py-[var(--space-sm)]">
+            <Marquee duration={40} repeat={3} pauseOnHover className="border-y border-line py-[var(--space-sm)]">
               {displayable.map((partner) => (
                 <span key={partner.name} className="mx-[var(--space-lg)] inline-flex items-center">
                   {partner.logo ? (

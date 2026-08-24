@@ -16,6 +16,19 @@ import { cn } from '@/lib/utils/cn';
  *
  * Reduced motion: the track stops and renders one static, readable copy.
  * The duplicate is aria-hidden so screen readers never hear the content twice.
+ *
+ * ⚠️ ONE COPY MUST BE AT LEAST AS WIDE AS THE CONTAINER.
+ * The loop works by holding two identical copies and translating exactly -50%,
+ * i.e. precisely one copy width. If a copy is NARROWER than the viewport, that
+ * translation walks the content off one side before the second copy has reached
+ * the other, and the ticker shows a moving hole instead of a seamless band.
+ *
+ * `repeat` is the fix: it multiplies the content inside each copy, so short
+ * content (a handful of short labels) still produces a copy wider than any
+ * realistic screen. Set it high enough that
+ *   (content width x repeat) > widest viewport you care about.
+ * It costs only DOM, and the duplicate copy stays aria-hidden either way, so a
+ * screen reader still hears the content exactly once.
  */
 
 export interface MarqueeProps {
@@ -28,6 +41,12 @@ export interface MarqueeProps {
   className?: string;
   /** Visual separator rendered between repeats. */
   separator?: ReactNode;
+  /**
+   * How many times to repeat the content inside EACH copy. Raise it when the
+   * content is narrower than the viewport, or the loop shows a gap. See the
+   * note above.
+   */
+  repeat?: number;
 }
 
 export function Marquee({
@@ -37,13 +56,18 @@ export function Marquee({
   pauseOnHover = false,
   className,
   separator = null,
+  repeat = 1,
 }: MarqueeProps) {
   const reduced = useReducedMotionSafe();
 
   const content = (
     <>
-      {children}
-      {separator}
+      {Array.from({ length: Math.max(1, repeat) }).map((_, i) => (
+        <span key={i} className="contents">
+          {children}
+          {separator}
+        </span>
+      ))}
     </>
   );
 

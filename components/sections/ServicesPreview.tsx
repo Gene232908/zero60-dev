@@ -37,11 +37,11 @@ export function ServicesPreview() {
 
       {/* Full-bleed rail: the service list as a branding device, not a nav. */}
       <div className="mt-[var(--space-lg)]">
-        <Marquee duration={38} pauseOnHover className="border-y border-line py-3 md:py-4">
+        <Marquee duration={38} repeat={3} pauseOnHover className="border-y border-line py-3 md:py-4">
           {SERVICE_RAIL.map((label, i) => (
             <span
               key={`${label}-${i}`}
-              className="display mx-[var(--space-md)] text-[clamp(1rem,2.2vw,1.75rem)] text-fg-muted"
+              className="display mx-[var(--space-md)] whitespace-nowrap text-[clamp(1rem,2.2vw,1.75rem)] leading-[1.5] text-fg-muted"
             >
               {label}
               <span className="ml-[var(--space-md)] text-accent">&#9670;</span>
