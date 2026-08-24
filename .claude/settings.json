@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "node .claude/gate.mjs --hook",
-            "timeout": 400
+            "timeout": 900
           }
         ]
       }

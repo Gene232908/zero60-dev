@@ -5,6 +5,9 @@ import { DualBrandSplit } from '@/components/sections/DualBrandSplit';
 import { EventIndex } from '@/components/sections/EventIndex';
 import { ServicesLedger } from '@/components/sections/ServicesLedger';
 import { FinalCTA } from '@/components/sections/FinalCTA';
+import { ServicesPreview } from '@/components/sections/ServicesPreview';
+import { AboutPreview } from '@/components/sections/AboutPreview';
+import { CTABand } from '@/components/sections/CTABand';
 
 /**
  * Landing page — Milestone 1, Developer 1.
@@ -24,10 +27,20 @@ import { FinalCTA } from '@/components/sections/FinalCTA';
  * All copy is the client's own, transcribed from the live site into
  * content/site.ts. Imagery is still labelled placeholder (BLOCKER B2).
  *
- * The lower landing sections (services preview, about preview, CTA block,
- * footer content) and the composed landing scroll choreography are Developer 2's
- * Milestone 1 tasks — they compose from components/motion, not a second
- * animation approach (Task Division Rev 2, p.2).
+ * ---------------------------------------------------------------------------
+ * Milestone 1 · Developer 2 (Task Division Rev 2, p.2)
+ *
+ * The lower landing sections and the scroll choreography that carries them are
+ * Developer 2's, composed from components/motion rather than a second animation
+ * approach:
+ *
+ *   ServicesPreview  what we do — full-bleed service rail, then editorial rows
+ *   AboutPreview     who we are — layered parallax collage against the real copy
+ *   CTABand          the mid-page conversion band, in Society mode
+ *
+ * They are interleaved rather than appended: each one lands between two of
+ * Developer 1's sections so the page alternates dense → open → dense all the way
+ * down, and the reader meets a next step (CTABand) before the closing climax.
  */
 
 export default function HomePage() {
@@ -36,8 +49,11 @@ export default function HomePage() {
       <Hero />
       <ServiceTicker />
       <Manifesto />
+      <ServicesPreview />
       <DualBrandSplit />
+      <AboutPreview />
       <EventIndex />
+      <CTABand />
       <ServicesLedger />
       <FinalCTA />
     </>
