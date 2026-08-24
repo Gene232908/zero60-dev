@@ -38,10 +38,11 @@ import { TILES, SCENES } from '@/content/media';
  * like a template.
  */
 const SPEC = [
-  { label: 'Location', value: CONTACT.region },
+  // Region and website are already stated in the top meta rail. Repeating them
+  // here was the same mistake as the duplicated service rail: repetition reads
+  // as an oversight, not as density. Only what is NOT already on screen.
   { label: 'Divisions', value: '063 Productions / 063 Society' },
   { label: 'Direct', value: CONTACT.phoneDisplay },
-  { label: 'Online', value: CONTACT.website },
 ] as const;
 
 export function Hero() {
@@ -50,19 +51,12 @@ export function Hero() {
 
   return (
     <section className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden pb-8 pt-28 md:pt-36">
-      {/* ---------- z-0 · ghost layer ---------- */}
-      {/* Outlined 063 at absurd scale, drifting slower than everything in front
-          of it. Purely textural, hidden from assistive tech. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-[18%] -z-10 select-none"
-      >
-        <Parallax strength="subtle">
-          <p className="display display-ghost text-center text-[clamp(12rem,42vw,44rem)] leading-[0.8] opacity-70">
-            {BRAND.short}
-          </p>
-        </Parallax>
-      </div>
+      {/* NOTE: there was a full-bleed outlined "063" behind this composition.
+          It came out. Two mega type layers occupying the same optical centre
+          meant the wordmark and the ghost each made the other harder to read —
+          the wordmark IS the bold type statement here, and it does not need a
+          second one arguing with it. Density belongs where there is room for
+          it: the image cluster and the margins, not underneath the headline. */}
 
       {/* ---------- top meta rail ---------- */}
       <Reveal variant="fade" weight="tertiary" delay={0.05} className="shell relative z-30">
@@ -151,37 +145,34 @@ export function Hero() {
         </div>
       </div>
 
-      {/* ---------- spec block ---------- */}
+      {/* ---------- spec line ---------- */}
       {/* Deliberately NOT a service rail: ServiceTicker renders immediately
           below off the same SERVICE_RAIL array, and stating it twice would read
           as a bug rather than as density.
 
-          This is the other kind of maximalism — a dense technical index, the
-          plate on the back of a piece of equipment. Four columns, hairline
-          divided, numerals in accent. Every value is confirmed: region and
-          contact from content/site.ts, the two divisions from the dual-brand
-          structure the next sections build on. Nothing invented. */}
+          Started as a four-column plate with accent numerals and was cut back to
+          two quiet pairs. At this size the numerals were decoration on two rows
+          of text, and half the content repeated the meta rail at the top of the
+          section. Both values are confirmed material: the divisions are the pair
+          DualBrandSplit renders further down, the number is from
+          content/site.ts. Nothing invented. */}
       <Reveal
         variant="settle"
         weight="tertiary"
         delay={0.62}
         stagger="tight"
-        className="shell relative z-30 grid grid-cols-2 border-y border-line md:grid-cols-4"
+        className="shell relative z-30 grid grid-cols-1 border-t border-line sm:grid-cols-2"
       >
-        {SPEC.map((row, i) => (
+        {SPEC.map((row) => (
           <div
             key={row.label}
-            // Every cell carries its own right rule, including the last, so the
-            // plate closes at the shell edge instead of trailing off. Simpler
-            // than nth-child juggling across two column counts, and it survives
-            // the 2-col to 4-col switch without competing variants.
-            className="group flex flex-col gap-1.5 border-r border-line px-3 py-4 first:pl-0"
+            // One rule between the two cells rather than a boxed grid — at two
+            // columns a full set of borders reads as a table, which is heavier
+            // than the information warrants.
+            className="group flex items-baseline gap-3 py-3 sm:[&:first-child]:pr-6 sm:[&:last-child]:border-l sm:[&:last-child]:border-line sm:[&:last-child]:pl-6"
           >
-            <span className="flex items-baseline gap-2">
-              <span className="eyebrow text-accent transition-transform duration-[var(--dur-fast)] ease-[var(--ease-signature)] group-hover:-translate-y-0.5">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="eyebrow text-fg-faint">{row.label}</span>
+            <span className="eyebrow shrink-0 text-fg-faint transition-colors duration-[var(--dur-fast)] group-hover:text-accent">
+              {row.label}
             </span>
             <span className="text-[0.78rem] leading-snug text-fg-muted transition-colors duration-[var(--dur-fast)] group-hover:text-fg">
               {row.value}
