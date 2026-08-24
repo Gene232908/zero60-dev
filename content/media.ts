@@ -56,6 +56,26 @@ export const SCENES = {
 } as const;
 
 /**
+ * The landing hero plate.
+ *
+ * Supplied separately by management as public/src/herobg.jpg and processed by
+ * scripts/generate-hero-bg.mjs — desaturated, pulled down and re-encoded from
+ * 1370KB to 142KB. It ships grayscale on purpose: the lime duotone is applied in
+ * CSS from var(--accent), so the one confirmed brand colour keeps a single
+ * source of truth rather than being baked into a binary.
+ *
+ * Resolution caveat (BLOCKER B2): the source is 1366px wide and is upscaled to
+ * 1600px here, so it is soft on a very wide display. Replace with the original
+ * full-resolution frame before launch.
+ */
+export const HERO_BG = m(
+  'hero-bg',
+  1600,
+  900,
+  'Stage rigging, lighting truss and flight cases before an event',
+);
+
+/**
  * Event-category imagery. These map 1:1 onto EVENT_TYPES in content/site.ts —
  * the live site pairs exactly these photographs with exactly these categories.
  */

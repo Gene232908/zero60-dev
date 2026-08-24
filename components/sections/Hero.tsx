@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { KineticHeading, MagneticButton, Parallax, Reveal, StickerSpin } from '@/components/motion';
 import { BRAND, CONTACT } from '@/content/site';
-import { TILES, SCENES } from '@/content/media';
+import { TILES, SCENES, HERO_BG } from '@/content/media';
 
 /**
  * Hero — the opening visual composition (design brief §7, §8).
@@ -59,7 +59,34 @@ export function Hero() {
   const secondary = SCENES.drums;
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden pb-8 pt-28 md:pt-36">
+    <section className="relative isolate flex min-h-[100svh] flex-col justify-between overflow-hidden pb-8 pt-28 md:pt-36">
+      {/* ---------- the plate ----------
+          A photograph behind display type is the fastest way to make both
+          illegible, so this is built as layers rather than one flat wash. See
+          the HERO PLATE block in globals.css for what each one is doing and
+          why the scrim is anisotropic instead of uniform. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <Image
+          src={HERO_BG.src}
+          alt=""
+          fill
+          priority
+          quality={82}
+          sizes="100vw"
+          className="object-cover object-[58%_38%]"
+        />
+        {/* Tint the grayscale plate toward the confirmed brand colour. */}
+        <div className="absolute inset-0 hero-duotone-shadows" />
+        <div className="absolute inset-0 hero-duotone" />
+        {/* Guarantee the contrast the type needs, without flattening the rig. */}
+        <div className="absolute inset-0 hero-scrim" />
+        {/* The beams the lighting rig in the photo would actually be throwing. */}
+        <div className="hero-beams absolute inset-0 overflow-hidden mix-blend-screen" />
+        {/* Close the frame so the composition sits IN the section rather than
+            running out of it — the hero is full-bleed, not unbounded. */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-bg to-transparent" />
+      </div>
+
       {/* NOTE: there was a full-bleed outlined "063" behind this composition.
           It came out. Two mega type layers occupying the same optical centre
           meant the wordmark and the ghost each made the other harder to read —
@@ -68,11 +95,15 @@ export function Hero() {
           it: the image cluster and the margins, not underneath the headline. */}
 
       {/* ---------- top meta rail ---------- */}
-      <Reveal variant="fade" weight="tertiary" delay={0.05} className="hero-bleed relative z-30">
-        <div className="flex items-start justify-between gap-6 border-b border-line pb-4">
-          <p className="eyebrow max-w-[16ch]">{CONTACT.region}</p>
-          <p className="eyebrow hidden text-center sm:block">{BRAND.suffix}</p>
-          <p className="eyebrow text-right">{CONTACT.website}</p>
+      <Reveal variant="fade" weight="tertiary" delay={0.05} className="hero-bleed relative z-30"
+            immediate>
+        <div className="flex items-start justify-between gap-6 border-b border-line-strong pb-4">
+          {/* .eyebrow is --fg-faint (32% white). That is correct on a flat black
+              ground and invisible over a photograph, so every small label in the
+              hero is lifted to --fg-muted and carries the halo. */}
+          <p className="eyebrow text-halo hero-label max-w-[16ch]">{CONTACT.region}</p>
+          <p className="eyebrow text-halo hero-label-accent hidden text-center sm:block">{BRAND.suffix}</p>
+          <p className="eyebrow text-halo hero-label text-right">{CONTACT.website}</p>
         </div>
       </Reveal>
 
@@ -85,8 +116,9 @@ export function Hero() {
         <div className="col-span-12 sm:col-span-8 sm:col-start-5 lg:absolute lg:right-0 lg:top-1/2 lg:z-10 lg:w-[38%] lg:-translate-y-1/2">
           <div className="relative">
             <Parallax strength="subtle">
-              <Reveal variant="mask" weight="primary" delay={0.15}>
-                <div className="relative aspect-[4/5] w-full overflow-hidden">
+              <Reveal variant="mask" weight="primary" delay={0.15}
+            immediate>
+                <div className="relative aspect-[4/5] w-full overflow-hidden border border-line-strong shadow-[0_28px_70px_-18px_rgb(0_0_0/0.9)]">
                   <Image
                     src={portrait.src}
                     alt={portrait.alt}
@@ -94,6 +126,12 @@ export function Hero() {
                     priority
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 38vw"
                     className="object-cover"
+                  />
+                  {/* A hairline of the accent along the top edge, so the frame
+                      is tied to the brand rather than just pasted on. */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-accent/70"
                   />
                 </div>
               </Reveal>
@@ -103,8 +141,9 @@ export function Hero() {
                 against the portrait so the pair separates as you scroll. */}
             <div className="absolute -bottom-10 -left-10 w-[46%] max-w-[190px] lg:-left-16">
               <Parallax strength="medium" invert>
-                <Reveal variant="settle" weight="secondary" delay={0.42}>
-                  <div className="relative aspect-[5/4] w-full overflow-hidden border border-line">
+                <Reveal variant="settle" weight="secondary" delay={0.42}
+            immediate>
+                  <div className="relative aspect-[5/4] w-full overflow-hidden border border-line-strong shadow-[0_20px_50px_-14px_rgb(0_0_0/0.95)]">
                     <Image
                       src={secondary.src}
                       alt={secondary.alt}
@@ -136,10 +175,11 @@ export function Hero() {
             // The third line still steps right and takes the accent so the block
             // moves across the composition — but 4vw, not 8vw. The wider push
             // dragged the wordmark edge to edge and left it nowhere to breathe.
-            lineClassName="text-fg [&:last-child]:text-accent [&:last-child]:pl-[4vw]"
+            lineClassName="text-halo text-fg [&:last-child]:text-halo-accent [&:last-child]:text-accent [&:last-child]:pl-[4vw]"
           />
-          <Reveal variant="settle" weight="tertiary" delay={0.5}>
-            <p className="display mt-2 text-[clamp(0.9rem,2.2vw,1.9rem)] tracking-[0.34em] text-fg-muted">
+          <Reveal variant="settle" weight="tertiary" delay={0.5}
+            immediate>
+            <p className="display text-halo mt-2 text-[clamp(0.9rem,2.2vw,1.9rem)] tracking-[0.34em] text-fg">
               {BRAND.suffix}
             </p>
           </Reveal>
@@ -150,7 +190,7 @@ export function Hero() {
             there is no margin to hang it in. */}
         <p
           aria-hidden="true"
-          className="eyebrow pointer-events-none absolute left-0 top-1/2 z-30 hidden origin-left -translate-y-1/2 -rotate-90 whitespace-nowrap text-fg-faint xl:block"
+          className="eyebrow text-halo pointer-events-none absolute left-0 top-1/2 z-30 hidden origin-left -translate-y-1/2 -rotate-90 whitespace-nowrap hero-label-muted xl:block"
         >
           {BRAND.full} &#183; Est. {BRAND.short}
         </p>
@@ -178,6 +218,7 @@ export function Hero() {
         delay={0.62}
         stagger="tight"
         className="hero-bleed relative z-30 grid grid-cols-1 border-t border-line sm:grid-cols-2"
+            immediate
       >
         {SPEC.map((row) => (
           <div
@@ -187,10 +228,10 @@ export function Hero() {
             // than the information warrants.
             className="group flex items-baseline gap-3 py-3 sm:[&:first-child]:pr-6 sm:[&:last-child]:border-l sm:[&:last-child]:border-line sm:[&:last-child]:pl-6"
           >
-            <span className="eyebrow shrink-0 text-fg-faint transition-colors duration-[var(--dur-fast)] group-hover:text-accent">
+            <span className="eyebrow text-halo hero-label-muted shrink-0 transition-colors duration-[var(--dur-fast)] group-hover:text-accent">
               {row.label}
             </span>
-            <span className="text-[0.78rem] leading-snug text-fg-muted transition-colors duration-[var(--dur-fast)] group-hover:text-fg">
+            <span className="text-halo text-[0.78rem] leading-snug text-fg transition-colors duration-[var(--dur-fast)] group-hover:text-accent">
               {row.value}
             </span>
           </div>
@@ -200,8 +241,9 @@ export function Hero() {
       {/* ---------- bottom rail ---------- */}
       <div className="hero-bleed relative z-30 pt-6">
         <div className="flex flex-col gap-8 border-t border-line pt-6 md:flex-row md:items-end md:justify-between">
-          <Reveal variant="settle" weight="secondary" delay={0.55} className="max-w-[42ch]">
-            <p className="text-sm leading-relaxed text-fg-muted">{BRAND.tagline}</p>
+          <Reveal variant="settle" weight="secondary" delay={0.55} className="max-w-[42ch]"
+            immediate>
+            <p className="text-halo text-sm leading-relaxed text-fg-muted">{BRAND.tagline}</p>
           </Reveal>
 
           <Reveal
@@ -210,6 +252,7 @@ export function Hero() {
             delay={0.7}
             stagger="tight"
             className="flex flex-wrap items-center gap-4"
+            immediate
           >
             <MagneticButton href="/contact" cursorLabel="Enquire">
               Get in touch
@@ -219,10 +262,11 @@ export function Hero() {
             </MagneticButton>
           </Reveal>
 
-          <Reveal variant="fade" weight="tertiary" delay={0.8}>
+          <Reveal variant="fade" weight="tertiary" delay={0.8}
+            immediate>
             {/* The cue drifts down on the house curve — the one moving thing in
                 an otherwise settled rail, stilled by the reduced-motion rule. */}
-            <p className="eyebrow hidden items-center gap-2 lg:flex">
+            <p className="eyebrow text-halo hero-label-muted hidden items-center gap-2 lg:flex">
               Scroll
               <span
                 aria-hidden="true"

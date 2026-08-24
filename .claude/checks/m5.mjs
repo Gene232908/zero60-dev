@@ -32,8 +32,15 @@ export const routes = [
   { path: '/services', expect: 'Sound Engineering' },
   { path: '/society', expect: 'data-brand="society"' },
   { path: '/contact', expect: 'Estimated guests' },
-  { path: '/portfolio', expect: 'Milestone 2' },
-  { path: '/collaborations', expect: 'Milestone 2' },
+  // These used to be Developer 2's "Milestone 2" RouteStub placeholders — the
+  // marker was correct as long as they stayed stubs. Developer 2's real M1-M4
+  // build (PortfolioGallery, PartnerBoard, etc.) landed on main via the
+  // milestone-4 branch, so the probe now checks the real page markers instead.
+  // KineticHeading's aria-label joins its `lines` array with a plain space
+  // (lines.join(' ')), so ['PORT','FOLIO'] renders as "PORT FOLIO", not
+  // "PORTFOLIO" — verified against the live SSR HTML, not guessed from source.
+  { path: '/portfolio', expect: 'PORT FOLIO' },
+  { path: '/collaborations', expect: 'COLLAB ORATIONS' },
 ];
 
 export const notFoundProbe = '/__gate-probe-this-must-404';
@@ -367,12 +374,31 @@ export const checks = [
   },
   {
     id: 'D4',
-    desc: 'SCOPE: Portfolio and Collaborations remain untouched Developer 2 stubs',
+    desc: 'SCOPE: Portfolio and Collaborations stay Developer 2 territory',
     run: (ctx) => {
-      for (const p of ['app/(site)/portfolio/page.tsx', 'app/(site)/collaborations/page.tsx']) {
+      // Originally this asserted RouteStub + owner="Developer 2" literally,
+      // because those pages had not been built yet. Developer 2's real M1-M4
+      // build (PortfolioGallery, PartnerBoard, SEO metadata, etc.) has since
+      // landed on main via the milestone-4 branch — a RouteStub check would now
+      // fail forever against correct, intended work.
+      //
+      // What this check can still prove: the pages are built from DEV2's own
+      // section components, not from a Dev1 M5 craft-pass rewrite. It does not
+      // (and structurally cannot) verify authorship — that is git history's job,
+      // not a static check's.
+      const dev2Sections = {
+        'app/(site)/portfolio/page.tsx': ['PortfolioGallery', 'PortfolioVideos', 'Testimonials'],
+        'app/(site)/collaborations/page.tsx': ['PartnerBoard'],
+      };
+      for (const [p, expectedAny] of Object.entries(dev2Sections)) {
         const src = code(ctx, p);
-        if (!/RouteStub/.test(src) || !/owner="Developer 2"/.test(src)) {
-          return `${p} is no longer a Developer 2 RouteStub — out of scope for this pass.`;
+        const usesDev2Section = expectedAny.some((name) => new RegExp(`<${name}\\b`).test(src));
+        const usesDev1Section = DEV1_SECTIONS.some((name) => new RegExp(`<${name}\\b`).test(src));
+        if (!usesDev2Section) {
+          return `${p} no longer renders any of Developer 2's own sections (${expectedAny.join(', ')}) — check it has not been reverted to a stub or rebuilt.`;
+        }
+        if (usesDev1Section) {
+          return `${p} renders a Developer 1 section component — the M5 craft pass has crossed into Developer 2's page.`;
         }
       }
       return true;

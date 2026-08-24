@@ -40,6 +40,19 @@ export interface RevealProps {
   className?: string;
   /** Re-fire every time it scrolls into view instead of once. */
   repeat?: boolean;
+  /**
+   * Animate on MOUNT rather than on scroll.
+   *
+   * VIEWPORT deliberately shrinks the detection area by 12% at the bottom so
+   * content animates slightly before it is centred. For anything already above
+   * the fold on load that backfires: on a 900px viewport nothing below ~792px
+   * is ever "in view", so hero CTAs sat at opacity 0 until the user scrolled —
+   * they had to interact with the page to see the thing asking them to interact.
+   *
+   * Opt-in and default false, so every existing scroll-triggered reveal on the
+   * site behaves exactly as before.
+   */
+  immediate?: boolean;
 }
 
 function buildVariants(variant: RevealVariant, distance: number, delay: number): Variants {
@@ -114,6 +127,7 @@ export function Reveal({
   stagger = false,
   className,
   repeat = false,
+  immediate = false,
 }: RevealProps) {
   const reduced = useReducedMotionSafe();
 
@@ -124,6 +138,10 @@ export function Reveal({
 
   const distance = TRAVEL[weight];
   const viewport = repeat ? { ...VIEWPORT, once: false } : VIEWPORT;
+  // Above the fold: run straight away. Otherwise: wait for the scroll.
+  const trigger = immediate
+    ? ({ animate: 'shown' } as const)
+    : ({ whileInView: 'shown', viewport } as const);
 
   if (stagger) {
     const gap = stagger === 'tight' ? STAGGER.tight : stagger === 'loose' ? STAGGER.loose : STAGGER.base;
@@ -138,8 +156,7 @@ export function Reveal({
         className={cn(className)}
         variants={container}
         initial="hidden"
-        whileInView="shown"
-        viewport={viewport}
+        {...trigger}
       >
         {Children.map(children, (child, i) =>
           isValidElement(child) ? (
@@ -159,8 +176,7 @@ export function Reveal({
       className={cn(className)}
       variants={buildVariants(variant, distance, delay)}
       initial="hidden"
-      whileInView="shown"
-      viewport={viewport}
+      {...trigger}
     >
       {children}
     </motion.div>

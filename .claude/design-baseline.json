@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-08-24T11:50:54.900Z",
+  "capturedAt": "2026-08-24T16:20:38.411Z",
   "note": "Structural contract for the Milestone 5 craft pass. Do not regenerate.",
   "pages": {
     "home": {
@@ -8,8 +8,12 @@
         "Hero",
         "ServiceTicker",
         "Manifesto",
+        "ServicesPreview",
         "DualBrandSplit",
+        "AboutPreview",
         "EventIndex",
+        "CTABand",
+        "TestimonialsTeaser",
         "ServicesLedger",
         "FinalCTA"
       ]
@@ -35,6 +39,7 @@
     "contact": {
       "file": "app/(site)/contact/page.tsx",
       "sections": [
+        "ContactDetails",
         "BookingSection"
       ]
     },
@@ -51,24 +56,33 @@
   },
   "sectionFiles": [
     "AboutHero.tsx",
+    "AboutPreview.tsx",
     "AboutStory.tsx",
     "AboutTiles.tsx",
     "BookingSection.tsx",
+    "CTABand.tsx",
+    "ContactDetails.tsx",
     "DualBrandSplit.tsx",
     "EventIndex.tsx",
     "FinalCTA.tsx",
     "Hero.tsx",
     "Manifesto.tsx",
+    "PartnerBoard.tsx",
+    "PortfolioGallery.tsx",
+    "PortfolioVideos.tsx",
     "RouteStub.tsx",
     "ServiceTicker.tsx",
     "ServicesBento.tsx",
     "ServicesHero.tsx",
     "ServicesLedger.tsx",
+    "ServicesPreview.tsx",
     "SocietyCTA.tsx",
     "SocietyCategories.tsx",
     "SocietyGallery.tsx",
     "SocietyHero.tsx",
-    "SocietyStatement.tsx"
+    "SocietyStatement.tsx",
+    "Testimonials.tsx",
+    "TestimonialsTeaser.tsx"
   ],
   "palette": {
     "brand-lime": "#ADFF2A",

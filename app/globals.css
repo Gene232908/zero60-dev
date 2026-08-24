@@ -130,6 +130,158 @@ body {
    global prefers-reduced-motion block above already flattens it to a single
    0.01ms pass for anyone who asked for less motion.
    -------------------------------------------------------------------------- */
+/* -----------------------------------------------------------------------------
+   HERO PLATE — legible display type over a photographic background.
+
+   The supplied frame (truss, movers, flight cases) is busy edge to edge and has
+   no clean area to set type into, so legibility is built in layers rather than
+   with one flat overlay that would kill the photograph:
+
+     1. the plate itself ships grayscale (scripts/generate-hero-bg.mjs)
+     2. .hero-duotone   tints it toward the one confirmed brand colour
+     3. .hero-scrim     darkens ANISOTROPICALLY — heaviest bottom-left where the
+                        wordmark and CTAs sit, lightest top-right where the rig
+                        is worth seeing. A uniform scrim would flatten the image
+                        into grey mud; this keeps the photograph readable AS a
+                        photograph while still guaranteeing text contrast.
+     4. .hero-beams     two slow lime shafts, echoing the movers overhead
+     5. text-halo       a soft dark aura carried by the type itself
+
+   Everything is a gradient or a transform — no filters on large areas, nothing
+   that forces a repaint on scroll.
+   -------------------------------------------------------------------------- */
+/* NO lime wash on the photograph.
+   Two attempts at tinting the plate toward the accent (mix-blend-color at 22%,
+   then soft-light at 30%) both turned the whole frame olive: lime is a
+   yellow-green, and spreading it across every midtone of a photo reads as a
+   colour cast, not as branding. plan.md §2.1 is explicit that the brand's
+   photographic base is black and white — the accent is an ACCENT.
+   So the plate stays neutral, and the only lime in this composition is the
+   light itself (.hero-beams) and the type. */
+/* .eyebrow sets its own colour and is declared OUTSIDE any @layer, while every
+   Tailwind text-* utility lives inside @layer utilities. Unlayered CSS wins over
+   layered CSS regardless of specificity, so `text-fg` on an .eyebrow silently
+   does nothing — the label stays at --fg-faint (32% white). That is correct on
+   flat black and unreadable over a photograph.
+   These are declared after .eyebrow, so equal specificity resolves on source
+   order and the hero can actually set its own label contrast. */
+.hero-label {
+  color: var(--fg);
+}
+.hero-label-muted {
+  color: var(--fg-muted);
+}
+.hero-label-accent {
+  color: var(--accent);
+}
+
+.hero-duotone {
+  background-color: var(--accent);
+  mix-blend-mode: soft-light;
+  opacity: 0.06;
+}
+
+/* Deepen the plate's shadows toward true black so the frame reads as the brand's
+   black ground with a photograph in it, rather than as a grey rectangle. */
+.hero-duotone-shadows {
+  background: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0.25) 0%,
+    rgb(0 0 0 / 0.55) 60%,
+    rgb(0 0 0 / 0.8) 100%
+  );
+  mix-blend-mode: multiply;
+}
+
+.hero-scrim {
+  background:
+    /* Left-weighted wash: the wordmark runs down the left two-thirds, so the
+       plate is nearly solid there and opens up on the right where the rig and
+       the image cluster are worth seeing. */
+    linear-gradient(
+      to right,
+      rgb(0 0 0 / 0.82) 0%,
+      rgb(0 0 0 / 0.7) 34%,
+      rgb(0 0 0 / 0.4) 62%,
+      rgb(0 0 0 / 0.28) 100%
+    ),
+    linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.9) 0%,
+      rgb(0 0 0 / 0.56) 26%,
+      rgb(0 0 0 / 0.26) 55%,
+      rgb(0 0 0 / 0.6) 100%
+    );
+}
+
+/* The lighting rig in the photograph is pointed at the stage. These are the
+   beams it would be throwing — angled, barely-there, and drifting slowly enough
+   that you register them as atmosphere rather than as animation. */
+.hero-beams::before,
+.hero-beams::after {
+  content: "";
+  position: absolute;
+  top: -34%;
+  /* 42vmax each was two thirds of the frame apiece — screened together they
+     stopped being shafts and became a green wash over the whole hero. A beam
+     has to be narrow enough to have an edge. */
+  width: 17vmax;
+  height: 128%;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent) 42%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 13%, transparent) 38%,
+    transparent 70%
+  );
+  filter: blur(30px);
+  transform-origin: top center;
+  will-change: transform, opacity;
+}
+
+.hero-beams::before {
+  left: 52%;
+  transform: rotate(14deg);
+  animation: zs-beam-drift 14s var(--ease-in-out) infinite alternate;
+}
+
+.hero-beams::after {
+  right: 8%;
+  transform: rotate(-11deg);
+  opacity: 0.7;
+  animation: zs-beam-drift 19s var(--ease-in-out) infinite alternate-reverse;
+}
+
+@keyframes zs-beam-drift {
+  from {
+    transform: rotate(14deg) translate3d(0, 0, 0);
+    opacity: 0.4;
+  }
+  to {
+    transform: rotate(10deg) translate3d(1.5vw, 0, 0);
+    opacity: 0.75;
+  }
+}
+
+/* Type sitting directly on photography. The halo is several soft dark shadows
+   stacked rather than one hard one, so it reads as the letterform separating
+   itself from the image rather than as an outline drawn around it. */
+.text-halo {
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 0.9),
+    0 4px 18px rgb(0 0 0 / 0.75),
+    0 8px 44px rgb(0 0 0 / 0.55);
+}
+
+/* The accent line gets the same separation plus a lime bloom — the one place on
+   the page where the brand colour behaves like an actual light source. */
+.text-halo-accent {
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 0.85),
+    0 4px 20px rgb(0 0 0 / 0.6),
+    0 0 28px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 0 70px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
 /* Hero scroll cue — a short fall that resets, not a bounce. transform only. */
 @keyframes zs-scroll-cue {
   0%,
