@@ -76,7 +76,7 @@ export const checks = [
     desc: 'A lite YouTube embed component exists (not the standard iframe player)',
     run: (c) => {
       const f = ['components/media/LiteYouTube.tsx', 'components/motion/LiteYouTube.tsx'].find((p) => c.exists(p));
-      return f || 'components/media/LiteYouTube.tsx not found — Rev 2 p.3 requires lite/lazy embeds';
+      return Boolean(f) || 'components/media/LiteYouTube.tsx not found — Rev 2 p.3 requires lite/lazy embeds';
     },
   },
   {
@@ -245,8 +245,10 @@ export const checks = [
       for (const f of files) {
         const s = c.stripComments(c.read(f));
         if (!/partner|collab/i.test(f)) continue;
-        const m = /(Acme|Example Corp|Partner (One|Two|A|B)|Lorem)/i.exec(s);
-        if (m) bad.push(`${f} (${m[0]})`);
+        // Inspect the actual record fields, not prose: a doc line that happens to say
+        // "Partner and collaborator logos" is not invented data.
+        const m = /(?:name|title):\s*['"][^'"]*(Acme|Example|Partner\s(?:One|Two|A|B)|Lorem|Sample|Test)/i.exec(s);
+        if (m) bad.push(`${f} (${m[0].trim()})`);
       }
       return bad.length === 0 || `invented partner data: ${bad.join(', ')}`;
     },

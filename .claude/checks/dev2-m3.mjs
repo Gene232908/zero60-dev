@@ -197,7 +197,7 @@ export const checks = [
     desc: 'A records screen lists bookings',
     run: (c) => {
       const f = adminFiles(c).find((p) => /(bookings|records)/i.test(p) && /page\.tsx$/.test(p));
-      return f || 'no admin bookings/records page found';
+      return Boolean(f) || 'no admin bookings/records page found';
     },
   },
   {
