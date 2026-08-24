@@ -41,10 +41,14 @@ export function SocietyHero() {
             lineClassName="text-fg [&:last-child]:italic"
           />
 
-          <Reveal variant="fade" weight="tertiary" delay={0.5} className="mt-10 max-w-[46ch]">
-            <p className="border-t border-line pt-5 text-sm leading-relaxed text-fg-muted">
-              {SOCIETY_BRAND.tagline}
-            </p>
+          <Reveal variant="settle" weight="tertiary" delay={0.55} className="mt-10 max-w-[46ch]">
+            {/* Society's one gesture. The rule is drawn slowly and late, well
+                after the wordmark has settled — in a register built on air, a
+                single line arriving on its own is the whole entrance. */}
+            <Reveal variant="draw" delay={0.85}>
+              <span aria-hidden="true" className="block h-px w-full bg-line" />
+            </Reveal>
+            <p className="pt-5 text-sm leading-relaxed text-fg-muted">{SOCIETY_BRAND.tagline}</p>
           </Reveal>
         </div>
 

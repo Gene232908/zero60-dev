@@ -24,6 +24,9 @@
  *   5. unit    - module-declared unit tests, run through Node's type stripping
  *   6. runtime - boot the prod server, fetch every route, optionally crawl every
  *                internal link, assert 200 + page markers + a 404 negative control
+ *   7. judge   - (M5+) the taste half: a SEPARATE headless model grades the
+ *                sections against .claude/judge-rubric.md. The only stage that
+ *                costs tokens, so it runs last and only on an otherwise-green run.
  *
  * AUTO-ADVANCE
  *   In --hook mode a GREEN milestone does not end the loop while later
@@ -32,7 +35,7 @@
  *   milestone's brief. The loop therefore runs M1 -> M<final> unattended and
  *   only releases the agent when the FINAL milestone is green.
  *
- * Usage: node .claude/gate.mjs [--stage=static|types|lint|build|unit|runtime|all] [--hook]
+ * Usage: node .claude/gate.mjs [--stage=static|types|lint|build|unit|runtime|judge|all] [--hook]
  */
 import { readFileSync, existsSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { execSync, spawn } from 'node:child_process';
@@ -73,6 +76,18 @@ const read = (p) => {
     return '';
   }
 };
+/**
+ * Raw bytes — needed from M4 onwards to assert on binary assets (the favicon's
+ * ICO header, PNG dimensions). Returns an empty buffer rather than throwing, so
+ * a missing file fails the check that asked for it instead of the whole run.
+ */
+const readBuffer = (p) => {
+  try {
+    return readFileSync(P(p));
+  } catch {
+    return Buffer.alloc(0);
+  }
+};
 function walk(dir, out = []) {
   const abs = P(dir);
   if (!existsSync(abs)) return out;
@@ -109,7 +124,7 @@ const srcFiles = () =>
 const stripComments = (src) =>
   src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 
-const ctx = { P, exists, read, walk, pkg, deps, srcFiles, stripComments, ROOT };
+const ctx = { P, exists, read, readBuffer, walk, pkg, deps, srcFiles, stripComments, ROOT };
 
 // ---------- runners ----------
 function sh(cmd, opts = {}) {
@@ -310,6 +325,116 @@ async function runRuntime(mod) {
     : { name: 'runtime', ok: true };
 }
 
+/**
+ * The taste half of the gate (M5+).
+ *
+ * Some of the brief — "does this still read as a template?" — has no script.
+ * The rule that keeps the loop honest is that maker and checker are different
+ * things, so this spawns a SEPARATE headless Claude on a cheap model, hands it
+ * the rubric and the sections, and reads back a verdict. The agent doing the
+ * work never writes this file and never sees the judge's context.
+ *
+ * Costs tokens, unlike every other stage here. It therefore runs LAST and only
+ * once the mechanical checks and the toolchain are already green — there is no
+ * point paying a model to critique a build that does not compile.
+ */
+/** Sections per judge call. One context reading all 18 either exhausts its turns
+ *  and returns nothing, or skims — both of which make the verdict worthless. */
+const JUDGE_BATCH = 5;
+
+function judgeBatch(rubric, files) {
+  const prompt = [
+    rubric,
+    '',
+    '## Sections to grade',
+    '',
+    'Read each of these files, then output the JSON verdict and nothing else:',
+    ...files.map((f) => `- ${f}`),
+    '',
+    'Read these FIRST — the sections compose them, and grading a section without',
+    'them is how you end up writing "implementation not shown" and marking down',
+    'work that is actually there:',
+    '- styles/tokens.css                     the curves; axis 1 asks whether they are stock or chosen',
+    '- components/motion/motion-tokens.ts    the JS mirror of the same vocabulary',
+    '- components/motion/Reveal.tsx          every entrance on the site',
+    '- components/motion/MagneticButton.tsx  the primary control and its states',
+    '- components/ui/ContactLink.tsx         the phone/email treatment',
+    '',
+    'A section that reaches its states through one of these components HAS those',
+    'states. Credit them to the section.',
+  ].join('\n');
+
+  const promptFile = join(ROOT, '.claude', 'judge-prompt.txt');
+  writeFileSync(promptFile, prompt);
+
+  let raw;
+  try {
+    raw = sh(
+      // `claude` is a global bin on PATH, not a local dependency — npx would miss it.
+      // Read-only tools only: the judge inspects, it never edits what it grades.
+      `claude -p --model haiku --allowed-tools "Read,Glob,Grep" < "${promptFile}"`,
+      { timeout: 900000 },
+    );
+  } catch (e) {
+    const detail = [e.stdout, e.stderr, e.message].filter(Boolean).join('\n').slice(-800);
+    return { error: `invocation failed for ${files.length} section(s):\n${detail}` };
+  }
+
+  // The model reliably wraps its JSON in a ```json fence; take the outermost object.
+  const match = raw.match(/\{[\s\S]*\}/);
+  if (!match) return { error: `no JSON for [${files.join(', ')}]:\n${raw.slice(-600) || '(empty output)'}` };
+  try {
+    return { value: JSON.parse(match[0]) };
+  } catch (e) {
+    return { error: `JSON did not parse: ${e.message}\n${match[0].slice(0, 600)}` };
+  }
+}
+
+async function runJudge(sections) {
+  const rubricPath = join(ROOT, '.claude', 'judge-rubric.md');
+  if (!existsSync(rubricPath)) return { name: 'judge', ok: false, detail: 'judge-rubric.md missing' };
+  const rubric = readFileSync(rubricPath, 'utf8');
+
+  const files = sections
+    .map((s) => `components/sections/${s}.tsx`)
+    .filter((f) => existsSync(join(ROOT, f)));
+
+  const graded = [];
+  const errors = [];
+  for (let i = 0; i < files.length; i += JUDGE_BATCH) {
+    const batch = files.slice(i, i + JUDGE_BATCH);
+    const { value, error } = judgeBatch(rubric, batch);
+    if (error) {
+      errors.push(error);
+      continue;
+    }
+    graded.push(...(value.sections || []));
+  }
+
+  const verdict = {
+    judgedAt: new Date().toISOString(),
+    sections: graded,
+    verdict: errors.length === 0 && graded.every((s) => s.pass && !s.scopeFail) ? 'GREEN' : 'RED',
+  };
+  writeFileSync(join(ROOT, '.claude', 'judge-verdict.json'), JSON.stringify(verdict, null, 2) + '\n');
+
+  // A section the judge never returned is NOT a pass. Silence must fail closed,
+  // or a batch that errors out becomes a free pass for everything in it.
+  const missing = sections.filter((s) => !graded.some((g) => g.name === s));
+  const failing = graded.filter((s) => s.scopeFail || !s.pass);
+
+  if (!errors.length && !missing.length && !failing.length) return { name: 'judge', ok: true };
+
+  const detail = [
+    ...failing.map(
+      (s) => `${s.scopeFail ? 'SCOPE-FAIL ' : `${s.total ?? '?'}/20 `} ${s.name} — ${s.note || 'no note'}`,
+    ),
+    ...(missing.length ? [`ungraded (judge returned nothing for these): ${missing.join(', ')}`] : []),
+    ...errors,
+  ].join('\n');
+  return { name: 'judge', ok: false, detail };
+}
+
 // ---------- main ----------
 const state = loadState();
 const track = state.track || 'dev1';
@@ -332,7 +457,10 @@ if (stageArg === 'all' || stageArg === 'static') {
   for (const c of mod.checks) {
     let verdict;
     try {
-      verdict = c.run(ctx);
+      // Awaited: from M5 the contract checks import the baseline module, so a
+      // check may be async. A returned Promise is never === true, which would
+      // fail those checks forever and look like a real regression.
+      verdict = await c.run(ctx);
     } catch (e) {
       verdict = `threw: ${e.message}`;
     }
@@ -360,6 +488,20 @@ if ((stageArg === 'all' || stageArg === 'unit') && (mod.tests || []).length) {
 }
 if ((stageArg === 'all' || stageArg === 'runtime') && stages.every((s) => s.ok)) {
   stages.push(await runRuntime(mod));
+}
+// Judge last, and only on an otherwise-green run: it is the one stage that
+// costs money, and a red build tells us nothing about taste.
+if (mod.judgeSections && (stageArg === 'all' || stageArg === 'judge')) {
+  const mechanicalGreen = staticFailures.length === 0 && stages.every((s) => s.ok);
+  if (mechanicalGreen || stageArg === 'judge') {
+    stages.push(await runJudge(mod.judgeSections));
+  } else {
+    stages.push({
+      name: 'judge',
+      ok: false,
+      detail: 'skipped — mechanical checks are red. Fix those first; the judge only runs on a clean build.',
+    });
+  }
 }
 
 // ---------- report ----------

@@ -124,12 +124,65 @@ body {
   animation-direction: var(--marquee-direction, normal);
 }
 
+/* -----------------------------------------------------------------------------
+   Submit sweep — the hairline that travels under the booking button while the
+   request is in flight. scaleX only, so it stays on the compositor, and the
+   global prefers-reduced-motion block above already flattens it to a single
+   0.01ms pass for anyone who asked for less motion.
+   -------------------------------------------------------------------------- */
+/* Hero scroll cue — a short fall that resets, not a bounce. transform only. */
+@keyframes zs-scroll-cue {
+  0%,
+  70%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  35% {
+    transform: translate3d(0, 5px, 0);
+    opacity: 0.55;
+  }
+}
+
+@keyframes zs-submit-sweep {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.1% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
 /* The editorial container: wide, asymmetric-friendly, never centred-by-default. */
 .shell {
   width: 100%;
   padding-inline: var(--gutter);
   margin-inline: auto;
   max-width: 96rem;
+}
+
+/* Full-bleed rail for the hero.
+   `.shell` caps at 96rem and centres what is inside it, which on a wide display
+   leaves the hero floating in the middle of the screen with dead space either
+   side. The hero is the one section that should own the whole viewport, so it
+   keeps the gutter for safe-area padding and drops both the cap and the
+   auto-centring. Every other section still uses `.shell` — the measured column
+   is right for reading, it is only wrong for the opening composition. */
+.hero-bleed {
+  width: 100%;
+  padding-inline: var(--gutter);
+  margin-inline: 0;
+  max-width: none;
 }
 
 /* -----------------------------------------------------------------------------

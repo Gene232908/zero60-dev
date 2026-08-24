@@ -1,5 +1,6 @@
 import { KineticHeading, MagneticButton, Reveal } from '@/components/motion';
 import { CONTACT } from '@/content/site';
+import { ContactLink } from '@/components/ui/ContactLink';
 
 /**
  * SocietyCTA — the quiet close.
@@ -25,36 +26,29 @@ export function SocietyCTA() {
         />
 
         <div className="mt-16 grid grid-cols-12 items-end gap-y-10 md:mt-24">
-          <Reveal variant="fade" weight="tertiary" className="col-span-12 md:col-span-5">
-            <div className="border-t border-line pt-5">
-              <p className="mb-6 text-sm leading-relaxed text-fg-muted">
+          <Reveal variant="settle" weight="tertiary" delay={0.2} className="col-span-12 md:col-span-5">
+            <div>
+              <Reveal variant="draw" delay={0.45}>
+                <span aria-hidden="true" className="block h-px w-full bg-line" />
+              </Reveal>
+              <p className="mb-6 pt-5 text-sm leading-relaxed text-fg-muted">
                 PLACEHOLDER — 063 Society invitation line, to be supplied by client.
               </p>
               <ul className="space-y-1.5 text-sm">
                 <li>
-                  <a
-                    href={CONTACT.emailHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.email}
-                  </a>
+                  <ContactLink href={CONTACT.emailHref}>{CONTACT.email}</ContactLink>
                 </li>
                 <li>
-                  <a
-                    href={CONTACT.phoneHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.phoneDisplay}
-                  </a>
+                  <ContactLink href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</ContactLink>
                 </li>
               </ul>
             </div>
           </Reveal>
 
           <Reveal
-            variant="fade"
+            variant="settle"
             weight="tertiary"
-            delay={0.15}
+            delay={0.42}
             className="col-span-12 md:col-span-5 md:col-start-8"
           >
             {/* Outlined, not filled — lime stays a hairline in this register. */}

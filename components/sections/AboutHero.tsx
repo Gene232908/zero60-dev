@@ -33,12 +33,18 @@ export function AboutHero() {
 
       <div className="grid grid-cols-12 pt-14 md:pt-20">
         <Reveal
-          variant="rise"
+          variant="settle"
           weight="secondary"
           delay={0.4}
           className="col-span-12 md:col-span-6 md:col-start-7"
         >
-          <p className="display border-t border-line pt-6 text-[clamp(1.25rem,2.6vw,2rem)] leading-[1.15] text-fg">
+          {/* The rule is drawn rather than simply present, arriving a beat after
+              the wordmark has landed — the page states its name, then underlines
+              the claim. */}
+          <Reveal variant="draw" delay={0.62}>
+            <span aria-hidden="true" className="block h-px w-full bg-line" />
+          </Reveal>
+          <p className="display pt-6 text-[clamp(1.25rem,2.6vw,2rem)] leading-[1.15] text-fg">
             {BRAND.tagline}
           </p>
         </Reveal>

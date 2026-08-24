@@ -17,7 +17,14 @@ import { cn } from '@/lib/utils/cn';
  * opacity ramp. Content is never gated behind an animation.
  */
 
-export type RevealVariant = 'fade' | 'rise' | 'mask' | 'clip';
+/**
+ * The first four are the original grammar and are unchanged — most content
+ * should still use them. The last two exist because a section where everything
+ * enters identically has no shape: `lead` is for the one element that should
+ * arrive first and be felt, `settle` is for supporting content that should look
+ * like it was placed rather than faded in.
+ */
+export type RevealVariant = 'fade' | 'rise' | 'mask' | 'clip' | 'lead' | 'settle' | 'draw';
 export type MotionWeight = 'primary' | 'secondary' | 'tertiary';
 
 export interface RevealProps {
@@ -54,6 +61,41 @@ function buildVariants(variant: RevealVariant, distance: number, delay: number):
       return {
         hidden: { clipPath: CLIP.hiddenDown },
         shown: { clipPath: CLIP.visible, transition: slow },
+      };
+    case 'draw':
+      // For rules, hairlines and dividers: draws left-to-right rather than
+      // fading in. The site's identity leans on exposed hairlines, and a rule
+      // that arrives by being drawn reads as made rather than placed.
+      return {
+        hidden: { clipPath: CLIP.hiddenRight },
+        shown: {
+          clipPath: CLIP.visible,
+          transition: { duration: DUR.slow, ease: EASE.signature, delay },
+        },
+      };
+    case 'lead':
+      // Travels further than anything around it and lands on the house curve,
+      // which carries a hair past the mark before settling. Use once per
+      // section, on the element that should own the entrance.
+      return {
+        hidden: { opacity: 0, y: distance * 1.35, scale: 0.985 },
+        shown: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: { duration: DUR.slow, ease: EASE.signature, delay },
+        },
+      };
+    case 'settle':
+      // Anticipation: eases back a few px before coming forward, so supporting
+      // content reads as placed with intent rather than simply appearing.
+      return {
+        hidden: { opacity: 0, y: distance * 0.6 },
+        shown: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: DUR.base, ease: EASE.anticipate, delay },
+        },
       };
     case 'rise':
     default:

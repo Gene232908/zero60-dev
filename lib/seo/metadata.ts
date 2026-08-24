@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { BRAND } from '@/content/site';
 
 /**
  * SEO metadata helpers.
@@ -12,17 +13,15 @@ import type { Metadata } from 'next';
  * tags cannot drift apart page by page — the one thing that reliably goes wrong
  * when each route hand-rolls its own `metadata` object.
  *
- * SITE URL. The production host is the client's existing domain, which
- * Developer 1 repoints in Milestone 4 (docs/plan.md OI-1 — resolved: connect
- * zerosixtythree.com). `metadataBase` must be absolute or Next cannot build
- * OpenGraph and canonical URLs, so it reads NEXT_PUBLIC_SITE_URL and falls back
- * to the confirmed production domain rather than to localhost.
+ * SITE URL. Re-exported from lib/seo/site-url.ts, which is Developer 1's
+ * Milestone 4 baseline and already resolves NEXT_PUBLIC_SITE_URL → the Vercel
+ * environment URLs → the confirmed production domain. Declaring a second origin
+ * here would give the sitemap and the canonicals two different ideas of where
+ * the site lives, which is exactly the bug canonicals exist to prevent.
  */
 
-/** The client's confirmed domain — content/site.ts CONTACT.website. */
-const PRODUCTION_URL = 'https://zerosixtythree.com';
-
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || PRODUCTION_URL;
+export { SITE_URL } from './site-url';
+import { SITE_URL } from './site-url';
 
 export const SITE_NAME = 'ZeroSixtyThree';
 
@@ -53,10 +52,16 @@ export type PageSeo = {
  */
 export function pageMetadata({ path, title, description, index = true }: PageSeo): Metadata {
   const url = path === '/' ? SITE_URL : `${SITE_URL}${path}`;
-  const fullTitle = path === '/' ? TITLE_SUFFIX : `${title} — ${SITE_NAME}`;
+
+  // The root layout owns the title TEMPLATE (`%s — ZERO-SIXTY-THREE PRODUCTIONS`),
+  // which is Developer 1's baseline. So a page hands over its bare title and lets
+  // the template compose it — the home page is the one exception, where the
+  // brand line reads better whole than as "Home — ...".
+  const isHome = path === '/';
+  const fullTitle = isHome ? TITLE_SUFFIX : `${title} — ${BRAND.full}`;
 
   return {
-    title: fullTitle,
+    title: isHome ? { absolute: TITLE_SUFFIX } : title,
     description,
     alternates: { canonical: url },
     robots: index ? undefined : { index: false, follow: false },

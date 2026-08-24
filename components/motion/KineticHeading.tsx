@@ -93,12 +93,29 @@ export function KineticHeading({
             aria-hidden="true"
           >
             {words.map((word, wi) => (
-              <span key={`${word}-${wi}`} className="inline-block overflow-hidden align-bottom">
+              // The observer MUST sit on this outer clip box, not on the inner span.
+              // The inner span starts translated 110% down, which puts it entirely
+              // outside this overflow-hidden parent — and IntersectionObserver clips
+              // a target against its ancestors' overflow before measuring. Observing
+              // the inner span therefore reported zero intersection forever: it could
+              // not come into view because it was hidden, and could not unhide because
+              // it had not come into view. Every heading on the site stayed invisible.
+              //
+              // This wrapper is never transformed, so it is always measurable. The
+              // inner span inherits `shown` through variants.
+              <motion.span
+                key={`${word}-${wi}`}
+                className="inline-block overflow-hidden align-bottom"
+                initial="hidden"
+                whileInView="shown"
+                viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+              >
                 <motion.span
                   className="inline-block will-change-transform"
-                  initial={{ y: '110%', clipPath: CLIP.hiddenUp }}
-                  whileInView={{ y: '0%', clipPath: CLIP.visible }}
-                  viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+                  variants={{
+                    hidden: { y: '110%', clipPath: CLIP.hiddenUp },
+                    shown: { y: '0%', clipPath: CLIP.visible },
+                  }}
                   transition={{
                     duration: DUR.slow,
                     ease: EASE.entrance,
@@ -108,7 +125,7 @@ export function KineticHeading({
                   {word}
                   {wi < words.length - 1 ? ' ' : ''}
                 </motion.span>
-              </span>
+              </motion.span>
             ))}
           </motion.span>
         ))}

@@ -30,7 +30,7 @@ Status legend: 🔴 blocking now · 🟠 blocks an upcoming milestone · ✅ rec
 
 | # | Item | Why it blocks | Current stand-in |
 |---|---|---|---|
-| B1 | **Logo files** — ZeroSixtyThree **and** 063 Society (vector / PDF / hi-res) | The circular mic-and-headphones badge is visible in the supplied screenshots but only as flattened raster. Cannot produce the favicon, nav mark, or `StickerSpin` seal without the source art | Type-set wordmark in the confirmed palette |
+| B1 | **Logo files** — ZeroSixtyThree **and** 063 Society (vector / PDF / hi-res) | Still needed for the nav mark and the `StickerSpin` seal — the badge exists only as flattened raster. **No longer blocks the favicon:** the badge is a detailed mic-and-headphones illustration inside a ring of type, which collapses into an unreadable smudge at 16–32px, so vector art would not have saved it either. The app icons use the client's own `063` short mark, which stays sharp at every size; the full badge is on the share card, where it has room to read | Type-set wordmark in the confirmed palette |
 | B2 | **Original photography** | ⚠️ The supplied `current website/` files are **flattened section screenshots with the headings and body copy baked into the JPEGs**. They were perfect for transcribing the copy, but they cannot be used as site imagery — they would render the OLD site's text inside the new one. Un-composited source images are still needed | Labelled SVG frames in `public/placeholders/` |
 | B3 | **Footer credit banner** — our agency name, logo asset and destination URL | The "Developed by" banner is a contracted M1 deliverable | Renders the banner with an inert, labelled placeholder — no invented URL |
 | B4 | **063 Society — everything** | The supplied material covers 063 Productions only. No Society copy, service categories, or imagery exists anywhere in the source. This is the M2 HARD task and it is fully blocked | `SOCIETY_PLACEHOLDER` in `content/placeholders.ts` |
@@ -74,14 +74,31 @@ submission returns the `503` above rather than pretending to succeed.
 
 > All of B10–B12 are **environment variables only**. Never committed.
 
+## 🔴 Milestone 4 — built, but switched off pending credentials
+
+Same pattern as Milestone 3: the code is finished and verified, and goes live
+with no code change the moment the value arrives.
+
+| Need | Variable | What happens without it |
+|---|---|---|
+| **Meta Pixel ID** | `NEXT_PUBLIC_META_PIXEL_ID` | `MetaPixel` returns `null`. No script, no requests to Meta, no console noise |
+| **Site origin** | `NEXT_PUBLIC_SITE_URL` | Falls back to Vercel's own deployment URL, then to `https://zerosixtythree.com` |
+
+Verified locally in a real browser with a dummy pixel ID: `PageView` fires on
+first load **and again on client-side route changes** (the App Router does not
+reload the document, so this had to be wired by hand or the whole funnel would
+look like a one-page site). `Lead` fires only when `/api/inquiry` **accepts** the
+enquiry — a `503` or a validation failure fires nothing. The `Lead` payload
+carries the source brand only: no name, email, phone, or location goes to Meta.
+
 ## 🟠 Milestone 4
 
 | # | Item | Blocks |
 |---|---|---|
 | B14 | **Domain** / registrar access for `zerosixtythree.com` | DNS repoint from the old Canva-hosted site |
-| B15 | **Meta Business** access | Meta Pixel install + event verification |
+| B15 | **Meta Business** access | Confirming the events land in Events Manager. The pixel itself is built and inert — this only blocks *verification with the client* |
 | B16 | **Client GitHub** account | Final source-code transfer (happens once the fee is settled) |
-| B17 | Social share image direction | OG image |
+| B17 | ~~Social share image direction~~ → **provisional, unblocked** | Built from confirmed assets only: the real logo mark, the confirmed lime/white/black palette, and the wordmark verbatim from `content/site.ts`. Nothing invented. Regenerate with `node scripts/generate-brand-images.mjs` if management wants a different direction |
 
 ---
 

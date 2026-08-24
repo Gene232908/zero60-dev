@@ -1,0 +1,84 @@
+{
+  "capturedAt": "2026-08-24T11:50:54.900Z",
+  "note": "Structural contract for the Milestone 5 craft pass. Do not regenerate.",
+  "pages": {
+    "home": {
+      "file": "app/(site)/page.tsx",
+      "sections": [
+        "Hero",
+        "ServiceTicker",
+        "Manifesto",
+        "DualBrandSplit",
+        "EventIndex",
+        "ServicesLedger",
+        "FinalCTA"
+      ]
+    },
+    "about": {
+      "file": "app/(site)/about/page.tsx",
+      "sections": [
+        "AboutHero",
+        "AboutTiles",
+        "AboutStory",
+        "FinalCTA"
+      ]
+    },
+    "services": {
+      "file": "app/(site)/services/page.tsx",
+      "sections": [
+        "ServicesHero",
+        "ServicesBento",
+        "EventIndex",
+        "FinalCTA"
+      ]
+    },
+    "contact": {
+      "file": "app/(site)/contact/page.tsx",
+      "sections": [
+        "BookingSection"
+      ]
+    },
+    "society": {
+      "file": "app/(site)/society/page.tsx",
+      "sections": [
+        "SocietyHero",
+        "SocietyStatement",
+        "SocietyCategories",
+        "SocietyGallery",
+        "SocietyCTA"
+      ]
+    }
+  },
+  "sectionFiles": [
+    "AboutHero.tsx",
+    "AboutStory.tsx",
+    "AboutTiles.tsx",
+    "BookingSection.tsx",
+    "DualBrandSplit.tsx",
+    "EventIndex.tsx",
+    "FinalCTA.tsx",
+    "Hero.tsx",
+    "Manifesto.tsx",
+    "RouteStub.tsx",
+    "ServiceTicker.tsx",
+    "ServicesBento.tsx",
+    "ServicesHero.tsx",
+    "ServicesLedger.tsx",
+    "SocietyCTA.tsx",
+    "SocietyCategories.tsx",
+    "SocietyGallery.tsx",
+    "SocietyHero.tsx",
+    "SocietyStatement.tsx"
+  ],
+  "palette": {
+    "brand-lime": "#ADFF2A",
+    "brand-white": "#FFFFFF",
+    "brand-black": "#000000",
+    "ink-900": "#0A0A0A",
+    "ink-800": "#141414",
+    "ink-700": "#1E1E1E",
+    "ink-600": "#2A2A2A",
+    "paper": "#F7F7F4",
+    "accent": "var(--brand-lime)"
+  }
+}

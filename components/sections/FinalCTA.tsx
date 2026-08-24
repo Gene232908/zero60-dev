@@ -1,5 +1,6 @@
 import { KineticHeading, MagneticButton, Reveal, StickerSpin } from '@/components/motion';
 import { CLOSING, CONTACT } from '@/content/site';
+import { ContactLink } from '@/components/ui/ContactLink';
 
 /**
  * FinalCTA — the visual climax (design brief §21).
@@ -25,32 +26,22 @@ export function FinalCTA() {
         />
 
         <div className="grid grid-cols-12 items-end gap-y-10">
-          <Reveal variant="rise" weight="secondary" className="col-span-12 md:col-span-5">
+          <Reveal variant="settle" weight="secondary" delay={0.25} className="col-span-12 md:col-span-5">
             <div className="border-t border-line pt-5">
               <p className="mb-6 text-sm leading-relaxed text-fg-muted">{CLOSING.supporting}</p>
               <ul className="space-y-1.5 text-sm">
                 <li>
-                  <a
-                    href={CONTACT.phoneHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.phoneDisplay}
-                  </a>
+                  <ContactLink href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</ContactLink>
                 </li>
                 <li>
-                  <a
-                    href={CONTACT.emailHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.email}
-                  </a>
+                  <ContactLink href={CONTACT.emailHref}>{CONTACT.email}</ContactLink>
                 </li>
               </ul>
             </div>
           </Reveal>
 
           <div className="col-span-12 flex items-end justify-between gap-6 md:col-span-6 md:col-start-7">
-            <Reveal variant="rise" weight="tertiary" delay={0.1}>
+            <Reveal variant="lead" weight="tertiary" delay={0.35}>
               <MagneticButton
                 href={CLOSING.contactHref}
                 cursorLabel="Enquire"

@@ -1,6 +1,7 @@
 import { KineticHeading, Reveal } from '@/components/motion';
 import { BookingForm } from '@/components/forms/BookingForm';
 import { CONTACT } from '@/content/site';
+import { ContactLink } from '@/components/ui/ContactLink';
 
 /**
  * BookingSection — the editorial wrapper around Developer 1's inquiry form.
@@ -28,30 +29,23 @@ export function BookingSection() {
               <p className="eyebrow mb-6">Or reach us directly</p>
             </Reveal>
 
-            <Reveal variant="rise" weight="secondary" delay={0.1}>
+            <Reveal variant="settle" weight="secondary" delay={0.1}>
               <ul className="space-y-4 text-sm">
                 <li>
-                  <a
-                    href={CONTACT.phoneHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.phoneDisplay}
-                  </a>
+                  <ContactLink href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</ContactLink>
                 </li>
                 <li>
-                  <a
-                    href={CONTACT.emailHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.email}
-                  </a>
+                  <ContactLink href={CONTACT.emailHref}>{CONTACT.email}</ContactLink>
                 </li>
                 <li className="pt-2 text-fg-faint">{CONTACT.region}</li>
               </ul>
             </Reveal>
 
-            <Reveal variant="fade" weight="tertiary" delay={0.25}>
-              <p className="mt-10 max-w-[34ch] border-t border-line pt-5 text-xs leading-relaxed text-fg-faint">
+            <Reveal variant="settle" weight="tertiary" delay={0.25} className="mt-10">
+              <Reveal variant="draw" delay={0.4}>
+                <span aria-hidden="true" className="block h-px w-full max-w-[34ch] bg-line" />
+              </Reveal>
+              <p className="max-w-[34ch] pt-5 text-xs leading-relaxed text-fg-faint">
                 Tell us the date, the place and roughly how many people, and we can come back with a
                 realistic quote rather than a guess.
               </p>
@@ -61,7 +55,7 @@ export function BookingSection() {
 
         {/* The form itself */}
         <div className="col-span-12 lg:col-span-7 lg:col-start-6">
-          <Reveal variant="fade" weight="tertiary">
+          <Reveal variant="lead" weight="primary">
             <KineticHeading lines={['Make an', 'enquiry']} size="md" className="mb-12" />
           </Reveal>
           <BookingForm />

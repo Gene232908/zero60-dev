@@ -18,11 +18,24 @@ export const DUR = {
   cinematic: 1.2,
 } as const;
 
-export const EASE: Record<'out' | 'inOut' | 'entrance' | 'exit', Bezier> = {
+/**
+ * The first four are the easeOut/easeQuint family every starter kit ships —
+ * correct, and anonymous. The last three are the house voice; see the
+ * `--ease-signature` block in styles/tokens.css for what each one is for.
+ * These values MUST stay identical to their CSS counterparts (gate check B3).
+ */
+export const EASE: Record<
+  'out' | 'inOut' | 'entrance' | 'exit' | 'signature' | 'anticipate' | 'overshoot' | 'refined',
+  Bezier
+> = {
   out: [0.16, 1, 0.3, 1],
   inOut: [0.65, 0, 0.35, 1],
   entrance: [0.22, 1, 0.36, 1],
   exit: [0.55, 0, 1, 0.45],
+  signature: [0.33, 1.12, 0.24, 1],
+  anticipate: [0.62, -0.28, 0.24, 1],
+  overshoot: [0.18, 1.34, 0.42, 1],
+  refined: [0.34, 0.02, 0.14, 1],
 };
 
 /** Seconds between staggered siblings. */
@@ -67,5 +80,7 @@ export const TRANSITION = {
 export const CLIP = {
   hiddenUp: 'inset(100% 0% 0% 0%)',
   hiddenDown: 'inset(0% 0% 100% 0%)',
+  /** Collapsed to the left edge — for rules and hairlines that draw across. */
+  hiddenRight: 'inset(0% 100% 0% 0%)',
   visible: 'inset(0% 0% 0% 0%)',
 } as const;

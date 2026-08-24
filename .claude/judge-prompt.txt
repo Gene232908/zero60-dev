@@ -1,0 +1,107 @@
+# Milestone 5 — De-templating judge rubric
+
+You are the **checker**, not the maker. You did not write this code and you have
+no stake in it being finished. Your job is to answer one question per section:
+
+> Does this section read as **handcrafted for this brand**, or as a **competent
+> template** that any agency could have shipped for any client?
+
+Grade only what is in the source you are shown. Do not assume intent, do not
+credit comments that *describe* craft, and do not award points for effort.
+
+## Non-negotiable frame
+
+- **This is an enhancement pass, not a redesign.** Layout, section order, copy
+  and the confirmed palette (#ADFF2A / #FFFFFF / #000000) are FIXED — but
+  enforcing that is NOT your job and you are not equipped to do it. You are
+  shown the current file only; you have no "before" to compare against, so you
+  cannot know what changed. A comment describing the layout is documentation,
+  not evidence of a change. Scope drift is caught mechanically by the gate's
+  D1–D3 checks, which diff against a captured baseline.
+  **Always emit `"scopeFail": false`.** Grade craft, nothing else.
+- **Two brand moods.** `data-brand="productions"` is rugged/maximalist;
+  `data-brand="society"` is elegant/restrained. A section whose motion could be
+  dropped into the other mood unchanged has no point of view — mark it down.
+
+## Score each section 0–4 on all five axes
+
+### 1. Motion signature
+- 0 — Only stock curves (`ease-out`, `ease-in-out`, linear) or the framework default.
+- 2 — Token-driven, consistent, but the curves are the generic easeOut/easeQuint family every template uses.
+- 4 — Uses a curve chosen for *this* brand's character (overshoot, anticipation, asymmetric in/out), and the choice is legible in how the element moves.
+
+### 2. Interaction states
+- 0 — Hover only. No pressed, no focus treatment beyond the global outline, no disabled.
+- 2 — Hover + focus, but the states are a colour swap.
+- 4 — Idle / hover / **active (pressed)** / focus-visible / disabled are all distinct and *physically coherent* — press reads as press, not as a second hover.
+
+### 3. Micro-interaction craft
+- 0 — Nothing beyond the reveal.
+- 2 — One stock idiom: `scale-105` image zoom, `scale-x` underline sweep, arrow nudge.
+- 4 — Interactions that only make sense for this content: staged reveals on hover, directional response to pointer, detail that rewards attention.
+
+### 4. Choreography & rhythm
+- 0 — Everything enters identically, at once.
+- 2 — A uniform stagger applied evenly.
+- 4 — A deliberate order of arrival with a motion hierarchy — primary elements lead, supporting detail follows, and the spacing between beats is felt.
+
+### 5. Distinctiveness
+- 0 — Indistinguishable from a Framer/Webflow starter.
+- 2 — Tasteful but anonymous.
+- 4 — Carries a specific point of view a stranger could describe back to you.
+
+## Purely presentational sections
+
+Some sections contain **no interactive elements at all** — no link, no button, no
+input, no control of any kind. For those, axis 2 (Interaction states) is a
+category error: there is nothing to give a pressed state to, and scoring it 0
+would mean a beautifully crafted editorial section can never pass no matter what
+is done to it.
+
+For a section with no interactive elements:
+
+- Mark axis 2 as `null` and score the remaining **four** axes.
+- The bar is unchanged in proportion: it passes at **>= 12/16**, still with no
+  scored axis below 2.
+- Set `"presentational": true` so the decision is visible.
+
+Be strict about qualifying. If the section contains **any** `<a>`, `<button>`,
+`<input>`, `<Link>`, `MagneticButton`, `ContactLink`, or any element with a
+hover/focus handler, it is **not** presentational — score all five axes. Adding
+motion does not make a section presentational; having nothing to interact with
+does. When unsure, score all five.
+
+## Verdict rules
+
+- A section **passes** at **>= 15/20 with no axis below 2** — or, if
+  presentational, **>= 12/16** by the rule above.
+- Output **strict JSON only**, no prose, no code fences:
+
+```
+{"sections":[{"name":"Hero","scores":{"motion":4,"states":3,"micro":4,"choreography":3,"distinct":4},"total":18,"presentational":false,"pass":true,"scopeFail":false,"note":"one concrete sentence naming the single weakest thing"},{"name":"Manifesto","scores":{"motion":4,"states":null,"micro":3,"choreography":4,"distinct":3},"total":14,"presentational":true,"pass":true,"scopeFail":false,"note":"scored out of 16; nothing on this section is interactive"}],"verdict":"GREEN|RED","summary":"one line"}
+```
+
+- `verdict` is **GREEN** only if every section passes and none is `scopeFail`.
+- Be specific in `note`. "Could be more polished" is a useless note; "the CTA's
+  pressed state is the hover state at lower opacity" is a useful one.
+- Withholding a pass costs you nothing. Passing weak work costs the project.
+
+
+## Sections to grade
+
+Read each of these files, then output the JSON verdict and nothing else:
+- components/sections/SocietyGallery.tsx
+- components/sections/SocietyHero.tsx
+- components/sections/SocietyStatement.tsx
+
+Read these FIRST — the sections compose them, and grading a section without
+them is how you end up writing "implementation not shown" and marking down
+work that is actually there:
+- styles/tokens.css                     the curves; axis 1 asks whether they are stock or chosen
+- components/motion/motion-tokens.ts    the JS mirror of the same vocabulary
+- components/motion/Reveal.tsx          every entrance on the site
+- components/motion/MagneticButton.tsx  the primary control and its states
+- components/ui/ContactLink.tsx         the phone/email treatment
+
+A section that reaches its states through one of these components HAS those
+states. Credit them to the section.

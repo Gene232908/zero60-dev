@@ -1,0 +1,156 @@
+{
+  "judgedAt": "2026-08-24T13:25:38.108Z",
+  "sections": [
+    {
+      "name": "AboutHero",
+      "scores": {
+        "motion": 3,
+        "states": null,
+        "micro": 3,
+        "choreography": 3,
+        "distinct": 3
+      },
+      "total": 12,
+      "presentational": true,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Rule draws on delayed beat; settle and draw curves are house-chosen, but entrance rhythm is uneven"
+    },
+    {
+      "name": "AboutStory",
+      "scores": {
+        "motion": 3,
+        "states": 0,
+        "micro": 3,
+        "choreography": 3,
+        "distinct": 4
+      },
+      "total": 13,
+      "presentational": false,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Service list is hover-only with no keyboard focus or active state; handcrafted choreography and micro-details cannot overcome missing interaction completeness"
+    },
+    {
+      "name": "AboutTiles",
+      "scores": {
+        "motion": 3,
+        "states": 0,
+        "micro": 3,
+        "choreography": 4,
+        "distinct": 4
+      },
+      "total": 14,
+      "presentational": false,
+      "pass": false,
+      "scopeFail": false,
+      "note": "Image hovers are hover-only (no focus-visible); desaturate-on-entry and radial choreography are crafted, but missing full state vocabulary fails the bar"
+    },
+    {
+      "name": "BookingSection",
+      "scores": {
+        "motion": 3,
+        "states": 4,
+        "micro": 3,
+        "choreography": 3,
+        "distinct": 3
+      },
+      "total": 16,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "ContactLink provides all four states (idle/hover/focus/active); underline-draw gesture is directional; form/contact layout separation is clear"
+    },
+    {
+      "name": "DualBrandSplit",
+      "scores": {
+        "motion": 4,
+        "states": 4,
+        "micro": 4,
+        "choreography": 4,
+        "distinct": 4
+      },
+      "total": 20,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Signature section: proves token system works by rendering identical markup under both brands; motion difference (signature vs. refined) is legible in how panels move and respond to hover"
+    },
+    {
+      "name": "Hero",
+      "scores": {
+        "motion": 4,
+        "states": 3,
+        "micro": 4,
+        "choreography": 4,
+        "distinct": 4
+      },
+      "total": 19,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Spec plate hover is color-only; everything else (parallax layering, magnetic drift, wipe fill, staggered assembly, scroll-cue drift) is brand-specific."
+    },
+    {
+      "name": "Manifesto",
+      "scores": {
+        "motion": 4,
+        "states": null,
+        "micro": 3,
+        "choreography": 3,
+        "distinct": 4
+      },
+      "total": 14,
+      "presentational": true,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Scored out of 16; the drawn rule and horizontal type drift are deliberate in a quiet section."
+    },
+    {
+      "name": "ServiceTicker",
+      "scores": {
+        "motion": 4,
+        "states": 2,
+        "micro": 4,
+        "choreography": 3,
+        "distinct": 4
+      },
+      "total": 17,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Diamond rotation on hover is the only micro-interaction; interaction-state coverage is thin, but the counter-rotating tracks at different speeds carry the POV."
+    },
+    {
+      "name": "EventIndex",
+      "scores": {
+        "motion": 4,
+        "states": 4,
+        "micro": 4,
+        "choreography": 3,
+        "distinct": 4
+      },
+      "total": 19,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Number and title move against each other on hover, rule draws in, neighbor dimming—all content-specific. Stagger is tight (55ms) but felt."
+    },
+    {
+      "name": "FinalCTA",
+      "scores": {
+        "motion": 4,
+        "states": 4,
+        "micro": 3,
+        "choreography": 3,
+        "distinct": 4
+      },
+      "total": 18,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Micro-interactions delegated to MagneticButton and ContactLink; choreography is clear but less intricate than EventIndex."
+    }
+  ],
+  "verdict": "RED"
+}

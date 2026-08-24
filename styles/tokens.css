@@ -38,6 +38,33 @@
   --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-exit: cubic-bezier(0.55, 0, 1, 0.45);
 
+  /* ---- Signature curves ----
+     The four above are the easeOut/easeQuint family every starter kit ships.
+     They are correct, and they are anonymous. These three are the house voice:
+
+       signature   fast attack, a hair past the mark, settles. The "063 snap" —
+                   the curve of a cue hit on time. Used for anything that leads.
+       anticipate  pulls back before it moves (negative first control point).
+                   Weight loading before a push — for elements that arrive with
+                   intent rather than simply appearing.
+       overshoot   a real bounce past the target. Reserved for press feedback
+                   and small accents, never for large travel.
+
+     Rule of thumb: signature leads, anticipate enters, overshoot answers touch. */
+  --ease-signature: cubic-bezier(0.33, 1.12, 0.24, 1);
+  --ease-anticipate: cubic-bezier(0.62, -0.28, 0.24, 1);
+  --ease-overshoot: cubic-bezier(0.18, 1.34, 0.42, 1);
+
+  /* Society's counterpart to `signature`. Society cannot borrow the snap — the
+     overshoot is the wrong voice entirely — but it must not fall back on the
+     stock entrance curve either, which is how the elegant register ends up
+     reading as anonymous rather than as restrained.
+
+     `refined` takes its time leaving, glides long, and arrives without ever
+     passing the mark. Restraint as a deliberate curve, not as an absence of
+     one. Society uses it for BOTH travel and press: one gesture, held. */
+  --ease-refined: cubic-bezier(0.34, 0.02, 0.14, 1);
+
   /* ---- Stagger rhythm for choreographed entrances (design brief §8) ---- */
   --stagger-tight: 60ms;
   --stagger-base: 110ms;
@@ -72,6 +99,13 @@
   --motion-scale: 1;
   --reveal-distance: 42px;
   --radius: 0px;
+
+  /* Productions moves like it means it: the snap, and a press that answers back. */
+  --ease-brand: var(--ease-signature);
+  --ease-press: var(--ease-overshoot);
+  --press-scale: 0.965;
+  --press-shift: 1px;
+  --hover-lift: -2px;
 }
 
 /* =============================================================================
@@ -97,6 +131,15 @@
   --motion-scale: 0.62;
   --reveal-distance: 22px;
   --radius: 0px;
+
+  /* Society never bounces. Same token names, deliberately quieter values — the
+     mood swap carries through motion, not just colour and type. A press here is
+     a settle, not a pop. */
+  --ease-brand: var(--ease-refined);
+  --ease-press: var(--ease-refined);
+  --press-scale: 0.988;
+  --press-shift: 0px;
+  --hover-lift: -1px;
 }
 
 /* Society on a dark stage — used when an elegant section sits inside a dark page. */
