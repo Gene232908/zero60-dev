@@ -31,7 +31,7 @@ export function ServicesLedger() {
             <Reveal variant="fade" weight="tertiary">
               <p className="eyebrow mb-6">Our services</p>
             </Reveal>
-            <Reveal variant="rise" weight="secondary">
+            <Reveal variant="lead" weight="primary">
               <h2 className="display text-[clamp(2rem,5vw,3.5rem)]">
                 <span className="block">Everything</span>
                 <span className="block">your event</span>
@@ -43,22 +43,29 @@ export function ServicesLedger() {
 
         {/* Ledger rows */}
         <div className="col-span-12 lg:col-span-7 lg:col-start-6">
-          <Reveal stagger variant="rise" weight="tertiary">
+          {/* A ledger should reward reading down it. Each row answers the pointer
+              with its own rule and a number that steps out of the way — the
+              label colour-swap alone left eight identical lines. */}
+          <Reveal stagger="tight" variant="settle" weight="tertiary">
             {SERVICES.map((service, i) => (
               <dl
                 key={service.id}
-                className="group grid grid-cols-12 items-baseline gap-x-4 gap-y-2 border-b border-line py-6 first:border-t"
+                className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-2 border-b border-line py-6 first:border-t"
               >
-                <dt className="eyebrow col-span-2 sm:col-span-1">
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-[-1px] h-px origin-left scale-x-0 bg-accent transition-transform duration-[var(--dur-base)] ease-[var(--ease-signature)] group-hover:scale-x-100"
+                />
+                <dt className="eyebrow col-span-2 transition-[color,transform] duration-[var(--dur-fast)] ease-[var(--ease-signature)] group-hover:-translate-x-1 group-hover:text-accent sm:col-span-1">
                   {String(i + 1).padStart(2, '0')}
                 </dt>
                 <dd className="col-span-10 sm:col-span-4">
-                  <span className="display text-base tracking-normal text-fg transition-colors duration-[var(--dur-micro)] group-hover:text-accent">
+                  <span className="display inline-block text-base tracking-normal text-fg transition-[color,transform] duration-[var(--dur-fast)] ease-[var(--ease-signature)] group-hover:translate-x-1 group-hover:text-accent">
                     {service.label}
                   </span>
                 </dd>
                 <dd className="col-span-12 sm:col-span-7">
-                  <span className="text-sm leading-relaxed text-fg-muted">
+                  <span className="text-sm leading-relaxed text-fg-muted transition-colors duration-[var(--dur-fast)] group-hover:text-fg">
                     {service.description}
                   </span>
                 </dd>

@@ -31,18 +31,25 @@ export function ServicesHero() {
         </div>
       </div>
 
-      <Marquee duration={44} className="border-y border-line py-4" pauseOnHover>
-        {SERVICE_RAIL.map((item) => (
-          <span key={item} className="flex items-center">
-            <span className="mx-7 text-[0.72rem] font-medium uppercase tracking-[0.3em] text-fg-muted">
-              {item}
+      {/* The rail arrives after the wordmark has landed rather than with it, so
+          the page reads its title before the capability list starts moving. */}
+      <Reveal variant="settle" weight="secondary" delay={0.45}>
+        <Marquee duration={44} className="border-y border-line py-4" pauseOnHover>
+          {SERVICE_RAIL.map((item) => (
+            <span key={item} className="group/item flex items-center">
+              <span className="mx-7 text-[0.72rem] font-medium uppercase tracking-[0.3em] text-fg-muted transition-colors duration-[var(--dur-fast)] group-hover/item:text-fg">
+                {item}
+              </span>
+              <span
+                className="text-accent transition-transform duration-[var(--dur-base)] ease-[var(--ease-overshoot)] group-hover/item:rotate-90"
+                aria-hidden="true"
+              >
+                &#9670;
+              </span>
             </span>
-            <span className="text-accent" aria-hidden="true">
-              &#9670;
-            </span>
-          </span>
-        ))}
-      </Marquee>
+          ))}
+        </Marquee>
+      </Reveal>
     </section>
   );
 }

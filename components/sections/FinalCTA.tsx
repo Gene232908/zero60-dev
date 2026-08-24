@@ -1,6 +1,6 @@
 import { KineticHeading, MagneticButton, Reveal, StickerSpin } from '@/components/motion';
 import { CLOSING, CONTACT } from '@/content/site';
-import { cn } from '@/lib/utils/cn';
+import { ContactLink } from '@/components/ui/ContactLink';
 
 /**
  * FinalCTA — the visual climax (design brief §21).
@@ -12,39 +12,6 @@ import { cn } from '@/lib/utils/cn';
  * Each line indents further than the last so the block reads as a descending
  * staircase rather than a centred slab.
  */
-
-/**
- * A phone number and an email address are the two things on this page someone
- * actually reaches for, and they were plain text that changed colour. Now the
- * accent hairline draws under the label on approach and retracts to the other
- * side on leave, the whole thing takes the press, and keyboard focus gets the
- * same treatment as hover rather than the blanket outline.
- */
-function ContactLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <a
-      href={href}
-      className={cn(
-        'group relative inline-block text-fg',
-        'transition-[color,transform] duration-[var(--dur-micro)] ease-[var(--ease-brand)]',
-        'hover:text-accent focus-visible:text-accent',
-        'active:scale-[var(--press-scale)] active:ease-[var(--ease-press)]',
-        'focus-visible:outline-none',
-      )}
-    >
-      {children}
-      <span
-        aria-hidden="true"
-        className={cn(
-          'absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-accent',
-          'transition-transform duration-[var(--dur-fast)] ease-[var(--ease-signature)]',
-          'group-hover:origin-left group-hover:scale-x-100',
-          'group-focus-visible:origin-left group-focus-visible:scale-x-100',
-        )}
-      />
-    </a>
-  );
-}
 
 export function FinalCTA() {
   return (
