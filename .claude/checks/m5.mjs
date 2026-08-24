@@ -78,7 +78,7 @@ const STOCK_CURVES = [
   '0,0,1,1',
 ];
 
-const SIGNATURE_NAMES = ['signature', 'anticipate', 'overshoot'];
+const SIGNATURE_NAMES = ['signature', 'anticipate', 'overshoot', 'refined'];
 
 /**
  * What the taste half of the gate grades. Same roster as DEV1_SECTIONS — the

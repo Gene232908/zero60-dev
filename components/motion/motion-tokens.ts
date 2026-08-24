@@ -25,7 +25,7 @@ export const DUR = {
  * These values MUST stay identical to their CSS counterparts (gate check B3).
  */
 export const EASE: Record<
-  'out' | 'inOut' | 'entrance' | 'exit' | 'signature' | 'anticipate' | 'overshoot',
+  'out' | 'inOut' | 'entrance' | 'exit' | 'signature' | 'anticipate' | 'overshoot' | 'refined',
   Bezier
 > = {
   out: [0.16, 1, 0.3, 1],
@@ -35,6 +35,7 @@ export const EASE: Record<
   signature: [0.33, 1.12, 0.24, 1],
   anticipate: [0.62, -0.28, 0.24, 1],
   overshoot: [0.18, 1.34, 0.42, 1],
+  refined: [0.34, 0.02, 0.14, 1],
 };
 
 /** Seconds between staggered siblings. */

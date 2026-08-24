@@ -55,6 +55,16 @@
   --ease-anticipate: cubic-bezier(0.62, -0.28, 0.24, 1);
   --ease-overshoot: cubic-bezier(0.18, 1.34, 0.42, 1);
 
+  /* Society's counterpart to `signature`. Society cannot borrow the snap — the
+     overshoot is the wrong voice entirely — but it must not fall back on the
+     stock entrance curve either, which is how the elegant register ends up
+     reading as anonymous rather than as restrained.
+
+     `refined` takes its time leaving, glides long, and arrives without ever
+     passing the mark. Restraint as a deliberate curve, not as an absence of
+     one. Society uses it for BOTH travel and press: one gesture, held. */
+  --ease-refined: cubic-bezier(0.34, 0.02, 0.14, 1);
+
   /* ---- Stagger rhythm for choreographed entrances (design brief §8) ---- */
   --stagger-tight: 60ms;
   --stagger-base: 110ms;
@@ -125,8 +135,8 @@
   /* Society never bounces. Same token names, deliberately quieter values — the
      mood swap carries through motion, not just colour and type. A press here is
      a settle, not a pop. */
-  --ease-brand: var(--ease-entrance);
-  --ease-press: var(--ease-out);
+  --ease-brand: var(--ease-refined);
+  --ease-press: var(--ease-refined);
   --press-scale: 0.988;
   --press-shift: 0px;
   --hover-lift: -1px;

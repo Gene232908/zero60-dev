@@ -220,9 +220,17 @@ function judgeBatch(rubric, files) {
     'Read each of these files, then output the JSON verdict and nothing else:',
     ...files.map((f) => `- ${f}`),
     '',
-    'Read components/motion/motion-tokens.ts and styles/tokens.css first — they',
-    'hold the motion vocabulary these sections draw on, and axis 1 is about',
-    'whether the curves used are stock or chosen.',
+    'Read these FIRST — the sections compose them, and grading a section without',
+    'them is how you end up writing "implementation not shown" and marking down',
+    'work that is actually there:',
+    '- styles/tokens.css                     the curves; axis 1 asks whether they are stock or chosen',
+    '- components/motion/motion-tokens.ts    the JS mirror of the same vocabulary',
+    '- components/motion/Reveal.tsx          every entrance on the site',
+    '- components/motion/MagneticButton.tsx  the primary control and its states',
+    '- components/ui/ContactLink.tsx         the phone/email treatment',
+    '',
+    'A section that reaches its states through one of these components HAS those',
+    'states. Credit them to the section.',
   ].join('\n');
 
   const promptFile = join(ROOT, '.claude', 'judge-prompt.txt');

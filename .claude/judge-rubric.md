@@ -50,13 +50,35 @@ credit comments that *describe* craft, and do not award points for effort.
 - 2 — Tasteful but anonymous.
 - 4 — Carries a specific point of view a stranger could describe back to you.
 
+## Purely presentational sections
+
+Some sections contain **no interactive elements at all** — no link, no button, no
+input, no control of any kind. For those, axis 2 (Interaction states) is a
+category error: there is nothing to give a pressed state to, and scoring it 0
+would mean a beautifully crafted editorial section can never pass no matter what
+is done to it.
+
+For a section with no interactive elements:
+
+- Mark axis 2 as `null` and score the remaining **four** axes.
+- The bar is unchanged in proportion: it passes at **>= 12/16**, still with no
+  scored axis below 2.
+- Set `"presentational": true` so the decision is visible.
+
+Be strict about qualifying. If the section contains **any** `<a>`, `<button>`,
+`<input>`, `<Link>`, `MagneticButton`, `ContactLink`, or any element with a
+hover/focus handler, it is **not** presentational — score all five axes. Adding
+motion does not make a section presentational; having nothing to interact with
+does. When unsure, score all five.
+
 ## Verdict rules
 
-- A section **passes** at **>= 15/20 with no axis below 2**.
+- A section **passes** at **>= 15/20 with no axis below 2** — or, if
+  presentational, **>= 12/16** by the rule above.
 - Output **strict JSON only**, no prose, no code fences:
 
 ```
-{"sections":[{"name":"Hero","scores":{"motion":4,"states":3,"micro":4,"choreography":3,"distinct":4},"total":18,"pass":true,"scopeFail":false,"note":"one concrete sentence naming the single weakest thing"}],"verdict":"GREEN|RED","summary":"one line"}
+{"sections":[{"name":"Hero","scores":{"motion":4,"states":3,"micro":4,"choreography":3,"distinct":4},"total":18,"presentational":false,"pass":true,"scopeFail":false,"note":"one concrete sentence naming the single weakest thing"},{"name":"Manifesto","scores":{"motion":4,"states":null,"micro":3,"choreography":4,"distinct":3},"total":14,"presentational":true,"pass":true,"scopeFail":false,"note":"scored out of 16; nothing on this section is interactive"}],"verdict":"GREEN|RED","summary":"one line"}
 ```
 
 - `verdict` is **GREEN** only if every section passes and none is `scopeFail`.
