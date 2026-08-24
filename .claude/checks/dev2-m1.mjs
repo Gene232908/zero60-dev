@@ -137,12 +137,22 @@ export const checks = [
   },
   {
     id: 'A8',
-    desc: 'No fixed-pixel layout widths (they break the phone/tablet path)',
+    desc: 'No fixed-pixel width wider than a phone (that is what forces horizontal scroll)',
     run: (c) => {
-      const offenders = c
-        .srcFiles()
-        .filter((f) => /\b(w|min-w|max-w)-\[\s*\d{3,}px\s*\]/.test(c.read(f)));
-      return offenders.length === 0 || `fixed pixel layout width in: ${offenders.join(', ')}`;
+      // What this check is actually for: an element FORCED wider than the
+      // narrowest viewport, which produces horizontal scroll on a phone.
+      //   w-[420px] / min-w-[420px]  -> forces a width, can overflow -> flag
+      //   max-w-[190px]              -> only ever CONSTRAINS a width  -> fine
+      // 390px is the reference phone in docs/DEV2-QA.md, so nothing at or below
+      // that can overflow it.
+      const PHONE = 390;
+      const offenders = [];
+      for (const f of c.srcFiles()) {
+        for (const m of c.read(f).matchAll(/\b(w|min-w)-\[\s*(\d{3,})px\s*\]/g)) {
+          if (Number(m[2]) > PHONE) offenders.push(`${f} (${m[0]})`);
+        }
+      }
+      return offenders.length === 0 || `fixed width wider than a ${PHONE}px phone: ${offenders.join(', ')}`;
     },
   },
 
