@@ -4,410 +4,315 @@
 <meta charset="utf-8">
 <title>ZeroSixtyThree — Image Checklist</title>
 <style>
-  @page { size: A4 landscape; margin: 12mm 10mm; }
+  @page { size: A4 landscape; margin: 11mm 9mm; }
   * { box-sizing: border-box; }
-  body {
-    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #111; margin: 0; font-size: 9.2pt; line-height: 1.4;
-  }
-  h1 { font-size: 20pt; margin: 0 0 2mm; letter-spacing: -0.02em; }
-  h2 {
-    font-size: 12pt; margin: 7mm 0 2mm; padding: 1.6mm 3mm;
-    background: #0A0A0A; color: #ADFF2A; letter-spacing: 0.08em; text-transform: uppercase;
-    break-after: avoid;
-  }
-  .sub { color: #555; margin: 0 0 4mm; font-size: 9pt; }
-  .legend { display: flex; gap: 4mm; flex-wrap: wrap; margin: 0 0 5mm; font-size: 8.4pt; }
-  .pill { padding: 1mm 2.5mm; border-radius: 2mm; font-weight: 600; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         color: #111; margin: 0; font-size: 8.8pt; line-height: 1.38; }
+  h1 { font-size: 19pt; margin: 0 0 1.5mm; letter-spacing: -0.02em; }
+  h2 { font-size: 11.5pt; margin: 6mm 0 2mm; padding: 1.5mm 3mm; background: #0A0A0A;
+       color: #ADFF2A; letter-spacing: .08em; text-transform: uppercase; break-after: avoid; }
+  .sub { color: #555; margin: 0 0 3mm; font-size: 8.6pt; }
+  .legend { display: flex; gap: 3mm; flex-wrap: wrap; margin: 0 0 4mm; font-size: 8pt; }
+  .pill { padding: .9mm 2.2mm; border-radius: 2mm; font-weight: 600; white-space: nowrap; }
   .p1 { background: #ffe0e0; color: #8a0000; }
   .p2 { background: #fff2cc; color: #7a5200; }
   .p3 { background: #e3f0ff; color: #0a3d75; }
   .ok { background: #e2f7e2; color: #14611a; }
-  table { width: 100%; border-collapse: collapse; break-inside: auto; }
+  table { width: 100%; border-collapse: collapse; }
   thead { display: table-header-group; }
   tr { break-inside: avoid; }
-  th {
-    background: #1a1a1a; color: #fff; text-align: left; padding: 2mm;
-    font-size: 8pt; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
-  }
-  td { padding: 2mm; border-bottom: 1px solid #ddd; vertical-align: top; }
+  th { background: #1a1a1a; color: #fff; text-align: left; padding: 1.8mm;
+       font-size: 7.6pt; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+  td { padding: 1.8mm; border-bottom: 1px solid #ddd; vertical-align: top; }
   tr:nth-child(even) td { background: #fafafa; }
-  .box { width: 4mm; height: 4mm; border: 1.2px solid #333; display: inline-block; }
+  .box { width: 3.6mm; height: 3.6mm; border: 1.2px solid #333; display: inline-block; }
+  .fname { font-family: ui-monospace, Consolas, monospace; font-weight: 700;
+           font-size: 8.6pt; color: #0a3d75; white-space: nowrap; }
   .ratio { font-weight: 700; font-family: ui-monospace, Consolas, monospace; white-space: nowrap; }
-  .px { font-family: ui-monospace, Consolas, monospace; white-space: nowrap; font-size: 8.6pt; }
-  .cur { color: #8a0000; font-family: ui-monospace, Consolas, monospace; font-size: 8.2pt; }
-  .curok { color: #14611a; font-family: ui-monospace, Consolas, monospace; font-size: 8.2pt; }
-  .note { font-size: 8.4pt; color: #444; }
-  .warn { background: #fff8e5; border-left: 3px solid #d19b00; padding: 3mm; margin: 4mm 0; font-size: 8.8pt; }
-  .crit { background: #ffefef; border-left: 3px solid #b00; padding: 3mm; margin: 4mm 0; font-size: 8.8pt; }
-  code { background: #eee; padding: 0.3mm 1mm; border-radius: 1mm; font-size: 8.4pt; }
+  .px { font-family: ui-monospace, Consolas, monospace; white-space: nowrap; font-size: 8.2pt; }
+  .cur { color: #8a0000; font-family: ui-monospace, Consolas, monospace; font-size: 7.8pt; }
+  .curok { color: #14611a; font-family: ui-monospace, Consolas, monospace; font-size: 7.8pt; }
+  .where { font-size: 7.8pt; color: #555; }
+  .note { font-size: 7.8pt; color: #666; }
+  .warn { background: #fff8e5; border-left: 3px solid #d19b00; padding: 2.5mm; margin: 3mm 0; font-size: 8.4pt; }
+  .crit { background: #ffefef; border-left: 3px solid #b00; padding: 2.5mm; margin: 3mm 0; font-size: 8.4pt; }
+  .tip  { background: #eef6ff; border-left: 3px solid #2b6cb0; padding: 2.5mm; margin: 3mm 0; font-size: 8.4pt; }
+  code { background: #eee; padding: .2mm 1mm; border-radius: 1mm; font-size: 8pt; }
 </style>
 </head>
 <body>
 
 <h1>ZeroSixtyThree — Image Checklist</h1>
 <p class="sub">
-  Every image slot on the site, verified against the code on <strong>2026-08-25</strong>.
-  Sections not listed here contain no images at all and need nothing.
-  <strong>Ratio</strong> is what the layout crops to — supply at that ratio or the crop will cut your subject.
+  Verified against the code on <strong>2026-08-25</strong>. Organised by <strong>FILE</strong>, not by section —
+  because several files are used in more than one place. There are <strong>22 files</strong> to supply, not 27 slots.
+  Save each Canva export using the exact <span class="fname">SAVE AS</span> name below.
 </p>
 
-<div class="legend">
-  <span class="pill p1">P1 — blocking / looks broken now</span>
-  <span class="pill p2">P2 — real but too low-resolution</span>
-  <span class="pill p3">P3 — nice to upgrade</span>
-  <span class="pill ok">OK — done, no action</span>
+<div class="tip">
+  <strong>How to send them:</strong> export as <strong>JPG</strong> (or PNG), name the file exactly as shown, and put
+  them all in one folder. Do <u>not</u> convert to .webp — I do that automatically when I install them.
+  If a file is missing I simply leave the current one in place, so you can send them in batches.
 </div>
 
 <div class="crit">
-  <strong>The single biggest issue:</strong> almost every photo on the site today was recovered by cropping
-  1366&nbsp;px-wide screenshots of your old website. Most are between <code>190×142</code> and <code>226×348</code> pixels —
-  they are being displayed 3–8× larger than their real size, which is why they look soft.
-  Replacing these is the highest-value thing you can do. This is tracked as <strong>BLOCKER B2</strong>.
+  <strong>Why this matters:</strong> almost every photo on the site today was recovered by cropping
+  1366&nbsp;px-wide screenshots of your old website. Most are between <code>190×142</code> and <code>226×348</code> pixels,
+  displayed 3–8× larger than their real size. That is the entire reason they look soft. <strong>BLOCKER B2.</strong>
 </div>
 
-<h2>1 — Home page</h2>
+<div class="legend">
+  <span class="pill p1">P1 — blocking / looks broken now</span>
+  <span class="pill p2">P2 — real photo but far too small</span>
+  <span class="pill p3">P3 — optional upgrade</span>
+  <span class="pill ok">OK — done</span>
+</div>
+
+<h2>A — Hero &amp; landing</h2>
 <table>
-  <thead>
-    <tr>
-      <th style="width:4%">✓</th><th style="width:15%">Slot</th><th style="width:7%">Ratio</th>
-      <th style="width:11%">Supply at</th><th style="width:33%">What the picture should show</th>
-      <th style="width:16%">What's there now</th><th style="width:6%">Pri</th>
-    </tr>
-  </thead>
+  <thead><tr>
+    <th style="width:4%">✓</th><th style="width:14%">Save as</th><th style="width:6%">Ratio</th>
+    <th style="width:10%">Export size</th><th style="width:31%">What the picture should show</th>
+    <th style="width:20%">Appears in</th><th style="width:10%">Now</th><th style="width:5%">Pri</th>
+  </tr></thead>
   <tbody>
     <tr>
       <td><span class="box"></span></td>
-      <td><strong>Hero background</strong><br><span class="note">full-screen plate</span></td>
+      <td class="fname">hero-bg.jpg</td>
       <td class="ratio">16:9</td>
       <td class="px">2560×1440</td>
-      <td>Wide landscape of a live setup — truss, lighting rig, stage, flight cases. Shot must have <strong>empty/dark space on the left half</strong>, because the ZERO SIXTY THREE wordmark sits there. Busy detail on the right is good. Low light / moody is ideal; it is desaturated to black &amp; white automatically.</td>
-      <td class="cur">1600×900<br>upscaled from 1366</td>
+      <td>Wide landscape of a live setup — truss, lighting rig, stage, flight cases.
+          <strong>Must have empty or dark space on the LEFT half</strong> — the ZERO SIXTY THREE wordmark sits there.
+          Busy detail on the right is good. Moody / low light is ideal; it is converted to black &amp; white automatically.</td>
+      <td class="where">Home hero background<br><span class="note">full screen</span></td>
+      <td class="cur">1600×900<br>upscaled</td>
       <td><span class="pill p2">P2</span></td>
     </tr>
     <tr>
       <td><span class="box"></span></td>
-      <td><strong>Hero — main frame</strong><br><span class="note">large portrait, right side</span></td>
+      <td class="fname">hero-main.jpg</td>
       <td class="ratio">4:5</td>
       <td class="px">1200×1500</td>
-      <td>A person <em>working</em> — camera operator filming, engineer at the desk. Vertical crop. This is the hero image people look at, so make it your strongest shot.</td>
-      <td class="cur">226×348</td>
+      <td>A person <em>working</em> — camera operator filming, engineer at the desk. Vertical.
+          <strong>Your strongest single shot</strong> — this is the framed photo beside the wordmark.</td>
+      <td class="where">Home hero — large frame<br><span class="note">NEW dedicated file — see note ★</span></td>
+      <td class="cur">226×348<br>shared w/ About</td>
       <td><span class="pill p1">P1</span></td>
     </tr>
     <tr>
       <td><span class="box"></span></td>
-      <td><strong>Hero — small frame</strong><br><span class="note">overlaps the main frame</span></td>
+      <td class="fname">hero-detail.jpg</td>
       <td class="ratio">5:4</td>
       <td class="px">1000×800</td>
-      <td>A tight detail shot that contrasts the main frame — drum kit, mixer faders, cabling, a lit stage. Small on screen, so it must read at a glance.</td>
-      <td class="cur">512×408</td>
+      <td>A tight detail that contrasts the main frame — drum kit, mixer faders, cabling, a lit stage.
+          Small on screen, so it must read instantly.</td>
+      <td class="where">Home hero — small frame<br><span class="note">NEW dedicated file — see note ★</span></td>
+      <td class="cur">512×408<br>shared w/ Bento</td>
       <td><span class="pill p2">P2</span></td>
     </tr>
     <tr>
       <td><span class="box"></span></td>
-      <td><strong>Two Houses — LEFT</strong><br><span class="note">063 Productions panel</span></td>
-      <td class="ratio">8:9<br><span class="note">near-square</span></td>
-      <td class="px">1600×1800</td>
-      <td>The <strong>rugged</strong> mood: loud, energetic, crowd, stage lights, live performance. Sits behind text at 30–45% opacity, so avoid busy centres.</td>
-      <td class="cur">664×444</td>
-      <td><span class="pill p2">P2</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Two Houses — RIGHT</strong><br><span class="note">063 Society panel</span></td>
-      <td class="ratio">8:9<br><span class="note">near-square</span></td>
-      <td class="px">1600×1800</td>
-      <td>The <strong>elegant</strong> mood: refined banquet, tasteful lighting, table settings, an upscale private event. Must feel calm and premium — the opposite of the left panel.</td>
-      <td class="cur">PLACEHOLDER<br>grey SVG frame</td>
-      <td><span class="pill p1">P1</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>About collage</strong><br><span class="note">3 stacked frames</span></td>
-      <td class="ratio">2:3</td>
-      <td class="px">800×1200<br>× 3 images</td>
-      <td>Three vertical frames that work as a set: e.g. hands on a mixer, an empty rigged stage, a camera operator. Different subjects, same visual family.</td>
-      <td class="cur">226×348 each</td>
-      <td><span class="pill p1">P1</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Event list previews</strong><br><span class="note">appear on hover</span></td>
-      <td class="ratio">4:3</td>
-      <td class="px">600×450<br>× 6 images</td>
-      <td>One per category, in this order: <strong>1</strong> Corporate&nbsp;Events &amp; Seminars · <strong>2</strong> Concerts &amp; Festivals · <strong>3</strong> Weddings · <strong>4</strong> Sports&nbsp;Events · <strong>5</strong> Community &amp; Charity · <strong>6</strong> Themed Events. Each must instantly read as that event type.</td>
-      <td class="cur">~190×145 each</td>
-      <td><span class="pill p1">P1</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Services closing band</strong><br><span class="note">full-width strip</span></td>
-      <td class="ratio">21:9<br><span class="note">cinematic</span></td>
+      <td class="fname">stage-truss.jpg</td>
+      <td class="ratio">21:9</td>
       <td class="px">2560×1080</td>
-      <td>A wide, dramatic establishing shot — full stage and truss before doors open, or a packed venue. Very wide crop, so the subject must survive heavy letterboxing.</td>
+      <td>Wide, dramatic establishing shot — full stage and truss before doors, or a packed venue.
+          Very wide crop, so the subject must survive heavy letterboxing.</td>
+      <td class="where">Home — services closing band<br>Portfolio gallery</td>
       <td class="cur">1240×308</td>
       <td><span class="pill p2">P2</span></td>
     </tr>
   </tbody>
 </table>
 
-<h2>2 — About page</h2>
+<h2>B — The two houses (the signature section)</h2>
 <table>
-  <thead>
-    <tr>
-      <th style="width:4%">✓</th><th style="width:15%">Slot</th><th style="width:7%">Ratio</th>
-      <th style="width:11%">Supply at</th><th style="width:33%">What the picture should show</th>
-      <th style="width:16%">What's there now</th><th style="width:6%">Pri</th>
-    </tr>
-  </thead>
+  <thead><tr>
+    <th style="width:4%">✓</th><th style="width:14%">Save as</th><th style="width:6%">Ratio</th>
+    <th style="width:10%">Export size</th><th style="width:31%">What the picture should show</th>
+    <th style="width:20%">Appears in</th><th style="width:10%">Now</th><th style="width:5%">Pri</th>
+  </tr></thead>
   <tbody>
     <tr>
       <td><span class="box"></span></td>
-      <td><strong>About tiles</strong><br><span class="note">row of 5 frames</span></td>
-      <td class="ratio">2:3</td>
-      <td class="px">800×1200<br>× 5 images</td>
-      <td>Five vertical frames covering the range of what you do — guitar/performer, mixing console, rigged stage, camera operator, camera &amp; photos. They sit at staggered heights, so each must stand alone.</td>
-      <td class="cur">226×348 each</td>
-      <td><span class="pill p1">P1</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>About story frame</strong><br><span class="note">tall, drifts on scroll</span></td>
-      <td class="ratio">3:4</td>
-      <td class="px">1200×1600</td>
-      <td>One strong portrait-orientation shot of the team at work — a cinema camera rig on a shoot, or an engineer mid-setup. Held large next to the story text.</td>
-      <td class="cur">664×448</td>
-      <td><span class="pill p2">P2</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>3 — Services page</h2>
-<table>
-  <thead>
-    <tr>
-      <th style="width:4%">✓</th><th style="width:15%">Slot</th><th style="width:7%">Ratio</th>
-      <th style="width:11%">Supply at</th><th style="width:33%">What the picture should show</th>
-      <th style="width:16%">What's there now</th><th style="width:6%">Pri</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Bento — feature tile</strong><br><span class="note">Audio Rental, largest</span></td>
+      <td class="fname">sound-engineer.jpg</td>
       <td class="ratio">4:3</td>
       <td class="px">1600×1200</td>
-      <td>Audio equipment hero shot — mixing desk, speaker stacks, racks. Sits behind the tile text at ~25% opacity, so keep the middle relatively calm.</td>
-      <td class="cur">1366×262<br><span class="note">wrong shape</span></td>
-      <td><span class="pill p2">P2</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Bento — Singers</strong></td>
-      <td class="ratio">4:3</td>
-      <td class="px">1200×900</td>
-      <td>A performer or band mid-performance on a lit stage.</td>
-      <td class="cur">512×408</td>
-      <td><span class="pill p2">P2</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Bento — DJ Services</strong></td>
-      <td class="ratio">4:3</td>
-      <td class="px">1200×900</td>
-      <td>DJ decks / controller with hands on them, ideally with crowd or lighting behind.</td>
-      <td class="cur">964×192<br><span class="note">wrong shape</span></td>
-      <td><span class="pill p2">P2</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Bento — Sound Engineering</strong></td>
-      <td class="ratio">4:3</td>
-      <td class="px">1200×900</td>
-      <td>Engineer at front-of-house, focused on the desk.</td>
+      <td>The <strong>rugged</strong> 063 Productions mood — loud, energetic: crowd, stage lights, live performance,
+          engineer at front of house. Sits behind text at 30–45% opacity, so keep the centre relatively calm.</td>
+      <td class="where">Home — Two Houses LEFT<br>Services bento (sound)<br>Portfolio gallery</td>
       <td class="cur">664×444</td>
       <td><span class="pill p2">P2</span></td>
     </tr>
     <tr>
       <td><span class="box"></span></td>
-      <td><strong>Bento — Sports Announcing</strong><br><span class="note">currently no image</span></td>
-      <td class="ratio">4:3</td>
-      <td class="px">1200×900</td>
-      <td><strong>OPTIONAL — empty by design.</strong> Two bento tiles are deliberately text-only so the grid has breathing room. Only supply if you want every tile to carry a photo. Would be: announcer with a mic at a sports event.</td>
-      <td class="curok">intentionally none</td>
-      <td><span class="pill p3">P3</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Bento — Hosting &amp; Emcee</strong><br><span class="note">currently no image</span></td>
-      <td class="ratio">4:3</td>
-      <td class="px">1200×900</td>
-      <td><strong>OPTIONAL — empty by design</strong>, same as above. Would be: emcee hosting on stage with an audience.</td>
-      <td class="curok">intentionally none</td>
-      <td><span class="pill p3">P3</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>4 — 063 Society page <span style="font-weight:400;text-transform:none;letter-spacing:0">— nothing real exists yet</span></h2>
-<div class="warn">
-  <strong>No Society photography has ever been supplied (BLOCKER B4).</strong> All three slots below render a grey
-  placeholder frame today. Society is the <em>elegant</em> brand — these must look clearly different from the
-  Productions imagery: calmer, more refined, more space, softer light. Do not reuse the concert/stage photos here.
-</div>
-<table>
-  <thead>
-    <tr>
-      <th style="width:4%">✓</th><th style="width:15%">Slot</th><th style="width:7%">Ratio</th>
-      <th style="width:11%">Supply at</th><th style="width:33%">What the picture should show</th>
-      <th style="width:16%">What's there now</th><th style="width:6%">Pri</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Society hero</strong></td>
+      <td class="fname">society-main.jpg</td>
       <td class="ratio">4:5</td>
       <td class="px">1200×1500</td>
-      <td>The single defining Society image. An elegant, restrained moment — a beautifully set table, refined venue detail, a tasteful private event. Vertical.</td>
-      <td class="cur">PLACEHOLDER</td>
-      <td><span class="pill p1">P1</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Society gallery — wide</strong></td>
-      <td class="ratio">3:2</td>
-      <td class="px">1800×1200</td>
-      <td>A wider elegant scene — the room in full, styling and lighting visible.</td>
-      <td class="cur">PLACEHOLDER</td>
-      <td><span class="pill p1">P1</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Society gallery — tall</strong></td>
-      <td class="ratio">4:5</td>
-      <td class="px">1200×1500</td>
-      <td>A detail that rewards a close look — glassware, florals, place setting, a considered corner of the room.</td>
-      <td class="cur">PLACEHOLDER</td>
+      <td>The <strong>elegant</strong> 063 Society mood — refined banquet, tasteful lighting, table settings,
+          an upscale private event. Calm and premium: the <u>opposite</u> of the Productions photo.
+          <strong>Do not reuse concert or stage shots here.</strong></td>
+      <td class="where">Home — Two Houses RIGHT<br>Society page hero<br><span class="note">same file in both — see note ▲</span></td>
+      <td class="cur">PLACEHOLDER<br>grey frame</td>
       <td><span class="pill p1">P1</span></td>
     </tr>
   </tbody>
 </table>
 
-<h2>5 — Portfolio &amp; Collaborations <span style="font-weight:400;text-transform:none;letter-spacing:0">— Developer 2's pages</span></h2>
-<table>
-  <thead>
-    <tr>
-      <th style="width:4%">✓</th><th style="width:15%">Slot</th><th style="width:7%">Ratio</th>
-      <th style="width:11%">Supply at</th><th style="width:33%">What the picture should show</th>
-      <th style="width:16%">What's there now</th><th style="width:6%">Pri</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Portfolio gallery</strong><br><span class="note">7 frames</span></td>
-      <td class="ratio">4:3<br><span class="note">mixed ok</span></td>
-      <td class="px">1600×1200<br>× 7+ images</td>
-      <td>Your actual best work — real events you delivered. Currently borrowing the same 7 scene photos used elsewhere on the site, which is why the portfolio does not yet feel like a portfolio. This is the page that wins you jobs. <strong>Send as many as you have.</strong></td>
-      <td class="cur">reused site photos</td>
-      <td><span class="pill p1">P1</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Video reel posters</strong><br><span class="note">optional</span></td>
-      <td class="ratio">16:9</td>
-      <td class="px">1280×720</td>
-      <td>Only needed if you want custom thumbnails. Otherwise YouTube's own thumbnail is used automatically. <strong>Blocked on B9</strong> — the YouTube links themselves are still missing.</td>
-      <td class="cur">no videos yet</td>
-      <td><span class="pill p3">P3</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Partner logos</strong></td>
-      <td class="ratio">2:1<br><span class="note">wide</span></td>
-      <td class="px">SVG preferred<br>or 800×400 PNG<br>transparent</td>
-      <td>One logo file per partner, on a <strong>transparent</strong> background. <strong>Blocked on B8</strong> — we also need written permission per partner before their mark can be displayed.</td>
-      <td class="cur">none — page empty</td>
-      <td><span class="pill p2">P2</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Partner project shots</strong></td>
-      <td class="ratio">4:3</td>
-      <td class="px">1200×900</td>
-      <td>A photo per collaboration project, plus which project belongs to which partner. <strong>Blocked on B8.</strong></td>
-      <td class="cur">none — page empty</td>
-      <td><span class="pill p2">P2</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>6 — Brand &amp; sharing assets</h2>
-<table>
-  <thead>
-    <tr>
-      <th style="width:4%">✓</th><th style="width:15%">Slot</th><th style="width:7%">Ratio</th>
-      <th style="width:11%">Supply at</th><th style="width:33%">What the picture should show</th>
-      <th style="width:16%">What's there now</th><th style="width:6%">Pri</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Social share image</strong><br><span class="note">shown on FB / WhatsApp / LinkedIn</span></td>
-      <td class="ratio">1.91:1</td>
-      <td class="px">1200×630</td>
-      <td>Currently auto-generated from the logo and brand colours — functional but plain. A real photo with the logo over it would look far better when someone shares the link. <strong>Optional upgrade.</strong></td>
-      <td class="curok">generated, works</td>
-      <td><span class="pill p3">P3</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Logo — light</strong></td>
-      <td class="ratio">1:1</td>
-      <td class="px">512×512</td>
-      <td>Supplied and in use across the dark site.</td>
-      <td class="curok">done</td>
-      <td><span class="pill ok">OK</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Logo — dark</strong><br><span class="note">for Society's pale pages</span></td>
-      <td class="ratio">1:1</td>
-      <td class="px">512×512</td>
-      <td>Supplied and in use.</td>
-      <td class="curok">done</td>
-      <td><span class="pill ok">OK</span></td>
-    </tr>
-    <tr>
-      <td><span class="box"></span></td>
-      <td><strong>Favicon / app icons</strong></td>
-      <td class="ratio">1:1</td>
-      <td class="px">512×512</td>
-      <td>Derived from the logo. No action needed.</td>
-      <td class="curok">done</td>
-      <td><span class="pill ok">OK</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>Sections that need no images</h2>
-<p class="sub" style="margin-top:2mm">
-  Verified in code — these are typography-only by design and require nothing from you:
-  <strong>Service ticker · Manifesto · Services preview · Mid-page CTA band · Testimonials teaser ·
-  Final CTA · About hero · Services hero · Society statement · Society categories · Society CTA ·
-  Contact details · Booking form.</strong>
+<h2>C — About page (5 vertical tiles)</h2>
+<p class="sub" style="margin:0 0 2mm">
+  These five also supply the layered collage on the Home page — no extra files needed for it.
+  They sit at staggered heights as a set, so give them a common look.
 </p>
+<table>
+  <thead><tr>
+    <th style="width:4%">✓</th><th style="width:14%">Save as</th><th style="width:6%">Ratio</th>
+    <th style="width:10%">Export size</th><th style="width:31%">What the picture should show</th>
+    <th style="width:20%">Appears in</th><th style="width:10%">Now</th><th style="width:5%">Pri</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><span class="box"></span></td><td class="fname">tile-guitar.jpg</td><td class="ratio">2:3</td><td class="px">1000×1500</td>
+      <td>A performer or musician mid-performance — guitar, singer, instrument in hand. Vertical.</td>
+      <td class="where">About tile 1</td><td class="cur">226×348</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">tile-mixer.jpg</td><td class="ratio">2:3</td><td class="px">1000×1500</td>
+      <td>Hands working a mixing console — close, tactile, faders and knobs visible.</td>
+      <td class="where">About tile 2<br>Home collage</td><td class="cur">226×348</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">tile-stage.jpg</td><td class="ratio">2:3</td><td class="px">1000×1500</td>
+      <td>An empty stage rigged with lighting truss — before the crowd arrives.</td>
+      <td class="where">About tile 3<br>Home collage</td><td class="cur">228×344</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">tile-camera-op.jpg</td><td class="ratio">2:3</td><td class="px">1000×1500</td>
+      <td>A camera operator filming an event — person behind the rig, working.</td>
+      <td class="where">About tile 4<br>Home collage</td><td class="cur">226×348</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">tile-camera.jpg</td><td class="ratio">2:3</td><td class="px">1000×1500</td>
+      <td>Equipment still life — camera body, lenses, printed photographs.</td>
+      <td class="where">About tile 5</td><td class="cur">226×348</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">video-camera.jpg</td><td class="ratio">3:4</td><td class="px">1200×1600</td>
+      <td>One strong portrait shot of the team at work — cinema camera rig on a shoot, or an engineer mid-setup.
+          Held large next to the story text.</td>
+      <td class="where">About — story frame<br>Services bento<br>Portfolio gallery</td>
+      <td class="cur">664×448</td><td><span class="pill p2">P2</span></td></tr>
+  </tbody>
+</table>
 
-<div class="warn" style="margin-top:6mm">
-  <strong>Two rules when you export from Canva</strong><br>
-  <strong>1. Export at the pixel sizes above, not smaller.</strong> The sizes are already 2× so the images stay sharp
-  on phones and retina laptops. Anything smaller will look soft — that is exactly the problem the current photos have.<br>
-  <strong>2. Match the ratio.</strong> The layout crops to the ratio shown. If you send a square image for a 21:9 slot,
-  the top and bottom of your subject get cut off. Colour and contrast do not matter much — several slots are
-  automatically converted to black &amp; white to match the brand.
+<h2>D — Event categories (6 hover previews)</h2>
+<p class="sub" style="margin:0 0 2mm">Each must instantly read as its category — these appear when someone hovers the event list.</p>
+<table>
+  <thead><tr>
+    <th style="width:4%">✓</th><th style="width:14%">Save as</th><th style="width:6%">Ratio</th>
+    <th style="width:10%">Export size</th><th style="width:51%">What the picture should show</th><th style="width:10%">Now</th><th style="width:5%">Pri</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><span class="box"></span></td><td class="fname">ev-corporate.jpg</td><td class="ratio">4:3</td><td class="px">600×450</td>
+      <td><strong>Corporate Events &amp; Seminars</strong> — speaker presenting, conference room, branded stage.</td><td class="cur">190×156</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">ev-concert.jpg</td><td class="ratio">4:3</td><td class="px">600×450</td>
+      <td><strong>Concerts &amp; Festivals</strong> — crowd and stage lighting, energy, big audience.</td><td class="cur">200×156</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">ev-wedding.jpg</td><td class="ratio">4:3</td><td class="px">600×450</td>
+      <td><strong>Weddings</strong> — reception setting, table styling, first dance, elegant lighting.</td><td class="cur">190×140</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">ev-sports.jpg</td><td class="ratio">4:3</td><td class="px">600×450</td>
+      <td><strong>Sports Events</strong> — supporters cheering, arena, announcer or scoreboard.</td><td class="cur">202×140</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">ev-community.jpg</td><td class="ratio">4:3</td><td class="px">600×450</td>
+      <td><strong>Community &amp; Charity</strong> — people taking part, families, an outdoor community gathering.</td><td class="cur">190×142</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">ev-themed.jpg</td><td class="ratio">4:3</td><td class="px">600×450</td>
+      <td><strong>Themed Events &amp; Productions</strong> — styled set, themed staging, outdoor production rig.</td><td class="cur">200×142</td><td><span class="pill p1">P1</span></td></tr>
+  </tbody>
+</table>
+
+<h2>E — Services bento grid</h2>
+<table>
+  <thead><tr>
+    <th style="width:4%">✓</th><th style="width:14%">Save as</th><th style="width:6%">Ratio</th>
+    <th style="width:10%">Export size</th><th style="width:31%">What the picture should show</th>
+    <th style="width:20%">Appears in</th><th style="width:10%">Now</th><th style="width:5%">Pri</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><span class="box"></span></td><td class="fname">audio-desk-top.jpg</td><td class="ratio">4:3</td><td class="px">1600×1200</td>
+      <td>Audio equipment hero shot — mixing desk, speaker stacks, amp racks. This is the largest tile.
+          Sits behind text at ~25% opacity, so keep the middle calm.</td>
+      <td class="where">Services — feature tile<br>Portfolio gallery</td><td class="cur">1366×262<br>wrong shape</td><td><span class="pill p2">P2</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">dj-decks.jpg</td><td class="ratio">4:3</td><td class="px">1200×900</td>
+      <td>DJ decks or controller with hands on them, ideally crowd or lighting behind.</td>
+      <td class="where">Services — DJ tile<br>Portfolio gallery</td><td class="cur">964×192<br>wrong shape</td><td><span class="pill p2">P2</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">photo-lens.jpg</td><td class="ratio">4:3</td><td class="px">1200×900</td>
+      <td>Photography kit — lens, camera body, a considered still life.</td>
+      <td class="where">Services — photography<br>Portfolio gallery</td><td class="cur">1064×318<br>wrong shape</td><td><span class="pill p2">P2</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">bento-sports.jpg</td><td class="ratio">4:3</td><td class="px">1200×900</td>
+      <td><strong>OPTIONAL — this tile is deliberately text-only.</strong> Two tiles are left without photos so the grid
+          can breathe. Send only if you want every tile to carry an image. Would be: announcer with a mic at a sports event.</td>
+      <td class="where">Services — sports announcing</td><td class="curok">none by design</td><td><span class="pill p3">P3</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">bento-emcee.jpg</td><td class="ratio">4:3</td><td class="px">1200×900</td>
+      <td><strong>OPTIONAL</strong>, same as above. Would be: emcee hosting on stage with an audience.</td>
+      <td class="where">Services — hosting &amp; emcee</td><td class="curok">none by design</td><td><span class="pill p3">P3</span></td></tr>
+  </tbody>
+</table>
+
+<h2>F — 063 Society <span style="font-weight:400;text-transform:none;letter-spacing:0">— no photography has ever been supplied (B4)</span></h2>
+<table>
+  <thead><tr>
+    <th style="width:4%">✓</th><th style="width:14%">Save as</th><th style="width:6%">Ratio</th>
+    <th style="width:10%">Export size</th><th style="width:51%">What the picture should show</th><th style="width:10%">Now</th><th style="width:5%">Pri</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><span class="box"></span></td><td class="fname">society-wide.jpg</td><td class="ratio">3:2</td><td class="px">1800×1200</td>
+      <td>A wider elegant scene — the room in full, styling and lighting visible. Calm, spacious, premium.</td>
+      <td class="cur">PLACEHOLDER</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">society-tall.jpg</td><td class="ratio">4:5</td><td class="px">1200×1500</td>
+      <td>A detail that rewards a close look — glassware, florals, a place setting, a considered corner of the room.</td>
+      <td class="cur">PLACEHOLDER</td><td><span class="pill p1">P1</span></td></tr>
+  </tbody>
+</table>
+<p class="sub" style="margin-top:1mm"><em>(<span class="fname">society-main.jpg</span> is listed in section B — it serves both the Society hero and the Two Houses panel.)</em></p>
+
+<h2>G — Portfolio, partners &amp; sharing</h2>
+<table>
+  <thead><tr>
+    <th style="width:4%">✓</th><th style="width:14%">Save as</th><th style="width:6%">Ratio</th>
+    <th style="width:10%">Export size</th><th style="width:51%">What the picture should show</th><th style="width:10%">Now</th><th style="width:5%">Pri</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><span class="box"></span></td><td class="fname">portfolio-01.jpg<br>portfolio-02.jpg<br><span class="note">…and so on</span></td>
+      <td class="ratio">4:3</td><td class="px">1600×1200<br>each</td>
+      <td><strong>Your actual best work</strong> — real events you delivered. Right now the portfolio borrows the same
+          photos used elsewhere on the site, which is why it does not yet feel like a portfolio.
+          This is the page that wins you jobs. <strong>Send as many as you have</strong> — number them in order.</td>
+      <td class="cur">reused photos</td><td><span class="pill p1">P1</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">partner-01-logo.png<br><span class="note">one per partner</span></td>
+      <td class="ratio">2:1</td><td class="px">SVG preferred<br>or 800×400</td>
+      <td>One logo per partner on a <strong>transparent</strong> background. <strong>BLOCKER B8</strong> — we also need
+          written permission per partner before their mark can be shown, plus which projects belong to whom.</td>
+      <td class="cur">page empty</td><td><span class="pill p2">P2</span></td></tr>
+    <tr><td><span class="box"></span></td><td class="fname">social-share.jpg</td><td class="ratio">1.91:1</td><td class="px">1200×630</td>
+      <td><strong>OPTIONAL.</strong> The image shown when someone shares the site on Facebook / WhatsApp / LinkedIn.
+          Currently auto-generated from the logo — functional but plain. A real photo would look far better.</td>
+      <td class="curok">generated</td><td><span class="pill p3">P3</span></td></tr>
+  </tbody>
+</table>
+
+<div class="warn">
+  <strong>★ Two new files for the hero.</strong> Right now the hero's large frame is the <em>same photo</em> as an About
+  tile, and its small frame is the same as a Services tile. Sending dedicated
+  <span class="fname">hero-main.jpg</span> and <span class="fname">hero-detail.jpg</span> gives the hero its own identity.
+  If you would rather not, skip them and I will keep reusing the About/Services shots — nothing breaks.
+  <br><br>
+  <strong>▲ One Society photo currently covers two places</strong> — the Two Houses panel on the Home page and the
+  Society page hero. If you want them to be different pictures, send a second file named
+  <span class="fname">society-hero.jpg</span> (4:5, 1200×1500) and I will split them.
 </div>
+
+<div class="warn">
+  <strong>Two rules when exporting from Canva</strong><br>
+  <strong>1. Use the export size shown, or larger — never smaller.</strong> These are already 2× so images stay sharp on
+  phones and retina screens. Smaller will look soft, which is exactly the problem the current photos have.<br>
+  <strong>2. Match the ratio.</strong> The layout crops to the ratio shown, from the centre. Send a square image for a
+  21:9 slot and the top and bottom of your subject get cut off. Colour grading does not matter much — several slots are
+  converted to black &amp; white automatically to match the brand.
+</div>
+
+<h2>Needs no images at all</h2>
+<p class="sub" style="margin-top:2mm">
+  Verified in code — typography-only by design, nothing required:
+  <strong>Service ticker · Manifesto · Services preview · Mid-page CTA band · Testimonials teaser · Final CTA ·
+  About hero · Services hero · Society statement · Society categories · Society CTA · Contact details · Booking form.</strong>
+  <br>Logo files, favicon and app icons are already supplied and in use — no action needed.
+</p>
 
 </body>
 </html>
