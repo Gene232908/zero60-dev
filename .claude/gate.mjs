@@ -237,6 +237,7 @@ async function runRuntime(mod) {
     try {
       const res = await fetch(`http://127.0.0.1:${port}${path}`, { redirect: 'manual' });
       const html = await res.text();
+      const isHtml = (res.headers.get('content-type') || '').includes('text/html');
       pages.set(path, html);
       if (res.status !== status) {
         failures.push(`${path} -> HTTP ${res.status} (expected ${status})`);
@@ -248,7 +249,9 @@ async function runRuntime(mod) {
       for (const marker of [].concat(forbid || [])) {
         if (html.includes(marker)) failures.push(`${path} -> still contains forbidden marker: "${marker}"`);
       }
-      if (status === 200 && html.length < 800) {
+      // Blank-render heuristic. Only meaningful for HTML pages — robots.txt and
+      // sitemap.xml are legitimately small, and flagging them proves nothing.
+      if (status === 200 && isHtml && html.length < 800) {
         failures.push(`${path} -> suspiciously small HTML (${html.length}b), likely blank render`);
       }
     } catch (e) {

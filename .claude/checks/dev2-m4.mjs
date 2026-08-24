@@ -165,8 +165,20 @@ export const liveProbes = [
   ),
   Object.assign(
     ({ pages }) => {
-      const bad = PUBLIC_ROUTES.filter((p) => /<img(?![^>]*\bsrcset=)[^>]*\bsrc=/i.test(pages.get(p) || ''));
-      return bad.length === 0 || `an unoptimised raw <img> reached the HTML of: ${bad.join(', ')}`;
+      // Every RASTER image must ship a srcset, so a phone never downloads a
+      // desktop-sized file. SVG is exempt: it is vector, so next/image serves it
+      // as-is and a srcset for it would be meaningless.
+      const bad = [];
+      for (const p of PUBLIC_ROUTES) {
+        for (const tag of (pages.get(p) || '').matchAll(/<img\b[^>]*>/gi)) {
+          const el = tag[0];
+          if (/\bsrcset=/i.test(el)) continue;
+          const src = (/\bsrc="([^"]*)"/i.exec(el) || [])[1] || '';
+          if (/\.svg(\?|$)/i.test(decodeURIComponent(src))) continue;
+          bad.push(`${p} -> ${src.slice(0, 80)}`);
+        }
+      }
+      return bad.length === 0 || `raster image shipped without a srcset: ${bad.join(' | ')}`;
     },
     { id: 'speed:images-optimised' },
   ),

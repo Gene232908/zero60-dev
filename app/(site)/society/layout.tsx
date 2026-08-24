@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
+
 import { BrandProvider } from '@/components/layout/BrandProvider';
+
+/** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
+export const metadata: Metadata = pageMetadata(PAGE_SEO.society);
 
 /**
  * 063 Society runs the whole route in elegant mode.

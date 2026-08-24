@@ -1,3 +1,7 @@
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
+
 import { KineticHeading, Reveal } from '@/components/motion';
 import { Button, Divider, Section } from '@/components/ui';
 import { PortfolioGallery } from '@/components/sections/PortfolioGallery';
@@ -5,6 +9,9 @@ import { PortfolioVideos } from '@/components/sections/PortfolioVideos';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { BRAND } from '@/content/site';
 import { GALLERY_FRAMES } from '@/content/portfolio';
+
+/** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
+export const metadata: Metadata = pageMetadata(PAGE_SEO.portfolio);
 
 /**
  * Portfolio / Testimonials — Milestone 2, Developer 2 (HARD).

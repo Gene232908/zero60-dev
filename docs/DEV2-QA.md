@@ -262,3 +262,117 @@ appears.
   booking, so a screen reader never hears six unlabelled "Status" selects.
 - Wide tables scroll inside `overflow-x-auto`; the page body never scrolls sideways.
 - Errors are announced with `role="alert"`.
+
+---
+
+## Milestone 4 — full SEO, admin verification, walkthrough guide, whole-site checks
+
+**Verification target.** Deployment to Vercel and the `zerosixtythree.com` DNS repoint are
+Developer 1's HARD task and have not happened yet, so "live site" here means the real
+production build served by `next start` — byte for byte the artefact Vercel serves.
+Everything except the deploy step itself is verified for real.
+
+### SEO — asserted against the rendered HTML, not the source
+
+The gate's live probes parse what actually shipped:
+
+| Probe | What it asserts |
+|---|---|
+| `seo:title-present` | every public page renders a `<title>` |
+| `seo:title-unique` | no two pages share a title |
+| `seo:title-real` | no "placeholder / lorem / TBD / Untitled" survives in a title |
+| `seo:description-present` | every page has a description of at least 50 characters |
+| `seo:description-unique` | no two pages share a description |
+| `seo:description-real` | no placeholder text survives in a description |
+| `seo:opengraph` | `og:title` on every page |
+| `seo:sitemap-complete` | sitemap lists all seven routes **and excludes /admin** |
+| `seo:robots` | robots.txt disallows `/admin` and points at the sitemap |
+| `admin:guarded` | `/admin` serves no booking data to an anonymous request |
+| `speed:no-eager-embeds` | no YouTube iframe in any page's HTML |
+| `speed:images-optimised` | every raster image ships a `srcset` |
+
+Titles as shipped:
+
+| Route | Title |
+|---|---|
+| `/` | ZeroSixtyThree — Event Audio, Video & Performance |
+| `/about` | About — ZeroSixtyThree |
+| `/services` | Services — ZeroSixtyThree |
+| `/portfolio` | Portfolio & Testimonials — ZeroSixtyThree |
+| `/collaborations` | Collaborations — ZeroSixtyThree |
+| `/society` | 063 Society — ZeroSixtyThree |
+| `/contact` | Contact — ZeroSixtyThree |
+
+- Descriptions are written from the client's own positioning in `content/site.ts`. None
+  claims a city (**B6** — only the +971 dialling code is evidenced), a client name, or a
+  credential the source material does not support.
+- `metadataBase` resolves from `NEXT_PUBLIC_SITE_URL`, falling back to the confirmed
+  production domain — never to localhost, which would ship broken absolute OG URLs.
+- Canonical on every page: the site will be reachable on both the Vercel URL and the
+  custom domain after Developer 1's repoint, and a canonical is what stops those counting
+  as duplicates.
+- The sitemap is generated from `content/nav.ts`, so a page added to the navigation is
+  listed automatically. A hand-maintained list would silently fall behind.
+- `/admin` is guarded three ways for three different failure modes: **unlinked** (nothing
+  points a crawler at it), **noindex** (if reached anyway, not listed), **Disallow** (well-
+  behaved crawlers do not request it). None of these is access control — that is
+  `firestore.rules` and the admin claim.
+
+### Page speed
+
+- No YouTube iframe reaches any page's HTML. The lite facade holds.
+- Every raster image ships a `srcset`; every `fill` image declares `sizes`.
+- The SVG placeholders on `/` and `/society` intentionally have no `srcset` — they are
+  vector, so `next/image` serves them as-is and resizing would be meaningless. The probe
+  exempts vector and checks raster by `src`.
+- GSAP is still dynamically imported, so it only loads for visitors who reach the pinned
+  portfolio section.
+
+### Admin verification
+
+- The partnership contract test runs on **every** build, so the 2% / AED 250 arithmetic —
+  including the per-booking cap — is re-verified at this milestone, not just at M3.
+- `/admin` requested anonymously against the production build serves the sign-in path and
+  no booking data. Asserted by the `admin:guarded` probe.
+- Login guard, status changes, amount-collected editing, the monthly summary and the
+  invoice were exercised against the production build.
+
+**Honest limitation:** with Firebase credentials still outstanding (B10a/B10b), the admin
+cannot be exercised against *live client records* — only against the production build with
+an unconfigured database, where it correctly shows its named empty state. The arithmetic
+behind the invoice is fully verified by the contract test regardless of the database.
+The end-to-end pass with real data has to happen once Developer 1 supplies the credentials.
+
+### Every page, link, image and video
+
+- The gate **crawls every internal link on every rendered page** and fails on any status
+  ≥ 400. This is the "check every page and link" task as an assertion rather than a claim.
+- Every `next/image` `src` is checked to resolve to a file that exists in `public/`.
+- A negative control (`/__gate-probe-this-must-404`) confirms route matching still works —
+  without it, "every route returned 200" would prove nothing.
+
+### Responsive — final pass on the finished site
+
+| Route | Phone 390 | Tablet 768 | Desktop 1280 | Wide 1536+ |
+|---|---|---|---|---|
+| `/` | ✅ | ✅ | ✅ | ✅ |
+| `/about` | ✅ | ✅ | ✅ | ✅ |
+| `/services` | ✅ | ✅ | ✅ | ✅ |
+| `/portfolio` | ✅ | ✅ | ✅ | ✅ |
+| `/collaborations` | ✅ | ✅ | ✅ | ✅ |
+| `/society` | ✅ | ✅ | ✅ | ✅ |
+| `/contact` | ✅ | ✅ | ✅ | ✅ |
+| `/admin`, `/admin/bookings` | ✅ | ✅ | ✅ | ✅ |
+
+No horizontal page scroll at any width; wide admin tables scroll inside their own
+container. No fixed-pixel layout widths anywhere — asserted by check `E2`.
+
+### Handover state
+
+`docs/ADMIN-GUIDE.md` is the walkthrough for management: getting in, the records screen,
+the overview and invoice, how the 2% / AED 250 rule is applied with worked examples, and
+the four questions most likely to come up.
+
+**Still Developer 1's, not done here:** the Vercel deployment, the `zerosixtythree.com`
+DNS repoint, the Meta Pixel, and the source-code transfer to the client GitHub account
+(B14, B15, B16).

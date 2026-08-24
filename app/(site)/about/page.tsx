@@ -1,7 +1,14 @@
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
+
 import { AboutHero } from '@/components/sections/AboutHero';
 import { AboutTiles } from '@/components/sections/AboutTiles';
 import { AboutStory } from '@/components/sections/AboutStory';
 import { FinalCTA } from '@/components/sections/FinalCTA';
+
+/** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
+export const metadata: Metadata = pageMetadata(PAGE_SEO.about);
 
 /**
  * About — Milestone 2, Developer 1 (MEDIUM).

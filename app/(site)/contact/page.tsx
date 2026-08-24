@@ -1,8 +1,15 @@
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
+
 import { KineticHeading, Reveal } from '@/components/motion';
 import { Button, Col, Grid, Section } from '@/components/ui';
 import { BookingSection } from '@/components/sections/BookingSection';
 import { ContactDetails } from '@/components/sections/ContactDetails';
 import { CLOSING, CONTACT } from '@/content/site';
+
+/** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
+export const metadata: Metadata = pageMetadata(PAGE_SEO.contact);
 
 /**
  * Contact — Milestone 2, Developer 2 (EASY: page layout + contact-details block).

@@ -1,3 +1,7 @@
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
+
 import { Hero } from '@/components/sections/Hero';
 import { ServiceTicker } from '@/components/sections/ServiceTicker';
 import { Manifesto } from '@/components/sections/Manifesto';
@@ -9,6 +13,9 @@ import { ServicesPreview } from '@/components/sections/ServicesPreview';
 import { AboutPreview } from '@/components/sections/AboutPreview';
 import { CTABand } from '@/components/sections/CTABand';
 import { TestimonialsTeaser } from '@/components/sections/TestimonialsTeaser';
+
+/** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
+export const metadata: Metadata = pageMetadata(PAGE_SEO.home);
 
 /**
  * Landing page — Milestone 1, Developer 1.

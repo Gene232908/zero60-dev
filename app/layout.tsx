@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { SITE_NAME, SITE_URL, TITLE_SUFFIX } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
 import { bodyFont, displayFont, serifFont } from '@/lib/fonts';
 import { SmoothScroll } from '@/components/layout/SmoothScroll';
 import { CustomCursor, NoiseOverlay } from '@/components/motion';
@@ -13,14 +15,36 @@ import { CustomCursor, NoiseOverlay } from '@/components/motion';
  * The three font variables are attached here so every brand map in tokens.css
  * can resolve --display-family regardless of which mode is active.
  *
- * NOTE: full SEO — page titles/descriptions, sitemap, robots, page-speed — is
- * Developer 2's Milestone 4 task (Task Division Rev 2, p.5). The minimal title
- * below exists only so the document is valid; it is not the SEO pass.
+ * SEO (Milestone 4, Developer 2): this layout carries only what is genuinely
+ * site-wide — metadataBase, the title template, and the shared OpenGraph
+ * defaults. Each page supplies its own title, description and canonical through
+ * lib/seo, so no two pages can end up sharing them.
+ *
+ * `metadataBase` must be absolute or Next cannot resolve canonical and
+ * OpenGraph URLs. It reads NEXT_PUBLIC_SITE_URL and falls back to the client's
+ * confirmed domain — never to localhost, which would ship broken absolute URLs.
  */
 
 export const metadata: Metadata = {
-  title: 'ZeroSixtyThree',
-  description: 'PLACEHOLDER — site description pending client copy (see BLOCKERS.md).',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITLE_SUFFIX,
+    /** Page titles arrive pre-composed from lib/seo, so this passes them through. */
+    template: '%s',
+  },
+  description: PAGE_SEO.home.description,
+  applicationName: SITE_NAME,
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: SITE_NAME,
+    title: TITLE_SUFFIX,
+    description: PAGE_SEO.home.description,
+    url: SITE_URL,
+    locale: 'en_AE',
+  },
+  twitter: { card: 'summary_large_image' },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

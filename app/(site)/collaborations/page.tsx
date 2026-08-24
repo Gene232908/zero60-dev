@@ -1,7 +1,14 @@
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
+
 import { KineticHeading, Reveal } from '@/components/motion';
 import { Button, Col, Divider, Grid, Section } from '@/components/ui';
 import { PartnerBoard } from '@/components/sections/PartnerBoard';
 import { BRAND, SERVICES } from '@/content/site';
+
+/** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
+export const metadata: Metadata = pageMetadata(PAGE_SEO.collaborations);
 
 /**
  * Collaborations — Milestone 2, Developer 2 (MEDIUM).

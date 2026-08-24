@@ -1,7 +1,14 @@
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo/metadata';
+import { PAGE_SEO } from '@/lib/seo/pages';
+
 import { ServicesHero } from '@/components/sections/ServicesHero';
 import { ServicesBento } from '@/components/sections/ServicesBento';
 import { EventIndex } from '@/components/sections/EventIndex';
 import { FinalCTA } from '@/components/sections/FinalCTA';
+
+/** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
+export const metadata: Metadata = pageMetadata(PAGE_SEO.services);
 
 /**
  * Services — Milestone 2, Developer 1 (MEDIUM).
