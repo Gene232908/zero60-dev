@@ -325,12 +325,31 @@ export function BookingForm() {
           type="submit"
           disabled={busy}
           className={cn(
+            'relative isolate overflow-hidden',
             'border border-accent bg-accent px-8 py-4 text-[0.7rem] font-medium uppercase tracking-[0.22em] text-accent-fg',
-            'transition-opacity duration-[var(--dur-micro)]',
-            busy && 'cursor-wait opacity-60',
+            // Transform and opacity ride separate channels so the press still
+            // reads the instant it happens, mid colour-change.
+            'transition-[opacity,transform] duration-[var(--dur-micro)] ease-[var(--ease-brand)]',
+            // The press answers the click: same physics as MagneticButton, so
+            // every primary action on the site feels like the same hand made it.
+            'active:scale-[var(--press-scale)] active:translate-y-[var(--press-shift)]',
+            'active:ease-[var(--ease-press)]',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
+            // Driven by the real disabled state rather than a JS-derived class,
+            // so the styling cannot drift from the behaviour.
+            'disabled:cursor-wait disabled:opacity-60 disabled:saturate-50',
+            'disabled:active:scale-100 disabled:active:translate-y-0',
           )}
         >
           {busy ? 'Sending…' : 'Send enquiry'}
+          {/* In-flight hairline. The label already says "Sending…" — this gives
+              the eye something moving to rest on while the request is open. */}
+          {busy ? (
+            <span
+              aria-hidden
+              className="absolute inset-x-0 bottom-0 h-px origin-left animate-[zs-submit-sweep_var(--dur-cinematic)_var(--ease-in-out)_infinite] bg-accent-fg/60"
+            />
+          ) : null}
         </button>
         <p className="text-xs text-fg-faint">
           <span className="text-accent">*</span> Required. We reply by email or phone.

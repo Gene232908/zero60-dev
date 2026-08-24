@@ -104,6 +104,31 @@ body {
   animation-direction: var(--marquee-direction, normal);
 }
 
+/* -----------------------------------------------------------------------------
+   Submit sweep — the hairline that travels under the booking button while the
+   request is in flight. scaleX only, so it stays on the compositor, and the
+   global prefers-reduced-motion block above already flattens it to a single
+   0.01ms pass for anyone who asked for less motion.
+   -------------------------------------------------------------------------- */
+@keyframes zs-submit-sweep {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.1% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
 /* The editorial container: wide, asymmetric-friendly, never centred-by-default. */
 .shell {
   width: 100%;
