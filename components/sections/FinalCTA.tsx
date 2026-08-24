@@ -1,5 +1,6 @@
 import { KineticHeading, MagneticButton, Reveal, StickerSpin } from '@/components/motion';
 import { CLOSING, CONTACT } from '@/content/site';
+import { cn } from '@/lib/utils/cn';
 
 /**
  * FinalCTA — the visual climax (design brief §21).
@@ -11,6 +12,39 @@ import { CLOSING, CONTACT } from '@/content/site';
  * Each line indents further than the last so the block reads as a descending
  * staircase rather than a centred slab.
  */
+
+/**
+ * A phone number and an email address are the two things on this page someone
+ * actually reaches for, and they were plain text that changed colour. Now the
+ * accent hairline draws under the label on approach and retracts to the other
+ * side on leave, the whole thing takes the press, and keyboard focus gets the
+ * same treatment as hover rather than the blanket outline.
+ */
+function ContactLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      className={cn(
+        'group relative inline-block text-fg',
+        'transition-[color,transform] duration-[var(--dur-micro)] ease-[var(--ease-brand)]',
+        'hover:text-accent focus-visible:text-accent',
+        'active:scale-[var(--press-scale)] active:ease-[var(--ease-press)]',
+        'focus-visible:outline-none',
+      )}
+    >
+      {children}
+      <span
+        aria-hidden="true"
+        className={cn(
+          'absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-accent',
+          'transition-transform duration-[var(--dur-fast)] ease-[var(--ease-signature)]',
+          'group-hover:origin-left group-hover:scale-x-100',
+          'group-focus-visible:origin-left group-focus-visible:scale-x-100',
+        )}
+      />
+    </a>
+  );
+}
 
 export function FinalCTA() {
   return (
@@ -25,32 +59,22 @@ export function FinalCTA() {
         />
 
         <div className="grid grid-cols-12 items-end gap-y-10">
-          <Reveal variant="rise" weight="secondary" className="col-span-12 md:col-span-5">
+          <Reveal variant="settle" weight="secondary" delay={0.25} className="col-span-12 md:col-span-5">
             <div className="border-t border-line pt-5">
               <p className="mb-6 text-sm leading-relaxed text-fg-muted">{CLOSING.supporting}</p>
               <ul className="space-y-1.5 text-sm">
                 <li>
-                  <a
-                    href={CONTACT.phoneHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.phoneDisplay}
-                  </a>
+                  <ContactLink href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</ContactLink>
                 </li>
                 <li>
-                  <a
-                    href={CONTACT.emailHref}
-                    className="text-fg transition-colors duration-[var(--dur-micro)] hover:text-accent"
-                  >
-                    {CONTACT.email}
-                  </a>
+                  <ContactLink href={CONTACT.emailHref}>{CONTACT.email}</ContactLink>
                 </li>
               </ul>
             </div>
           </Reveal>
 
           <div className="col-span-12 flex items-end justify-between gap-6 md:col-span-6 md:col-start-7">
-            <Reveal variant="rise" weight="tertiary" delay={0.1}>
+            <Reveal variant="lead" weight="tertiary" delay={0.35}>
               <MagneticButton
                 href={CLOSING.contactHref}
                 cursorLabel="Enquire"

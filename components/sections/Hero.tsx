@@ -49,7 +49,7 @@ export function Hero() {
             className="relative z-10 -ml-[0.06em]"
             lineClassName="text-fg [&:last-child]:text-accent"
           />
-          <Reveal variant="rise" weight="tertiary" delay={0.5}>
+          <Reveal variant="settle" weight="tertiary" delay={0.5}>
             <p className="display mt-2 text-[clamp(0.9rem,2.2vw,1.9rem)] tracking-[0.34em] text-fg-muted">
               {BRAND.suffix}
             </p>
@@ -83,12 +83,12 @@ export function Hero() {
       {/* --- bottom rail: strapline, CTA, scroll cue --- */}
       <div className="shell">
         <div className="flex flex-col gap-8 border-t border-line pt-6 md:flex-row md:items-end md:justify-between">
-          <Reveal variant="rise" weight="secondary" delay={0.55} className="max-w-[46ch]">
+          <Reveal variant="settle" weight="secondary" delay={0.55} className="max-w-[46ch]">
             <p className="text-sm leading-relaxed text-fg-muted">{BRAND.tagline}</p>
           </Reveal>
 
           <Reveal
-            variant="rise"
+            variant="settle"
             weight="tertiary"
             delay={0.7}
             stagger="tight"
@@ -103,7 +103,19 @@ export function Hero() {
           </Reveal>
 
           <Reveal variant="fade" weight="tertiary" delay={0.8}>
-            <p className="eyebrow hidden lg:block">Scroll &#8595;</p>
+            {/* The cue used to be a static glyph asking you to scroll while
+                doing nothing itself. The arrow now drifts down on the house
+                curve — the one moving thing in an otherwise settled rail, and
+                stilled entirely by the global reduced-motion rule. */}
+            <p className="eyebrow hidden items-center gap-2 lg:flex">
+              Scroll
+              <span
+                aria-hidden="true"
+                className="inline-block animate-[zs-scroll-cue_var(--dur-cinematic)_var(--ease-signature)_infinite]"
+              >
+                &#8595;
+              </span>
+            </p>
           </Reveal>
         </div>
       </div>

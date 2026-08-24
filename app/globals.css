@@ -110,6 +110,20 @@ body {
    global prefers-reduced-motion block above already flattens it to a single
    0.01ms pass for anyone who asked for less motion.
    -------------------------------------------------------------------------- */
+/* Hero scroll cue — a short fall that resets, not a bounce. transform only. */
+@keyframes zs-scroll-cue {
+  0%,
+  70%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  35% {
+    transform: translate3d(0, 5px, 0);
+    opacity: 0.55;
+  }
+}
+
 @keyframes zs-submit-sweep {
   0% {
     transform: scaleX(0);
