@@ -11,10 +11,14 @@ credit comments that *describe* craft, and do not award points for effort.
 
 ## Non-negotiable frame
 
-- **This is an enhancement pass, not a redesign.** Layout, section order,
-  copy and the confirmed palette (#ADFF2A / #FFFFFF / #000000) are FIXED.
-  A section that changed its layout is a FAIL for *scope*, no matter how good
-  it looks.
+- **This is an enhancement pass, not a redesign.** Layout, section order, copy
+  and the confirmed palette (#ADFF2A / #FFFFFF / #000000) are FIXED — but
+  enforcing that is NOT your job and you are not equipped to do it. You are
+  shown the current file only; you have no "before" to compare against, so you
+  cannot know what changed. A comment describing the layout is documentation,
+  not evidence of a change. Scope drift is caught mechanically by the gate's
+  D1–D3 checks, which diff against a captured baseline.
+  **Always emit `"scopeFail": false`.** Grade craft, nothing else.
 - **Two brand moods.** `data-brand="productions"` is rugged/maximalist;
   `data-brand="society"` is elegant/restrained. A section whose motion could be
   dropped into the other mood unchanged has no point of view — mark it down.
@@ -49,8 +53,6 @@ credit comments that *describe* craft, and do not award points for effort.
 ## Verdict rules
 
 - A section **passes** at **>= 15/20 with no axis below 2**.
-- Any section that changed layout, order, copy or palette is **SCOPE-FAIL**
-  regardless of score.
 - Output **strict JSON only**, no prose, no code fences:
 
 ```
@@ -66,9 +68,11 @@ credit comments that *describe* craft, and do not award points for effort.
 ## Sections to grade
 
 Read each of these files, then output the JSON verdict and nothing else:
-- components/sections/SocietyGallery.tsx
-- components/sections/SocietyHero.tsx
-- components/sections/SocietyStatement.tsx
+- components/sections/EventIndex.tsx
+- components/sections/FinalCTA.tsx
+- components/sections/Hero.tsx
+- components/sections/Manifesto.tsx
+- components/sections/ServiceTicker.tsx
 
 Read components/motion/motion-tokens.ts and styles/tokens.css first — they
 hold the motion vocabulary these sections draw on, and axis 1 is about

@@ -26,10 +26,18 @@ export function SocietyStatement() {
             lineClassName="text-fg [&:nth-child(2)]:pl-[6vw] [&:nth-child(3)]:pl-[12vw] [&:nth-child(3)]:italic"
           />
 
-          <Reveal variant="fade" weight="tertiary" delay={0.35} className="mt-16 max-w-[52ch] md:mt-24">
-            <p className="border-t border-line pt-5 text-sm leading-relaxed text-fg-muted">
-              {SOCIETY_BRAND.intro}
-            </p>
+          <Reveal
+            variant="settle"
+            weight="tertiary"
+            delay={0.35}
+            className="mt-16 max-w-[52ch] md:mt-24"
+          >
+            {/* The pause is the point, so the rule takes its time getting here —
+                it lands after the statement has been read, not alongside it. */}
+            <Reveal variant="draw" delay={0.6}>
+              <span aria-hidden="true" className="block h-px w-full bg-line" />
+            </Reveal>
+            <p className="pt-5 text-sm leading-relaxed text-fg-muted">{SOCIETY_BRAND.intro}</p>
           </Reveal>
         </div>
       </div>
