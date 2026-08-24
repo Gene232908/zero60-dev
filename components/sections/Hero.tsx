@@ -115,12 +115,19 @@ export function Hero() {
           <KineticHeading
             as="h1"
             lines={BRAND.wordmark}
-            size="mega"
+            // `xl`, not `mega`. Three lines at 16vw with 0.82 leading is close
+            // to 40svh of solid letterform — at that size the wordmark stops
+            // being a focal point and becomes a wall, and the eye has nowhere
+            // to rest. Maximalism is a contrast of scale: ONE confident large
+            // element with dense small detail around it. Everything shouting at
+            // once is not maximalism, it is noise.
+            size="xl"
             delay={0.25}
             className="relative z-20 -ml-[0.06em]"
-            // The third line pushes right and takes the accent, so the block
-            // steps across the image rather than sitting squarely beside it.
-            lineClassName="text-fg [&:last-child]:text-accent [&:last-child]:pl-[8vw]"
+            // The third line still steps right and takes the accent so the block
+            // moves across the composition — but 4vw, not 8vw. The wider push
+            // dragged the wordmark edge to edge and left it nowhere to breathe.
+            lineClassName="text-fg [&:last-child]:text-accent [&:last-child]:pl-[4vw]"
           />
           <Reveal variant="settle" weight="tertiary" delay={0.5}>
             <p className="display mt-2 text-[clamp(0.9rem,2.2vw,1.9rem)] tracking-[0.34em] text-fg-muted">
