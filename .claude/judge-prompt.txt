@@ -90,11 +90,9 @@ does. When unsure, score all five.
 ## Sections to grade
 
 Read each of these files, then output the JSON verdict and nothing else:
-- components/sections/AboutHero.tsx
-- components/sections/AboutStory.tsx
-- components/sections/AboutTiles.tsx
-- components/sections/BookingSection.tsx
-- components/sections/DualBrandSplit.tsx
+- components/sections/SocietyGallery.tsx
+- components/sections/SocietyHero.tsx
+- components/sections/SocietyStatement.tsx
 
 Read these FIRST — the sections compose them, and grading a section without
 them is how you end up writing "implementation not shown" and marking down

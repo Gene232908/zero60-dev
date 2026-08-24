@@ -12,22 +12,31 @@ import { TILES, SCENES } from '@/content/media';
  * verbatim: the site is maximalist, more-is-more, "bold type, layered
  * compositions, heavy but purposeful motion".
  *
- * So the composition is now stacked rather than divided. Reading back to front:
+ * So the composition is stacked rather than divided. Reading back to front:
  *
- *   z-0   ghost "063" at mega scale, outlined, drifting slowest
  *   z-10  image cluster — two frames at different sizes, offsets and drift rates
  *   z-20  the wordmark, deliberately OVERLAPPING the cluster
- *   z-30  edge furniture: rotated rail, technical metadata, rotating seal
+ *   z-30  edge furniture: rotated margin rail and the rotating seal
  *
- * The overlap is the whole point: layers that intersect read as a composition,
- * layers that sit side by side read as a grid. Every element was already in the
- * old hero except the second frame and the ghost — this is denser, not busier,
- * and nothing new is being said.
+ * The overlap is the point: layers that intersect read as a composition, layers
+ * that sit side by side read as a grid. Depth comes from parallax separation
+ * between those layers, not from sheer count.
  *
- * Purposeful, not noisy — each layer drifts at its own rate, so depth comes from
- * parallax separation rather than from adding more things. All of it collapses
- * to a single readable column under `lg`, and every moving part is a Reveal or
- * Parallax, both of which render their finished state under reduced motion.
+ * Two things were tried and removed, both for the same reason — they competed
+ * rather than contributed. A full-bleed outlined "063" sat directly behind the
+ * wordmark, and two mega type layers in one optical centre made each other
+ * harder to read. And the wordmark itself ran at `mega`: three lines at 16vw is
+ * ~40svh of solid letterform, which is a wall, not a focal point. Maximalism is
+ * a contrast of scale — one confident large element with dense small detail
+ * around it — not everything shouting at once.
+ *
+ * This section runs FULL BLEED (`.hero-bleed`, not `.shell`). The 96rem measured
+ * column is right for reading and wrong for the opening composition, which
+ * should own the whole viewport.
+ *
+ * All of it collapses to a single readable column under `lg`, and every moving
+ * part is a Reveal or Parallax, both of which render their finished state under
+ * reduced motion.
  */
 
 /**
@@ -59,7 +68,7 @@ export function Hero() {
           it: the image cluster and the margins, not underneath the headline. */}
 
       {/* ---------- top meta rail ---------- */}
-      <Reveal variant="fade" weight="tertiary" delay={0.05} className="shell relative z-30">
+      <Reveal variant="fade" weight="tertiary" delay={0.05} className="hero-bleed relative z-30">
         <div className="flex items-start justify-between gap-6 border-b border-line pb-4">
           <p className="eyebrow max-w-[16ch]">{CONTACT.region}</p>
           <p className="eyebrow hidden text-center sm:block">{BRAND.suffix}</p>
@@ -68,7 +77,7 @@ export function Hero() {
       </Reveal>
 
       {/* ---------- main stacked composition ---------- */}
-      <div className="shell relative grid flex-1 grid-cols-12 items-center gap-y-10 py-10">
+      <div className="hero-bleed relative grid flex-1 grid-cols-12 items-center gap-y-10 py-10">
         {/* --- z-10 · image cluster --- */}
         {/* Two frames instead of one, overlapping, at different drift rates. The
             offset between them is what creates depth; an evenly spaced pair
@@ -168,7 +177,7 @@ export function Hero() {
         weight="tertiary"
         delay={0.62}
         stagger="tight"
-        className="shell relative z-30 grid grid-cols-1 border-t border-line sm:grid-cols-2"
+        className="hero-bleed relative z-30 grid grid-cols-1 border-t border-line sm:grid-cols-2"
       >
         {SPEC.map((row) => (
           <div
@@ -189,7 +198,7 @@ export function Hero() {
       </Reveal>
 
       {/* ---------- bottom rail ---------- */}
-      <div className="shell relative z-30 pt-6">
+      <div className="hero-bleed relative z-30 pt-6">
         <div className="flex flex-col gap-8 border-t border-line pt-6 md:flex-row md:items-end md:justify-between">
           <Reveal variant="settle" weight="secondary" delay={0.55} className="max-w-[42ch]">
             <p className="text-sm leading-relaxed text-fg-muted">{BRAND.tagline}</p>

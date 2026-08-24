@@ -151,6 +151,20 @@ body {
   max-width: 96rem;
 }
 
+/* Full-bleed rail for the hero.
+   `.shell` caps at 96rem and centres what is inside it, which on a wide display
+   leaves the hero floating in the middle of the screen with dead space either
+   side. The hero is the one section that should own the whole viewport, so it
+   keeps the gutter for safe-area padding and drops both the cap and the
+   auto-centring. Every other section still uses `.shell` — the measured column
+   is right for reading, it is only wrong for the opening composition. */
+.hero-bleed {
+  width: 100%;
+  padding-inline: var(--gutter);
+  margin-inline: 0;
+  max-width: none;
+}
+
 /* -----------------------------------------------------------------------------
    ACCESSIBILITY — global reduced-motion policy (docs/plan.md §2.4, non-negotiable)
 

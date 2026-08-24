@@ -1,64 +1,128 @@
 {
-  "judgedAt": "2026-08-24T13:09:09.116Z",
+  "judgedAt": "2026-08-24T13:25:38.108Z",
   "sections": [
     {
       "name": "AboutHero",
       "scores": {
         "motion": 3,
-        "states": 0,
-        "micro": 2,
+        "states": null,
+        "micro": 3,
         "choreography": 3,
-        "distinct": 2
+        "distinct": 3
       },
-      "total": 10,
-      "pass": false,
+      "total": 12,
+      "presentational": true,
+      "pass": true,
       "scopeFail": false,
-      "note": "No interactive elements; section is purely presentational."
+      "note": "Rule draws on delayed beat; settle and draw curves are house-chosen, but entrance rhythm is uneven"
     },
     {
       "name": "AboutStory",
       "scores": {
-        "motion": 4,
-        "states": 2,
-        "micro": 2,
-        "choreography": 4,
-        "distinct": 3
+        "motion": 3,
+        "states": 0,
+        "micro": 3,
+        "choreography": 3,
+        "distinct": 4
       },
-      "total": 15,
-      "pass": true,
+      "total": 13,
+      "presentational": false,
+      "pass": false,
       "scopeFail": false,
-      "note": "Service list uses stock idioms (scale-x rule, number lift) but choreography resolves from primary to tertiary with felt stagger."
+      "note": "Service list is hover-only with no keyboard focus or active state; handcrafted choreography and micro-details cannot overcome missing interaction completeness"
     },
     {
       "name": "AboutTiles",
       "scores": {
-        "motion": 4,
-        "states": 2,
-        "micro": 2,
+        "motion": 3,
+        "states": 0,
+        "micro": 3,
         "choreography": 4,
-        "distinct": 3
+        "distinct": 4
       },
-      "total": 15,
-      "pass": true,
+      "total": 14,
+      "presentational": false,
+      "pass": false,
       "scopeFail": false,
-      "note": "Center-leading reveal mirrors the offset pattern, but hover feedback is standard zoom+saturate+line-draw."
+      "note": "Image hovers are hover-only (no focus-visible); desaturate-on-entry and radial choreography are crafted, but missing full state vocabulary fails the bar"
     },
     {
       "name": "BookingSection",
       "scores": {
-        "motion": 2,
-        "states": 0,
-        "micro": 2,
+        "motion": 3,
+        "states": 4,
+        "micro": 3,
         "choreography": 3,
-        "distinct": 2
+        "distinct": 3
       },
-      "total": 9,
-      "pass": false,
+      "total": 16,
+      "presentational": false,
+      "pass": true,
       "scopeFail": false,
-      "note": "Contact interactions delegated to ContactLink component; BookingSection itself has no hover/active/focus states."
+      "note": "ContactLink provides all four states (idle/hover/focus/active); underline-draw gesture is directional; form/contact layout separation is clear"
     },
     {
       "name": "DualBrandSplit",
+      "scores": {
+        "motion": 4,
+        "states": 4,
+        "micro": 4,
+        "choreography": 4,
+        "distinct": 4
+      },
+      "total": 20,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Signature section: proves token system works by rendering identical markup under both brands; motion difference (signature vs. refined) is legible in how panels move and respond to hover"
+    },
+    {
+      "name": "Hero",
+      "scores": {
+        "motion": 4,
+        "states": 3,
+        "micro": 4,
+        "choreography": 4,
+        "distinct": 4
+      },
+      "total": 19,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Spec plate hover is color-only; everything else (parallax layering, magnetic drift, wipe fill, staggered assembly, scroll-cue drift) is brand-specific."
+    },
+    {
+      "name": "Manifesto",
+      "scores": {
+        "motion": 4,
+        "states": null,
+        "micro": 3,
+        "choreography": 3,
+        "distinct": 4
+      },
+      "total": 14,
+      "presentational": true,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Scored out of 16; the drawn rule and horizontal type drift are deliberate in a quiet section."
+    },
+    {
+      "name": "ServiceTicker",
+      "scores": {
+        "motion": 4,
+        "states": 2,
+        "micro": 4,
+        "choreography": 3,
+        "distinct": 4
+      },
+      "total": 17,
+      "presentational": false,
+      "pass": true,
+      "scopeFail": false,
+      "note": "Diamond rotation on hover is the only micro-interaction; interaction-state coverage is thin, but the counter-rotating tracks at different speeds carry the POV."
+    },
+    {
+      "name": "EventIndex",
       "scores": {
         "motion": 4,
         "states": 4,
@@ -67,23 +131,10 @@
         "distinct": 4
       },
       "total": 19,
+      "presentational": false,
       "pass": true,
       "scopeFail": false,
-      "note": "Rule+arrow gesture is connected and specific to this CTA; press is physically coherent (scale differs per mood); demonstrates the dual-token system."
-    },
-    {
-      "name": "EventIndex",
-      "scores": {
-        "motion": 4,
-        "states": 2,
-        "micro": 4,
-        "choreography": 2,
-        "distinct": 4
-      },
-      "total": 16,
-      "pass": true,
-      "scopeFail": false,
-      "note": "Choreography applies uniform stagger; no hierarchical progression from primary (accent line) through supporting (tags)."
+      "note": "Number and title move against each other on hover, rule draws in, neighbor dimming—all content-specific. Stagger is tight (55ms) but felt."
     },
     {
       "name": "FinalCTA",
@@ -95,163 +146,10 @@
         "distinct": 4
       },
       "total": 18,
+      "presentational": false,
       "pass": true,
       "scopeFail": false,
-      "note": "StickerSpin is decorative animation, not interaction; micro-craft relies on inherited component behavior."
-    },
-    {
-      "name": "Hero",
-      "scores": {
-        "motion": 4,
-        "states": 4,
-        "micro": 3,
-        "choreography": 4,
-        "distinct": 4
-      },
-      "total": 19,
-      "pass": true,
-      "scopeFail": false,
-      "note": "Parallax drift on imagery is subtle, appropriate to content, but not brand-specific—any photo could carry it."
-    },
-    {
-      "name": "Manifesto",
-      "scores": {
-        "motion": 3,
-        "states": 0,
-        "micro": 3,
-        "choreography": 2,
-        "distinct": 2
-      },
-      "total": 10,
-      "pass": false,
-      "scopeFail": false,
-      "note": "No interactive elements present; the section is motion-only and cannot express interaction state design."
-    },
-    {
-      "name": "ServiceTicker",
-      "scores": {
-        "motion": 3,
-        "states": 0,
-        "micro": 4,
-        "choreography": 4,
-        "distinct": 4
-      },
-      "total": 15,
-      "pass": false,
-      "scopeFail": false,
-      "note": "Only hover state active (diamond rotation); focus-visible, active, and disabled states entirely absent from marquee items."
-    },
-    {
-      "name": "ServicesBento",
-      "scores": {
-        "motion": 4,
-        "states": 3,
-        "micro": 4,
-        "choreography": 4,
-        "distinct": 4
-      },
-      "total": 19,
-      "pass": true,
-      "scopeFail": false,
-      "note": "No distinct pressed state; hover and focus effects are identical rather than physically coherent."
-    },
-    {
-      "name": "ServicesHero",
-      "scores": {
-        "motion": 3,
-        "states": 2,
-        "micro": 2,
-        "choreography": 3,
-        "distinct": 2
-      },
-      "total": 12,
-      "pass": false,
-      "scopeFail": false,
-      "note": "Interaction states limited to rail-item hover (color + rotation); no focus-visible, pressed, or disabled. Reads as template hero."
-    },
-    {
-      "name": "ServicesLedger",
-      "scores": {
-        "motion": 3,
-        "states": 3,
-        "micro": 3,
-        "choreography": 3,
-        "distinct": 3
-      },
-      "total": 15,
-      "pass": true,
-      "scopeFail": false,
-      "note": "Opposite-direction pointer response (number left, label right) is directional and specific; missing distinct focus-visible state beyond global outline."
-    },
-    {
-      "name": "SocietyCTA",
-      "scores": {
-        "motion": 2,
-        "states": 1,
-        "micro": 1,
-        "choreography": 2,
-        "distinct": 2
-      },
-      "total": 8,
-      "pass": false,
-      "scopeFail": false,
-      "note": "MagneticButton implementation not shown; no visible interaction states in source. Delay sequence (0.2s, 0.45s, 0.42s) reads arbitrary."
-    },
-    {
-      "name": "SocietyCategories",
-      "scores": {
-        "motion": 2,
-        "states": 2,
-        "micro": 2,
-        "choreography": 2,
-        "distinct": 2
-      },
-      "total": 10,
-      "pass": false,
-      "scopeFail": false,
-      "note": "Intentional restraint fits Society mood but reads as quiet/anonymous rather than handcrafted. Stock list-row patterns throughout; no distinctive point of view."
-    },
-    {
-      "name": "SocietyGallery",
-      "scores": {
-        "motion": 2,
-        "states": 0,
-        "micro": 2,
-        "choreography": 2,
-        "distinct": 2
-      },
-      "total": 8,
-      "pass": false,
-      "scopeFail": false,
-      "note": "Images have hover-only state (filter + hairline scale-x); no pressed/focus/disabled. Motion uses --ease-entrance (the anonymous generic curve the tokens call out), not a signature choice."
-    },
-    {
-      "name": "SocietyHero",
-      "scores": {
-        "motion": 2,
-        "states": 0,
-        "micro": 2,
-        "choreography": 3,
-        "distinct": 2
-      },
-      "total": 9,
-      "pass": false,
-      "scopeFail": false,
-      "note": "Display-only hero with no interactive elements. Delayed rule (0.85s) shows choreographic intent, but motion vocabulary (fade, kinetic reveal, mask, draw) is template-standard; curves are generic entrance, not signature."
-    },
-    {
-      "name": "SocietyStatement",
-      "scores": {
-        "motion": 2,
-        "states": 0,
-        "micro": 2,
-        "choreography": 3,
-        "distinct": 2
-      },
-      "total": 9,
-      "pass": false,
-      "scopeFail": false,
-      "note": "Display section with no interactive states. Delayed rule (0.6s) reflects intentional restraint, but motion is stock (kinetic reveal, settle, draw) and easing is generic --ease-entrance, not a brand signature."
+      "note": "Micro-interactions delegated to MagneticButton and ContactLink; choreography is clear but less intricate than EventIndex."
     }
   ],
   "verdict": "RED"
