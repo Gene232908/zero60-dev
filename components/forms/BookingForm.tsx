@@ -11,6 +11,7 @@ import {
   type InquirySource,
 } from '@/lib/validation/inquiry';
 import { cn } from '@/lib/utils/cn';
+import { trackInquirySubmitted } from '@/lib/analytics/meta-pixel';
 
 /**
  * BookingForm — the inquiry flow (docs/plan.md §4 M3, Developer 1).
@@ -103,6 +104,11 @@ export function BookingForm() {
         setStatus('error');
         return;
       }
+
+      // Meta Pixel "Lead" — fired only once the server has ACCEPTED the enquiry,
+      // so the ad reporting counts real leads rather than submit clicks. Inert
+      // until the Pixel ID is configured (BLOCKER B15); carries no customer data.
+      trackInquirySubmitted(source);
 
       setStatus('success');
     } catch {

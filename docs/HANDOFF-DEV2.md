@@ -175,3 +175,52 @@ input; the arithmetic and the cap are yours.
 ### Environment variables
 See `.env.example` for every name. Values come from me, never from the client
 directly, and never into git.
+
+---
+
+## 7. Milestone 4 — the metadata seam, and what is waiting for you
+
+Read this before you start the SEO task, because we both touch metadata and only
+one of us should touch each part of it.
+
+### What I have already done (do not redo it)
+- **`app/layout.tsx` root metadata** — `metadataBase`, a title **template**, the
+  default description, and the Open Graph / Twitter card blocks.
+- **Icons + share card** — `app/favicon.ico`, `icon.png`, `apple-icon.png`,
+  `opengraph-image.png`, wired automatically by Next's file conventions. There is
+  no `icons` field to maintain. Regenerate them with
+  `node scripts/generate-brand-images.mjs`.
+- **Meta Pixel** — `components/analytics/MetaPixel.tsx`, mounted in the root
+  layout, inert until `NEXT_PUBLIC_META_PIXEL_ID` is set.
+
+### What is yours
+Per-page **titles and descriptions**, `sitemap`, `robots`, and page-speed
+(Task Division Rev 2 p.5, your HARD task). The M4 gate **fails my build** if I add
+any of them, so they are genuinely untouched.
+
+**How to add a page title.** The root template does the branding, so export only
+the distinctive part from the page:
+
+```tsx
+// app/(site)/services/page.tsx
+export const metadata: Metadata = {
+  title: 'Services',                       // → "Services — ZERO-SIXTY-THREE PRODUCTIONS"
+  description: '...',                      // yours to write
+};
+```
+
+Do **not** repeat the brand name in the title — the template appends it. On the
+063 Society page you may want `title: '063 Society'`.
+
+**Share images per page** are also yours if you want them: drop an
+`opengraph-image.png` into that route's folder and it overrides the root one.
+
+### One thing to know about the pixel
+`MetaPixel` re-fires `PageView` on every client-side route change, because the
+App Router never reloads the document and Meta would otherwise only ever see the
+first page. If you add any custom navigation that bypasses `next/navigation`,
+that tracking breaks silently — tell me rather than patching it, it is my task.
+
+`trackPixelEvent()` in `lib/analytics/meta-pixel.ts` is safe to call from the
+admin side too, but **do not send customer details to Meta** — the enquiry data
+belongs in Firestore, not in an ad platform.

@@ -47,6 +47,18 @@ const read = (p) => {
     return '';
   }
 };
+/**
+ * Raw bytes — needed from M4 onwards to assert on binary assets (the favicon's
+ * ICO header, PNG dimensions). Returns an empty buffer rather than throwing, so
+ * a missing file fails the check that asked for it instead of the whole run.
+ */
+const readBuffer = (p) => {
+  try {
+    return readFileSync(P(p));
+  } catch {
+    return Buffer.alloc(0);
+  }
+};
 function walk(dir, out = []) {
   const abs = P(dir);
   if (!existsSync(abs)) return out;
@@ -67,7 +79,7 @@ const pkg = () => {
   }
 };
 const deps = () => ({ ...(pkg().dependencies || {}), ...(pkg().devDependencies || {}) });
-const ctx = { P, exists, read, walk, pkg, deps, ROOT };
+const ctx = { P, exists, read, readBuffer, walk, pkg, deps, ROOT };
 
 // ---------- runners ----------
 function sh(cmd, opts = {}) {
