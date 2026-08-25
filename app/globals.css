@@ -332,6 +332,51 @@ body {
     0 0 70px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
+/* -----------------------------------------------------------------------------
+   SOCIETY HERO PLATE — the same full-bleed-photo problem as .hero-scrim above,
+   solved in the opposite direction.
+
+   Productions sets WHITE type over a photo, so that scrim goes dark. Society's
+   fg is --ink-900 — near-black serif type over the same kind of photo needs the
+   opposite treatment: the plate has to lighten toward --paper under the type,
+   not darken. Same reasoning as .hero-duotone (no filters over large areas,
+   gradients only), mirrored for the paper-ground brand.
+   -------------------------------------------------------------------------- */
+.hero-scrim-society {
+  background:
+    /* Measured, not assumed: the first version of this plate only lightened
+       toward the bottom and left the top corners bare. Over a bright ceiling
+       or a lit chandelier that measured 2.4:1 against the meta rail's ink-900
+       text — a real failure, not a stylistic risk. This second band gives the
+       whole top edge a light wash too, since nav/meta text can sit anywhere
+       across that width, not only over the darkest part of the photo. */
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--paper) 55%, transparent) 0%,
+      color-mix(in srgb, var(--paper) 30%, transparent) 12%,
+      transparent 26%
+    ),
+    linear-gradient(
+      to top,
+      var(--paper) 0%,
+      color-mix(in srgb, var(--paper) 88%, transparent) 22%,
+      color-mix(in srgb, var(--paper) 38%, transparent) 52%,
+      color-mix(in srgb, var(--paper) 6%, transparent) 78%,
+      transparent 100%
+    );
+}
+
+/* The halo equivalent for dark type on a light plate: a soft PAPER-coloured
+   aura rather than a dark one, so the letterform still separates itself from
+   the photograph without borrowing Productions' black shadow (which would
+   print as a dirty ring around ink-900 text on a light ground). */
+.text-halo-paper {
+  text-shadow:
+    0 1px 1px color-mix(in srgb, var(--paper) 90%, transparent),
+    0 2px 12px color-mix(in srgb, var(--paper) 85%, transparent),
+    0 6px 30px color-mix(in srgb, var(--paper) 70%, transparent);
+}
+
 /* Hero scroll cue — a short fall that resets, not a bounce. transform only. */
 @keyframes zs-scroll-cue {
   0%,

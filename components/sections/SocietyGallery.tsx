@@ -14,15 +14,23 @@ import { SOCIETY } from '@/content/media';
  * The frames are paper-toned rather than black so the elegant composition can
  * still be judged before the real pictures arrive.
  *
- * REFERENCE STUDY (2026-08-25): madremia.framer.website sets its photo captions
- * as small rotated type running up the side of the frame rather than flat text
- * underneath — this site already owns that exact device (the margin rail in
- * Hero.tsx), so this borrows from a sibling component more than from the
- * reference, and ties Society's gallery back to the same motif Home opens
+ * REFERENCE STUDY (2026-08-25, round 1): madremia.framer.website sets its photo
+ * captions as small rotated type running up the side of the frame rather than
+ * flat text underneath — this site already owns that exact device (the margin
+ * rail in Hero.tsx), so this borrows from a sibling component more than from
+ * the reference, and ties Society's gallery back to the same motif Home opens
  * with. Laid out as a CSS grid column rather than absolute positioning, so the
  * caption rail always stretches to the image's own height with no measuring.
  * Falls back to a plain caption below the frame under `lg`, where a vertical
  * label would be cramped.
+ *
+ * REFERENCE STUDY (round 2): lightfall.framer.website's images arrive on scroll
+ * with real conviction, not a slow fade. `mask` (a clip-reveal) is swapped for
+ * `snap` — Reveal's overshoot-curve variant — on both frames. This changes the
+ * ENTRANCE only. The hover behaviour immediately below (no scale, no bounce; the
+ * change is in the picture's tone, not its geometry) is untouched — restraint
+ * once a photograph has arrived is still the register, only how it gets there
+ * has more presence now.
  */
 
 export function SocietyGallery() {
@@ -36,16 +44,17 @@ export function SocietyGallery() {
         <div className="col-span-12 lg:col-span-7 lg:mt-24">
           <div className="lg:grid lg:grid-cols-[1fr_2rem] lg:items-stretch lg:gap-4">
             <Parallax strength="subtle">
-              <Reveal variant="mask" weight="primary">
+              <Reveal variant="snap" weight="primary">
                 <div className="group relative aspect-[3/2] w-full overflow-hidden">
                   <Image
                     src={wide.src}
                     alt={wide.alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 58vw"
-                    // Society never scales or bounces on approach. The frame settles
-                    // in tone instead — held slightly flat, restored as you look at
-                    // it. The change is in the picture, not in its geometry.
+                    // HOVER (not the scroll-entrance above): the pointer approaching
+                    // never scales or bounces the frame. It settles in tone instead —
+                    // held slightly flat, restored as you look at it. The change is in
+                    // the picture, not in its geometry.
                     className="photo-mono object-cover"
                   />
                   <span
@@ -69,16 +78,17 @@ export function SocietyGallery() {
         <div className="col-span-12 sm:col-span-8 lg:col-span-4 lg:col-start-9">
           <div className="lg:grid lg:grid-cols-[1fr_2rem] lg:items-stretch lg:gap-4">
             <Parallax strength="medium" invert>
-              <Reveal variant="mask" weight="secondary" delay={0.15}>
+              <Reveal variant="snap" weight="secondary" delay={0.15}>
                 <div className="group relative aspect-[4/5] w-full overflow-hidden">
                   <Image
                     src={tall.src}
                     alt={tall.alt}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 33vw"
-                    // Society never scales or bounces on approach. The frame settles
-                    // in tone instead — held slightly flat, restored as you look at
-                    // it. The change is in the picture, not in its geometry.
+                    // HOVER (not the scroll-entrance above): the pointer approaching
+                    // never scales or bounces the frame. It settles in tone instead —
+                    // held slightly flat, restored as you look at it. The change is in
+                    // the picture, not in its geometry.
                     className="photo-mono object-cover"
                   />
                   <span

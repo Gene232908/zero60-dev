@@ -24,7 +24,7 @@ import { cn } from '@/lib/utils/cn';
  * arrive first and be felt, `settle` is for supporting content that should look
  * like it was placed rather than faded in.
  */
-export type RevealVariant = 'fade' | 'rise' | 'mask' | 'clip' | 'lead' | 'settle' | 'draw';
+export type RevealVariant = 'fade' | 'rise' | 'mask' | 'clip' | 'lead' | 'settle' | 'draw' | 'snap';
 export type MotionWeight = 'primary' | 'secondary' | 'tertiary';
 
 export interface RevealProps {
@@ -108,6 +108,22 @@ function buildVariants(variant: RevealVariant, distance: number, delay: number):
           opacity: 1,
           y: 0,
           transition: { duration: DUR.base, ease: EASE.anticipate, delay },
+        },
+      };
+    case 'snap':
+      // A confident arrival for photography, not for type. Starts slightly
+      // small and dropped, then lands on the overshoot curve — the same
+      // physics MagneticButton uses for its press feedback — so it reads as
+      // decisive rather than a slow fade. Faster than `lead` (DUR.base, not
+      // DUR.slow): the point is that it looks like it has already arrived
+      // by the time you register it moving.
+      return {
+        hidden: { opacity: 0, scale: 0.94, y: distance * 0.5 },
+        shown: {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          transition: { duration: DUR.base, ease: EASE.overshoot, delay },
         },
       };
     case 'rise':
