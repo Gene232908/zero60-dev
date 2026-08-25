@@ -377,6 +377,38 @@ body {
     0 6px 30px color-mix(in srgb, var(--paper) 70%, transparent);
 }
 
+/* -----------------------------------------------------------------------------
+   SOCIETY HERO PLATE — the settle.
+
+   The brief asked for "subtle image movement [that] continues after entrance"
+   and, separately, for no aggressive zooming. Those are reconciled by making
+   the movement a ONE-WAY SETTLE rather than a loop: the plate enters fractionally
+   overscaled and eases back to rest over 1.6s, then stops. You feel the frame
+   arrive; nothing is still animating by the time the wordmark is read, so it
+   costs one composited transform at load and nothing thereafter.
+
+   1.06 is deliberately small. Anything past ~1.08 on a full-bleed plate reads as
+   a Ken Burns effect, which is the "animation for its own sake" the brief rules
+   out. `both` holds the final frame so the image never snaps back.
+
+   Not covered by a prefers-reduced-motion guard here because the global block
+   at the foot of this file already flattens every animation to 0.01ms — the
+   plate simply renders at rest.
+   -------------------------------------------------------------------------- */
+@keyframes zs-hero-settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.zs-hero-plate {
+  animation: zs-hero-settle 1600ms var(--ease-refined) both;
+  will-change: transform;
+}
+
 /* Hero scroll cue — a short fall that resets, not a bounce. transform only. */
 @keyframes zs-scroll-cue {
   0%,

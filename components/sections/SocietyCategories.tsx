@@ -1,4 +1,4 @@
-import { Reveal } from '@/components/motion';
+import { KineticHeading, Reveal } from '@/components/motion';
 import { SOCIETY_CATEGORIES } from '@/content/society';
 
 /**
@@ -28,9 +28,25 @@ import { SOCIETY_CATEGORIES } from '@/content/society';
 export function SocietyCategories() {
   return (
     <section className="shell py-[var(--section-y)]">
-      <Reveal variant="fade" weight="tertiary">
-        <p className="eyebrow mb-14 md:mb-20">Services</p>
-      </Reveal>
+      {/* REDESIGN (2026-08-25): the label gained a heading beside it.
+          Previously this section opened with a bare "Services" eyebrow, which
+          was fine when it was section 3 of 5 but reads as an unannounced list
+          now that it sits after the marquee band. The heading is `md` — the
+          same rank as the gallery's — because the page reserves `lg` and `xl`
+          for the manifesto and the two ends of the page. */}
+      <div className="mb-16 grid grid-cols-12 gap-y-8 md:mb-24">
+        <Reveal variant="fade" weight="tertiary" className="col-span-12 md:col-span-3">
+          <p className="eyebrow">Services</p>
+        </Reveal>
+
+        <div className="col-span-12 md:col-span-9">
+          <KineticHeading
+            lines={['What we are', 'asked for.']}
+            size="md"
+            lineClassName="text-fg [&:last-child]:pl-[6vw] [&:last-child]:italic"
+          />
+        </div>
+      </div>
 
       <div className="relative">
         {/* The spine. `clip` reveals top-to-bottom, so the line reads as

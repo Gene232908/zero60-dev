@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils/cn';
  * the caller already set reads as "dim" in both Society's ink-on-paper and
  * Productions' white-on-black, with zero brand-specific code in here.
  *
- * No position or clip travel — SocietyStatement is explicit that stillness is
+ * No position or clip travel — SocietyManifesto is explicit that stillness is
  * the register ("the restraint of *not* moving is what separates the two
  * moods"). Resolving into focus in place respects that; sliding words in would
  * not have.
