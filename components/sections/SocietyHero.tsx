@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { KineticHeading, Parallax, Reveal } from '@/components/motion';
 import { SOCIETY_BRAND } from '@/content/society';
 import { SOCIETY } from '@/content/media';
+import { NAV_ITEMS } from '@/content/nav';
 
 /**
  * SocietyHero — the elegant counterpart to the Productions hero.
@@ -16,7 +17,17 @@ import { SOCIETY } from '@/content/media';
  * Fraunces here and Archivo on every other page. One component, two voices.
  *
  * Copy is PLACEHOLDER: no Society wording has been supplied (BLOCKER B4).
+ *
+ * REFERENCE STUDY (2026-08-25): comparing this page's structure against its
+ * five siblings — About's "02 — About", Services' "03 — Services", Portfolio's
+ * "04 — Portfolio" — turned up a real inconsistency, not a borrowed idea: every
+ * other destination states its position in the site via a numbered eyebrow, and
+ * Society never did. content/nav.ts already carries the answer (index "06"),
+ * so this reads it rather than hardcoding a number that could drift from the
+ * navbar's own source of truth.
  */
+
+const SOCIETY_NAV = NAV_ITEMS.find((item) => item.href === '/society');
 
 export function SocietyHero() {
   const image = SOCIETY.main;
@@ -24,8 +35,14 @@ export function SocietyHero() {
   return (
     <section className="shell pb-[var(--section-y)] pt-36 md:pt-48">
       <Reveal variant="fade" weight="tertiary">
+        {/* Three-slot rail, matching Hero.tsx's meta row: an edge item always
+            visible on both sides, the middle one hidden below sm so three
+            labels never crowd a narrow header. */}
         <div className="flex items-baseline justify-between border-b border-line pb-4">
-          <p className="eyebrow">{SOCIETY_BRAND.mood}</p>
+          <p className="eyebrow">
+            {SOCIETY_NAV ? `${SOCIETY_NAV.index} — ${SOCIETY_NAV.label}` : SOCIETY_BRAND.name}
+          </p>
+          <p className="eyebrow hidden sm:block">{SOCIETY_BRAND.mood}</p>
           <p className="eyebrow">Est. 063</p>
         </div>
       </Reveal>

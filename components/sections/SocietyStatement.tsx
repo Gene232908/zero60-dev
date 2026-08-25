@@ -1,4 +1,4 @@
-import { KineticHeading, Reveal } from '@/components/motion';
+import { KineticHeading, Reveal, TextResolve } from '@/components/motion';
 import { SOCIETY_BRAND } from '@/content/society';
 
 /**
@@ -10,6 +10,13 @@ import { SOCIETY_BRAND } from '@/content/society';
  *
  * No scroll drift on the heading here — Productions' Manifesto uses horizontal
  * drift, and the restraint of *not* moving is what separates the two moods.
+ *
+ * REFERENCE STUDY (2026-08-25): lafleur.framer.website resolves its body copy
+ * from dim to full ink as it scrolls into view, word by word. Borrowed as
+ * TextResolve (components/motion/TextResolve.tsx) — opacity only, no position
+ * or clip travel, so it adds engagement without adding the movement this
+ * section is explicitly built to avoid. "The pause is the point" gains a
+ * second meaning: the words themselves seem to arrive at the reader's pace.
  *
  * Copy is PLACEHOLDER (BLOCKER B4).
  */
@@ -37,7 +44,9 @@ export function SocietyStatement() {
             <Reveal variant="draw" delay={0.6}>
               <span aria-hidden="true" className="block h-px w-full bg-line" />
             </Reveal>
-            <p className="pt-5 text-sm leading-relaxed text-fg-muted">{SOCIETY_BRAND.intro}</p>
+            <TextResolve className="pt-5 text-sm leading-relaxed text-fg-muted" delay={0.15}>
+              {SOCIETY_BRAND.intro}
+            </TextResolve>
           </Reveal>
         </div>
       </div>

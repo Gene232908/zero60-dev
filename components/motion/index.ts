@@ -7,6 +7,7 @@
  * is automatically accessible.
  *
  *   Reveal             standard scroll-entry (fade / rise / mask / clip, staggered)
+ *   TextResolve        a paragraph that comes into focus word by word (opacity only)
  *   Marquee            seamless infinite ticker
  *   Parallax           restrained scroll-linked drift
  *   KineticHeading     oversized display type, masked word reveal + scroll drift
@@ -20,6 +21,7 @@
  */
 
 export { Reveal, type RevealProps, type RevealVariant, type MotionWeight } from './Reveal';
+export { TextResolve, type TextResolveProps } from './TextResolve';
 export { Marquee, type MarqueeProps } from './Marquee';
 export { Parallax, type ParallaxProps } from './Parallax';
 export { KineticHeading, type KineticHeadingProps, type KineticSize } from './KineticHeading';
