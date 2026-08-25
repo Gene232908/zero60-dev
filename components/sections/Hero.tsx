@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { KineticHeading, MagneticButton, Parallax, Reveal, StickerSpin } from '@/components/motion';
 import { BRAND, CONTACT } from '@/content/site';
-import { TILES, SCENES, HERO_BG } from '@/content/media';
+import { HERO, HERO_BG } from '@/content/media';
 
 /**
  * Hero — the opening visual composition (design brief §7, §8).
@@ -55,8 +55,8 @@ const SPEC = [
 ] as const;
 
 export function Hero() {
-  const portrait = TILES.cameraOp;
-  const secondary = SCENES.drums;
+  const portrait = HERO.main;
+  const secondary = HERO.detail;
 
   return (
     <section className="relative isolate flex min-h-[100svh] flex-col justify-between overflow-hidden pb-8 pt-28 md:pt-36">
@@ -118,14 +118,14 @@ export function Hero() {
             <Parallax strength="subtle">
               <Reveal variant="mask" weight="primary" delay={0.15}
             immediate>
-                <div className="relative aspect-[4/5] w-full overflow-hidden border border-line-strong shadow-[0_28px_70px_-18px_rgb(0_0_0/0.9)]">
+                <div className="group relative aspect-[4/5] w-full overflow-hidden border border-line-strong shadow-[0_28px_70px_-18px_rgb(0_0_0/0.9)]">
                   <Image
                     src={portrait.src}
                     alt={portrait.alt}
                     fill
                     priority
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 38vw"
-                    className="object-cover"
+                    className="photo-mono object-cover group-hover:scale-[1.03]"
                   />
                   {/* A hairline of the accent along the top edge, so the frame
                       is tied to the brand rather than just pasted on. */}
@@ -143,13 +143,13 @@ export function Hero() {
               <Parallax strength="medium" invert>
                 <Reveal variant="settle" weight="secondary" delay={0.42}
             immediate>
-                  <div className="relative aspect-[5/4] w-full overflow-hidden border border-line-strong shadow-[0_20px_50px_-14px_rgb(0_0_0/0.95)]">
+                  <div className="group relative aspect-[5/4] w-full overflow-hidden border border-line-strong shadow-[0_20px_50px_-14px_rgb(0_0_0/0.95)]">
                     <Image
                       src={secondary.src}
                       alt={secondary.alt}
                       fill
                       sizes="(max-width: 1024px) 45vw, 16vw"
-                      className="object-cover"
+                      className="photo-mono object-cover group-hover:scale-[1.04]"
                     />
                   </div>
                 </Reveal>

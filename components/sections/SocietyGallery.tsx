@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Parallax, Reveal } from '@/components/motion';
-import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
+import { SOCIETY } from '@/content/media';
 
 /**
  * SocietyGallery — an asymmetric two-image composition.
@@ -16,8 +16,8 @@ import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
  */
 
 export function SocietyGallery() {
-  const wide = PLACEHOLDER_IMAGES.societyWide;
-  const tall = PLACEHOLDER_IMAGES.societyTall;
+  const wide = SOCIETY.wide;
+  const tall = SOCIETY.tall;
 
   return (
     <section className="shell py-[var(--section-y)]">
@@ -35,7 +35,7 @@ export function SocietyGallery() {
                   // Society never scales or bounces on approach. The frame settles
                   // in tone instead — held slightly flat, restored as you look at
                   // it. The change is in the picture, not in its geometry.
-                  className="object-cover contrast-[0.94] saturate-[0.9] transition-[filter] duration-[var(--dur-cinematic)] ease-[var(--ease-brand)] group-hover:contrast-100 group-hover:saturate-100"
+                  className="photo-mono object-cover"
                 />
                 <span
                   aria-hidden="true"
@@ -62,7 +62,7 @@ export function SocietyGallery() {
                   // Society never scales or bounces on approach. The frame settles
                   // in tone instead — held slightly flat, restored as you look at
                   // it. The change is in the picture, not in its geometry.
-                  className="object-cover contrast-[0.94] saturate-[0.9] transition-[filter] duration-[var(--dur-cinematic)] ease-[var(--ease-brand)] group-hover:contrast-100 group-hover:saturate-100"
+                  className="photo-mono object-cover"
                 />
                 <span
                   aria-hidden="true"

@@ -25,13 +25,13 @@ export function AboutStory() {
         <div className="col-span-12 lg:col-span-5">
           <Parallax strength="medium">
             <Reveal variant="clip" weight="primary">
-              <div className="relative aspect-[3/4] w-full overflow-hidden">
+              <div className="group relative aspect-[3/4] w-full overflow-hidden">
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
                   sizes="(max-width: 1024px) 100vw, 42vw"
-                  className="object-cover"
+                  className="photo-mono object-cover group-hover:scale-[1.02]"
                 />
               </div>
             </Reveal>

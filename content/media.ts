@@ -68,6 +68,52 @@ export const SCENES = {
  * 1600px here, so it is soft on a very wide display. Replace with the original
  * full-resolution frame before launch.
  */
+/**
+ * The hero two framed photographs.
+ *
+ * These used to borrow TILES.cameraOp and SCENES.drums, which meant the most
+ * prominent image on the site was also a small About tile. Management supplied
+ * dedicated frames, so the hero now has its own identity — see
+ * docs/IMAGE-CHECKLIST.pdf note.
+ */
+export const HERO = {
+  main: m('hero-main', 1200, 1500, 'Camera operator filming a live event'),
+  detail: m('hero-detail', 1000, 800, 'Mixing console faders in close-up'),
+} as const;
+
+/**
+ * 063 SOCIETY — real photography at last.
+ *
+ * Every Society slot rendered a grey placeholder frame from
+ * content/placeholders.ts because no Society imagery had ever been supplied
+ * (BLOCKER B4). Management has now provided all three.
+ *
+ * SOCIETY.main deliberately serves BOTH the Two Houses panel on the landing
+ * page and the Society page hero — one picture, two placements. Supply a
+ * separate society-hero source if they should ever differ.
+ */
+export const SOCIETY = {
+  main: m('society-main', 1200, 1500, 'Table setting with roses and glassware at an elegant event'),
+  wide: m('society-wide', 1800, 1200, 'Banquet hall laid for a formal dinner'),
+  tall: m('society-tall', 1200, 1500, 'Place setting detail with folded napkin'),
+} as const;
+
+/**
+ * The two bento tiles that were text-only by design. Management supplied images
+ * for both, so they are wired in — the grid keeps its rhythm because the tiles
+ * were already sized for it; only the empty backgrounds are filled.
+ */
+export const BENTO = {
+  sportsAnnouncing: m('bento-sports', 1200, 900, 'Announcer interviewing an athlete at a sports event'),
+  hostingEmcee: m('bento-emcee', 1200, 900, 'Performer hosting on stage in front of a crowd'),
+} as const;
+
+/** Additional portfolio frames supplied separately from the scene set. */
+export const PORTFOLIO_FRAMES = [
+  m('portfolio-02', 1600, 1200, 'DJ performing under red stage lighting'),
+  m('portfolio-03', 1600, 1200, 'Crowd lit by stage wash at a live show'),
+] as const;
+
 export const HERO_BG = m(
   'hero-bg',
   1600,

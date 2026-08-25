@@ -77,14 +77,14 @@ export function ServicesLedger() {
 
       {/* Full-bleed visual closes the section (design brief §3 "Section E"). */}
       <Reveal variant="clip" weight="primary">
-        <div className="relative h-[45svh] w-full overflow-hidden md:h-[70svh]">
+        <div className="group relative h-[45svh] w-full overflow-hidden md:h-[70svh]">
           <Parallax strength="medium" className="h-full">
             <Image
               src={image.src}
               alt={image.alt}
               fill
               sizes="100vw"
-              className="scale-110 object-cover"
+              className="photo-mono scale-110 object-cover"
             />
           </Parallax>
         </div>

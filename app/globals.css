@@ -131,6 +131,56 @@ body {
    0.01ms pass for anyone who asked for less motion.
    -------------------------------------------------------------------------- */
 /* -----------------------------------------------------------------------------
+   PHOTOGRAPHY — monochrome at rest, colour on approach.
+
+   plan.md §2.1 sets the brand's photographic base as black and white, and §2.5
+   asks for a duotone/grain treatment. Shipping the files greyscale would satisfy
+   the first and throw away the second: there would be nothing left to reveal.
+
+   So every photograph ships in FULL COLOUR and is desaturated here instead. The
+   picture resolves as you approach it, which turns a page of stills into
+   something that answers the pointer — and it costs one CSS property rather than
+   a second set of image files.
+
+   Mechanics:
+   - filter and transform only, so this stays on the compositor
+   - keyboard users get the same reveal via :focus-within, not hover alone
+   - the global prefers-reduced-motion block flattens the transition to 0.01ms,
+     leaving the colour reveal instant rather than removing it
+   - NO will-change: it would pin a compositor layer for every photo on the page,
+     which costs far more than the transition it would smooth
+   -------------------------------------------------------------------------- */
+.photo-mono {
+  filter: grayscale(1) contrast(1.06) brightness(0.94);
+  transition:
+    filter var(--dur-slow) var(--ease-brand),
+    transform var(--dur-cinematic) var(--ease-signature);
+}
+
+/* Works both ways: driven by a .group wrapper where the whole card is the
+   target, and by the image itself where it stands alone (Developer 2's gallery
+   already used the direct form). */
+.group:hover .photo-mono,
+.group:focus-within .photo-mono,
+.photo-mono:hover {
+  filter: grayscale(0) contrast(1) brightness(1);
+}
+
+/* Society is the restrained register — it resolves rather than pops. Same idea,
+   slower, and it never fully saturates: the elegant mood stays understated even
+   at its most colourful. */
+[data-brand="society"] .photo-mono {
+  filter: grayscale(1) contrast(1.02) brightness(0.97);
+  transition: filter var(--dur-cinematic) var(--ease-refined);
+}
+
+[data-brand="society"] .group:hover .photo-mono,
+[data-brand="society"] .group:focus-within .photo-mono,
+[data-brand="society"] .photo-mono:hover {
+  filter: grayscale(0.12) contrast(1) brightness(1);
+}
+
+/* -----------------------------------------------------------------------------
    HERO PLATE — legible display type over a photographic background.
 
    The supplied frame (truss, movers, flight cases) is busy edge to edge and has

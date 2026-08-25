@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Reveal } from '@/components/motion';
 import { SERVICES } from '@/content/site';
-import { SCENES } from '@/content/media';
+import { SCENES, TILES, BENTO } from '@/content/media';
 import { cn } from '@/lib/utils/cn';
 import type { Media } from '@/content/media';
 
@@ -9,13 +9,13 @@ import type { Media } from '@/content/media';
  * ServicesBento — the eight service lines as a bento layout.
  *
  * A bento only works if the tiles genuinely differ; eight equal rectangles is
- * just a card grid with extra steps. So the sizes vary (7/5, 4/4/4, 6/6), two
- * tiles carry no image at all, and the lead tile is double height.
+ * just a card grid with extra steps. So the sizes vary (7/5, 4/4/4, 6/6) and the
+ * lead tile is double height.
  *
- * The two image-less tiles are not a shortfall — they are the rhythm. They also
- * happen to be the two disciplines with no usable photograph in the supplied
- * material (sports announcing and hosting), so the layout absorbs a content gap
- * instead of advertising it.
+ * Sports announcing and hosting used to render without a photograph, because no
+ * usable image existed for either — the layout absorbed the content gap rather
+ * than advertising it. Management has since supplied both, so all eight tiles
+ * now carry imagery and the rhythm comes from the sizes alone.
  *
  * All eight descriptions are the client's own copy, verbatim from the live site.
  */
@@ -30,11 +30,16 @@ type Tile = {
 /** Keyed by service id so a reordering of SERVICES cannot silently misalign. */
 const LAYOUT: Record<string, Tile> = {
   'audio-rental': { span: 'md:col-span-7 md:row-span-2', media: SCENES.audioDesk, feature: true },
-  'singers-performers': { span: 'md:col-span-5', media: SCENES.drums },
+  // No drums frame was supplied in the delivery, and the old one is a 512x408
+  // screenshot crop. TILES.guitar is a guitarist mid-performance, which is
+  // exactly what this tile is about — a real photograph beats a sharp label.
+  'singers-performers': { span: 'md:col-span-5', media: TILES.guitar },
   'dj-services': { span: 'md:col-span-5', media: SCENES.djDecks },
   'sound-engineering': { span: 'md:col-span-4', media: SCENES.soundEngineer },
-  'sports-announcing': { span: 'md:col-span-4', media: null },
-  'hosting-emcee': { span: 'md:col-span-4', media: null },
+  // These two were deliberately text-only while no imagery existed for them.
+  // Management supplied both, so they are filled.
+  'sports-announcing': { span: 'md:col-span-4', media: BENTO.sportsAnnouncing },
+  'hosting-emcee': { span: 'md:col-span-4', media: BENTO.hostingEmcee },
   videography: { span: 'md:col-span-6', media: SCENES.videoCamera },
   photography: { span: 'md:col-span-6', media: SCENES.photoLens },
 };
@@ -75,7 +80,7 @@ export function ServicesBento() {
                       // exposes an edge. The photograph eases UP as you approach
                       // rather than zooming at you: the stock bento zoom is the
                       // first thing that reads as a template.
-                      className="scale-[1.06] object-cover transition-transform duration-[var(--dur-cinematic)] ease-[var(--ease-signature)] group-hover:translate-y-[-2%]"
+                      className="photo-mono scale-[1.06] object-cover group-hover:translate-y-[-2%]"
                     />
                   </div>
                 ) : null}

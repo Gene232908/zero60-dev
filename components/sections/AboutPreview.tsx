@@ -78,7 +78,7 @@ export function AboutPreview() {
                     width={media.width}
                     height={media.height}
                     sizes="(max-width: 48rem) 30vw, (max-width: 64rem) 22vw, 16vw"
-                    className="h-full w-full object-cover grayscale"
+                    className="photo-mono h-full w-full object-cover"
                   />
                 </Reveal>
               </Parallax>

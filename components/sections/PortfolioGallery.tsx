@@ -102,7 +102,7 @@ export function PortfolioGallery() {
                       width={frame.media.width}
                       height={frame.media.height}
                       sizes="(max-width: 48rem) 100vw, (max-width: 64rem) 50vw, 33vw"
-                      className="w-full object-cover grayscale transition-[filter] duration-[var(--dur-base)] hover:grayscale-0"
+                      className="photo-mono w-full object-cover"
                     />
                     <figcaption className="eyebrow mt-[var(--space-2xs)]">{frame.caption}</figcaption>
                   </figure>

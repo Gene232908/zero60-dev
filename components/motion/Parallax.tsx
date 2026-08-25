@@ -58,9 +58,27 @@ export function Parallax({
 
   return (
     <div ref={ref} className={cn('relative', className)}>
+      {/*
+        h-full is load-bearing, not decoration.
+
+        `will-change: transform` makes this div a containing block for absolutely
+        positioned descendants — the same way a real transform does. A next/image
+        with `fill` therefore resolves its height against THIS div rather than
+        the sized wrapper outside, and with only an absolutely positioned child
+        this div collapses to 0. The image then computed to height:0 and vanished
+        while still being present, correctly sourced and fully opaque.
+
+        That silently broke every Parallax that wraps a fill image directly:
+        the Two Houses panels and the Services closing band had never once shown
+        their photograph.
+
+        h-full is a no-op when the wrapper is content-sized (percentage height
+        against an auto-height parent resolves to auto), so this only takes
+        effect exactly where it is needed.
+      */}
       <motion.div
         style={axis === 'y' ? { y: smooth } : { x: smooth }}
-        className="will-change-transform"
+        className="h-full will-change-transform"
         transition={{ duration: DUR.base }}
       >
         {children}

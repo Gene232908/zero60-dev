@@ -50,7 +50,7 @@ export function AboutTiles() {
                     // Held a touch desaturated so the row reads as one edit, and
                     // restored on approach — the frame you are looking at is the
                     // only one at full strength.
-                    className="scale-[1.03] object-cover saturate-[0.85] transition-[filter,transform] duration-[var(--dur-cinematic)] ease-[var(--ease-signature)] group-hover:scale-100 group-hover:saturate-100"
+                    className="photo-mono scale-[1.03] object-cover group-hover:scale-100"
                   />
                   {/* Hairline that draws down the leading edge on approach. */}
                   <span

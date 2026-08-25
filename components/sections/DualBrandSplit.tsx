@@ -4,7 +4,8 @@ import { KineticHeading, Parallax, Reveal } from '@/components/motion';
 import { BrandProvider } from '@/components/layout/BrandProvider';
 import { BRAND } from '@/content/site';
 import { SCENES } from '@/content/media';
-import { PLACEHOLDER_IMAGES, SOCIETY_PLACEHOLDER } from '@/content/placeholders';
+import { SOCIETY_PLACEHOLDER } from '@/content/placeholders';
+import { SOCIETY as SOCIETY_MEDIA } from '@/content/media';
 import { cn } from '@/lib/utils/cn';
 
 /**
@@ -46,7 +47,7 @@ const SOCIETY: Panel = {
   mood: SOCIETY_PLACEHOLDER.mood,
   blurb: SOCIETY_PLACEHOLDER.blurb,
   href: '/society',
-  image: PLACEHOLDER_IMAGES.society,
+  image: SOCIETY_MEDIA.main,
 };
 
 function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
@@ -59,7 +60,12 @@ function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
       // on the right. --ease-brand, --press-scale and --hover-lift each differ
       // per data-brand; nothing below is hardcoded to one mood.
       className={cn(
-        'group relative flex min-h-[70svh] flex-col justify-between overflow-hidden p-[var(--gutter)] lg:min-h-[92svh]',
+        // `isolate` is load-bearing. BrandProvider paints a solid bg-bg, and this
+        // Link was only `relative` — which does NOT create a stacking context on
+        // its own — so the -z-10 image layer below rendered BEHIND that
+        // background and was invisible. The panels have never actually shown
+        // their photograph. isolate scopes the negative z-index to this Link.
+        'group relative isolate flex min-h-[70svh] flex-col justify-between overflow-hidden p-[var(--gutter)] lg:min-h-[92svh]',
         'transition-transform duration-[var(--dur-fast)] ease-[var(--ease-brand)]',
         'hover:translate-y-[var(--hover-lift)]',
         'active:scale-[var(--press-scale)] active:ease-[var(--ease-press)]',
@@ -73,14 +79,14 @@ function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
         className="pointer-events-none absolute inset-3 z-20 border border-accent opacity-0 transition-opacity duration-[var(--dur-micro)] group-focus-visible:opacity-100"
       />
       {/* Image sits behind the type and drifts on scroll. */}
-      <div className="absolute inset-0 -z-10 opacity-30 transition-opacity duration-[var(--dur-slow)] ease-[var(--ease-brand)] group-hover:opacity-45">
+      <div className="absolute inset-0 -z-10 opacity-60 transition-opacity duration-[var(--dur-slow)] ease-[var(--ease-brand)] group-hover:opacity-80">
         <Parallax strength="subtle" className="h-full">
           <Image
             src={panel.image.src}
             alt={panel.image.alt}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className="photo-mono object-cover"
           />
         </Parallax>
       </div>

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { KineticHeading, Parallax, Reveal } from '@/components/motion';
 import { SOCIETY_BRAND } from '@/content/society';
-import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
+import { SOCIETY } from '@/content/media';
 
 /**
  * SocietyHero — the elegant counterpart to the Productions hero.
@@ -19,7 +19,7 @@ import { PLACEHOLDER_IMAGES } from '@/content/placeholders';
  */
 
 export function SocietyHero() {
-  const image = PLACEHOLDER_IMAGES.society;
+  const image = SOCIETY.main;
 
   return (
     <section className="shell pb-[var(--section-y)] pt-36 md:pt-48">
@@ -56,14 +56,14 @@ export function SocietyHero() {
         <div className="col-span-12 sm:col-span-7 sm:col-start-6 lg:col-span-4 lg:col-start-9">
           <Parallax strength="subtle">
             <Reveal variant="mask" weight="primary" delay={0.3}>
-              <div className="relative aspect-[4/5] w-full overflow-hidden">
+              <div className="group relative aspect-[4/5] w-full overflow-hidden">
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
                   priority
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 58vw, 33vw"
-                  className="object-cover"
+                  className="photo-mono object-cover"
                 />
               </div>
             </Reveal>

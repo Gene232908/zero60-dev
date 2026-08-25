@@ -23,7 +23,7 @@
  */
 
 import { PLACEHOLDER_NOTICE } from './placeholders';
-import { SCENES } from './media';
+import { SCENES, PORTFOLIO_FRAMES } from './media';
 import type { Media } from './media';
 
 export type PortfolioVideo = {
@@ -68,7 +68,11 @@ export const GALLERY_FRAMES: GalleryFrame[] = [
   { media: SCENES.audioDesk, caption: 'Front of house' },
   { media: SCENES.soundEngineer, caption: 'Sound engineering' },
   { media: SCENES.djDecks, caption: 'DJ set' },
-  { media: SCENES.drums, caption: 'Live performance' },
+  // The two frames supplied specifically for the portfolio. SCENES.drums used to
+  // sit here and was dropped — it is a 512x408 screenshot crop, and enlarging it
+  // in a gallery is exactly where that shows.
+  { media: PORTFOLIO_FRAMES[0], caption: 'Live performance' },
+  { media: PORTFOLIO_FRAMES[1], caption: 'Crowd and stage wash' },
   { media: SCENES.videoCamera, caption: 'Videography' },
   { media: SCENES.photoLens, caption: 'Photography' },
 ];
