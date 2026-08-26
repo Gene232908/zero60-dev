@@ -19,7 +19,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Services', href: '/services', index: '03', brand: 'productions' },
   { label: 'Portfolio', href: '/portfolio', index: '04', brand: 'productions' },
   { label: 'Collaborations', href: '/collaborations', index: '05', brand: 'productions' },
-  { label: '063 Society', href: '/society', index: '06', brand: 'society' },
+  { label: '063 Society', href: '/societysixty', index: '06', brand: 'society' },
   { label: 'Contact', href: '/contact', index: '07', brand: 'productions' },
 ];
 

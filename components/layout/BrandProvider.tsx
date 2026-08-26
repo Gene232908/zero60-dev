@@ -35,6 +35,8 @@ export interface BrandProviderProps {
   surface?: Surface;
   as?: ElementType;
   className?: string;
+  /** Escape hatch for a one-off token override on this subtree (e.g. --bg). */
+  style?: React.CSSProperties;
   children: ReactNode;
 }
 
@@ -43,6 +45,7 @@ export function BrandProvider({
   surface = 'default',
   as: Tag = 'div',
   className,
+  style,
   children,
 }: BrandProviderProps) {
   const Element = Tag as ElementType;
@@ -52,6 +55,7 @@ export function BrandProvider({
         data-brand={brand}
         data-surface={surface === 'dark' ? 'dark' : undefined}
         className={cn('bg-bg text-fg', className)}
+        style={style}
       >
         {children}
       </Element>

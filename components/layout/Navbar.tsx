@@ -36,8 +36,15 @@ const MENU_ID = 'primary-mobile-menu';
  * The mood of the route currently on screen.
  * Longest matching href wins, so a nested path resolves to its section rather
  * than falling back to "/".
+ *
+ * `/societysixty` runs in society mode too, but is deliberately not added to
+ * NAV_ITEMS (no visible nav link yet — build spec §8 leaves that decision to
+ * the client), so it is matched here directly instead.
  */
 function brandForPath(pathname: string): 'productions' | 'society' {
+  if (pathname === '/societysixty' || pathname.startsWith('/societysixty/')) {
+    return 'society';
+  }
   const match = NAV_ITEMS.filter((item) => item.href !== '/')
     .filter((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))
     .sort((a, b) => b.href.length - a.href.length)[0];
@@ -48,6 +55,7 @@ export function Navbar() {
   const pathname = usePathname();
   const brand = brandForPath(pathname);
   const isSociety = brand === 'society';
+  const isSocietySixty = pathname === '/societysixty' || pathname.startsWith('/societysixty/');
   const reduced = useReducedMotionSafe();
   const { scrollY, scrollYProgress } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -75,7 +83,12 @@ export function Navbar() {
         <div
           className={cn(
             'relative transition-colors duration-[var(--dur-base)]',
-            scrolled && 'bg-bg/80 backdrop-blur-sm',
+            // SocietySixty's hero sits directly under the bar with no dark
+            // scrim, so the bar carries its own frosted-glass surface the
+            // whole time rather than only after scrolling.
+            isSocietySixty
+              ? 'border-b border-white/25 bg-white/25 backdrop-blur-md backdrop-saturate-150 supports-[not(backdrop-filter:blur(1px))]:bg-[#E7DDCB]/90'
+              : scrolled && 'bg-bg/80 backdrop-blur-sm',
           )}
         >
           <nav
@@ -98,7 +111,12 @@ export function Navbar() {
                 priority
                 className="h-8 w-8 shrink-0 md:h-9 md:w-9"
               />
-              <span className="display hidden text-[0.9rem] leading-none tracking-[-0.02em] text-fg sm:inline">
+              <span
+                className={cn(
+                  'display hidden text-[0.9rem] leading-none tracking-[-0.02em] sm:inline',
+                  isSocietySixty ? 'text-[#1A1714]' : 'text-fg',
+                )}
+              >
                 ZERO-SIXTY-THREE
               </span>
             </Link>
@@ -115,12 +133,22 @@ export function Navbar() {
                       className={cn(
                         'group relative inline-block py-1 text-[0.68rem] uppercase tracking-[0.18em]',
                         'transition-colors duration-[var(--dur-micro)]',
-                        // Lime on the black Productions ground is the signature
-                        // accent; on Society's paper it is barely legible, so the
-                        // current page is marked by weight and near-black instead.
-                        active && isSociety && 'font-bold text-fg',
-                        active && !isSociety && 'font-medium text-accent',
-                        !active && 'font-medium text-fg-muted hover:text-fg',
+                        isSocietySixty
+                          ? // Real flyer palette, weighted for contrast against the
+                            // frosted glass bar: dark ink at rest, dusty-rose on
+                            // the active page and on hover — energetic but not loud.
+                            cn(
+                              'font-bold',
+                              active ? 'text-[#B18A83]' : 'text-[#1A1714] hover:text-[#B18A83]',
+                            )
+                          : cn(
+                              // Lime on the black Productions ground is the signature
+                              // accent; on Society's paper it is barely legible, so the
+                              // current page is marked by weight and near-black instead.
+                              active && isSociety && 'font-bold text-fg',
+                              active && !isSociety && 'font-medium text-accent',
+                              !active && 'font-medium text-fg-muted hover:text-fg',
+                            ),
                       )}
                     >
                       {item.label}
@@ -129,7 +157,7 @@ export function Navbar() {
                         aria-hidden="true"
                         className={cn(
                           'absolute -bottom-0.5 left-0 h-px w-full origin-left',
-                          isSociety ? 'bg-fg' : 'bg-accent',
+                          isSocietySixty ? 'bg-[#B18A83]' : isSociety ? 'bg-fg' : 'bg-accent',
                           'scale-x-0 transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]',
                           'group-hover:scale-x-100',
                           active && 'scale-x-100',
@@ -149,19 +177,26 @@ export function Navbar() {
               aria-controls={MENU_ID}
               className="group flex items-center gap-3 lg:hidden"
             >
-              <span className="text-[0.68rem] font-medium uppercase tracking-[0.18em] text-fg-muted">
+              <span
+                className={cn(
+                  'text-[0.68rem] font-medium uppercase tracking-[0.18em]',
+                  isSocietySixty ? 'text-[#1A1714]' : 'text-fg-muted',
+                )}
+              >
                 {menuOpen ? 'Close' : 'Menu'}
               </span>
               <span aria-hidden="true" className="relative flex h-3 w-6 flex-col justify-between">
                 <span
                   className={cn(
-                    'block h-px w-full bg-fg transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]',
+                    'block h-px w-full transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]',
+                    isSocietySixty ? 'bg-[#1A1714]' : 'bg-fg',
                     menuOpen && 'translate-y-[5.5px] rotate-45',
                   )}
                 />
                 <span
                   className={cn(
-                    'block h-px w-full bg-fg transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]',
+                    'block h-px w-full transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]',
+                    isSocietySixty ? 'bg-[#1A1714]' : 'bg-fg',
                     menuOpen && '-translate-y-[5.5px] -rotate-45',
                   )}
                 />
