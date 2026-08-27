@@ -423,6 +423,17 @@ body {
    PERFORMANCE. `color`, `-webkit-text-stroke-color`, `opacity` and
    `text-shadow` are paint-only — no layout, no `filter`, no blur, one line of
    type rather than per-glyph animation. One-shot: nothing paints after 2s.
+
+   MOBILE GLOW SCALE (client feedback, fourth round): on a phone the glyphs
+   render far smaller than on desktop, but a hardcoded `56px`/`140px` blur
+   radius stays the same absolute size regardless — so on a narrow screen the
+   glow was wider than the letterforms themselves, and the word read as a
+   green smear rather than legible type. `--neon-glow-2` / `--neon-glow-3`
+   (defined on `:root`, scaled down under the `max-width: 40rem` query at the
+   bottom of this file) hold the two OUTER glow radii used in the brightest
+   keyframes; every text-shadow below reads through them instead of a literal
+   px value, so one breakpoint override reaches every pass, every fallback,
+   and both the hero's own THREE and every non-home hero's title at once.
    -------------------------------------------------------------------------- */
 @keyframes zs-neon-activate {
   /* ---- 0.0-0.2s · NOTHING, HELD ----
@@ -456,7 +467,7 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 10px color-mix(in srgb, var(--accent) 44%, transparent),
-      0 0 28px color-mix(in srgb, var(--accent) 18%, transparent);
+      0 0 calc(var(--neon-glow-2) * 0.5) color-mix(in srgb, var(--accent) 18%, transparent);
   }
   53% {
     opacity: 0.85;
@@ -472,7 +483,7 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 14px color-mix(in srgb, var(--accent) 60%, transparent),
-      0 0 44px color-mix(in srgb, var(--accent) 30%, transparent);
+      0 0 calc(var(--neon-glow-2) * 0.78) color-mix(in srgb, var(--accent) 30%, transparent);
   }
   82% {
     opacity: 1;
@@ -480,8 +491,8 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 16px color-mix(in srgb, var(--accent) 84%, transparent),
-      0 0 54px color-mix(in srgb, var(--accent) 46%, transparent),
-      0 0 120px color-mix(in srgb, var(--accent) 20%, transparent);
+      0 0 calc(var(--neon-glow-2) * 0.96) color-mix(in srgb, var(--accent) 46%, transparent),
+      0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 20%, transparent);
   }
 
   /* ---- 2.0s onward · FULL NEON, PERMANENT ----
@@ -495,8 +506,8 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 16px var(--accent),
-      0 0 56px color-mix(in srgb, var(--accent) 60%, transparent),
-      0 0 140px color-mix(in srgb, var(--accent) 30%, transparent);
+      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent),
+      0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 30%, transparent);
   }
 }
 
@@ -530,7 +541,7 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 16px var(--accent),
-      0 0 56px color-mix(in srgb, var(--accent) 60%, transparent);
+      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent);
   }
 }
 
@@ -563,7 +574,7 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 16px var(--accent),
-      0 0 56px color-mix(in srgb, var(--accent) 60%, transparent);
+      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent);
   }
 }
 
@@ -750,6 +761,38 @@ body {
     /* No sweep, but the letters must still be legible — hand the fill back. */
     background-image: none;
     color: var(--fg);
+  }
+}
+
+/* MOBILE FIX (client-reported): on a phone, ZERO and SIXTY were rendering
+   fully invisible — not dim, gone — while THREE (which does NOT use this
+   class) lit up normally beside them. Root cause: this class's parent
+   `motion.span` (CinematicWord, `push` mode) animates `filter: blur()` on
+   entrance, and iOS Safari has a known fault where an element painted via
+   `background-clip: text` + `color: transparent` sitting inside a filter-
+   animating ancestor can fail to repaint once that filter settles — the
+   glyphs stay clipped to nothing instead of resolving to the gradient fill.
+   Desktop browsers were never affected, which is why this shipped unnoticed.
+   The sweep itself is a decorative flourish; it is not worth trading page
+   content for. Below the sm breakpoint (matches Tailwind's own, see the
+   --neon-glow-2/3 note above this file's ACCESSIBILITY block) the gradient
+   and the clip are dropped entirely and the line falls back to its plain
+   .text-halo fill — same fallback the reduced-motion query already uses,
+   just triggered by viewport instead of by motion preference. */
+@media (max-width: 40rem) {
+  .hero-sweep {
+    animation: none;
+    background-image: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: var(--fg);
+  }
+
+  .hero-sweep.text-halo {
+    text-shadow:
+      0 1px 2px rgb(0 0 0 / 0.9),
+      0 4px 18px rgb(0 0 0 / 0.75),
+      0 8px 44px rgb(0 0 0 / 0.55);
   }
 }
 
@@ -998,6 +1041,18 @@ body {
     animation: none;
     background: var(--accent);
     box-shadow: 0 0 6px var(--accent);
+  }
+}
+
+/* Narrower glow on phones — see the --neon-glow-2/3 doc in styles/tokens.css.
+   40rem matches Tailwind's own `sm` breakpoint declared in globals.css's
+   @theme block, so this and every `sm:` utility agree on where "mobile" ends.
+   Scaled down (not eliminated) so the neon still reads as neon, just sized to
+   letterforms that are themselves smaller on a phone than on desktop. */
+@media (max-width: 40rem) {
+  :root {
+    --neon-glow-2: 22px;
+    --neon-glow-3: 46px;
   }
 }
 

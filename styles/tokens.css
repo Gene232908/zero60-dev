@@ -74,6 +74,15 @@
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --section-y: clamp(6rem, 14vh, 14rem);
   --measure: 62ch;
+
+  /* ---- Neon glow radii — see zs-neon-activate in app/globals.css ----
+     Desktop-scale defaults for the two OUTER text-shadow layers the neon
+     build uses. Overridden narrower under `max-width: 40rem` in
+     app/globals.css so the glow never outgrows the smaller glyphs a phone
+     renders at — a fixed 56px/140px blur reads as a green smear once the
+     letterforms themselves are a fraction of their desktop size. */
+  --neon-glow-2: 56px;
+  --neon-glow-3: 140px;
 }
 
 /* =============================================================================
