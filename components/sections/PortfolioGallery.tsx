@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ImageHoverPreview, KineticHeading, Parallax, Reveal, StickySection } from '@/components/motion';
+import { ImageHoverPreview, KineticHeading, Parallax, Reveal } from '@/components/motion';
 import { Col, Divider, Grid, Section } from '@/components/ui';
 import { GALLERY_FRAMES, GALLERY_PLACEHOLDER } from '@/content/portfolio';
 
@@ -14,10 +14,11 @@ import { GALLERY_FRAMES, GALLERY_PLACEHOLDER } from '@/content/portfolio';
  * Two movements, so the section changes shape as you scroll rather than
  * repeating one grid:
  *
- *   1. A pinned index. The section holds still while a typographic list of the
- *      work scrubs past, imagery arriving on hover via ImageHoverPreview. This
- *      is the one place GSAP earns its weight, and StickySection loads it
- *      dynamically so the cost lands only here.
+ *   1. A typographic index. A numbered list of the work, imagery arriving on
+ *      hover via ImageHoverPreview. This scrolls at the page's own rate: it was
+ *      previously wrapped in StickySection, but holding the viewport still for
+ *      1.25 screens read as the page snagging rather than as emphasis, and
+ *      nothing in the list is scrub-linked to the pin to justify the cost.
  *   2. A layered collage. The same frames again as an offset, parallaxed
  *      composition — the "more is more" reading of the same material.
  *
@@ -44,32 +45,30 @@ export function PortfolioGallery() {
 
   return (
     <>
-      {/* ---------- 1. Pinned typographic index ---------- */}
-      <StickySection scrollLength={1.25}>
-        <Section space="loose" className="flex min-h-[92svh] flex-col justify-center">
-          <Reveal variant="fade" weight="tertiary">
-            <div className="flex items-baseline justify-between border-b border-line pb-3">
-              <p className="eyebrow">Selected work</p>
-              <p className="eyebrow">{GALLERY_FRAMES.length} frames</p>
-            </div>
-          </Reveal>
+      {/* ---------- 1. Typographic index ---------- */}
+      <Section space="loose">
+        <Reveal variant="fade" weight="tertiary">
+          <div className="flex items-baseline justify-between border-b border-line pb-3">
+            <p className="eyebrow">Selected work</p>
+            <p className="eyebrow">{GALLERY_FRAMES.length} frames</p>
+          </div>
+        </Reveal>
 
-          <ul className="mt-[var(--space-md)]" onPointerLeave={() => setActive(null)}>
-            {GALLERY_FRAMES.map((frame, i) => (
-              <li
-                key={frame.media.src}
-                onPointerEnter={() => setActive(i)}
-                className="group flex items-baseline justify-between gap-4 border-b border-line py-[var(--space-xs)] md:py-[var(--space-sm)]"
-              >
-                <span className="eyebrow shrink-0">{String(i + 1).padStart(2, '0')}</span>
-                <span className="display flex-1 text-[clamp(1.35rem,4vw,3rem)] transition-colors duration-[var(--dur-fast)] group-hover:text-accent">
-                  {frame.caption}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Section>
-      </StickySection>
+        <ul className="mt-[var(--space-md)]" onPointerLeave={() => setActive(null)}>
+          {GALLERY_FRAMES.map((frame, i) => (
+            <li
+              key={frame.media.src}
+              onPointerEnter={() => setActive(i)}
+              className="group flex items-baseline justify-between gap-4 border-b border-line py-[var(--space-xs)] md:py-[var(--space-sm)]"
+            >
+              <span className="eyebrow shrink-0">{String(i + 1).padStart(2, '0')}</span>
+              <span className="display flex-1 text-[clamp(1.35rem,4vw,3rem)] transition-colors duration-[var(--dur-fast)] group-hover:text-accent">
+                {frame.caption}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </Section>
 
       {/* Cursor-following preview — returns null on touch and under reduced motion. */}
       <ImageHoverPreview images={previews} activeIndex={active} width={320} />

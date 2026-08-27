@@ -6,10 +6,12 @@ import { ContactLink } from '@/components/ui/ContactLink';
  * FinalCTA — the visual climax (design brief §21).
  *
  * Not "Contact us" over a list of details. The page ends on the client's own
- * closing line — "Get in touch with us" — at mega scale filling the viewport,
- * and only once you have read it do the practical details appear beneath.
+ * closing line — "Get in touch with us" — at display scale, and only once you
+ * have read it do the practical details appear beneath.
  *
- * Each line indents further than the last so the block reads as a descending
+ * The line break is deliberate: "GET IN TOUCH" reads as the instruction and
+ * "WITH US" as the accent answer, so the pair carries a beat the old three-line
+ * split did not. The second line indents so the block reads as a descending
  * staircase rather than a centred slab.
  */
 
@@ -22,7 +24,7 @@ export function FinalCTA() {
           lines={CLOSING.lines}
           size="mega"
           className="mb-14"
-          lineClassName="text-fg [&:nth-child(2)]:pl-[6vw] [&:nth-child(3)]:pl-[14vw] [&:nth-child(3)]:text-accent"
+          lineClassName="text-fg [&:nth-child(2)]:pl-[10vw] [&:nth-child(2)]:text-accent"
         />
 
         <div className="grid grid-cols-12 items-end gap-y-10">

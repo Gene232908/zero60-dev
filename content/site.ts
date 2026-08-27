@@ -245,7 +245,7 @@ export const TESTIMONIALS: Testimonial[] = [
 /* -------------------------------------------------------------------------- */
 
 export const CLOSING = {
-  lines: ['Get in', 'touch', 'with us'],
+  lines: ['Get in touch', 'with us'],
   supporting: BRAND.tagline,
   contactLabel: 'Start a conversation',
   contactHref: '/contact',

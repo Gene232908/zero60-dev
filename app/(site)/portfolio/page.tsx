@@ -40,10 +40,10 @@ export default function PortfolioPage() {
         <div className="pt-[var(--space-lg)]">
           <KineticHeading
             as="h1"
-            lines={['PORT', 'FOLIO']}
-            size="xl"
+            lines={['Portfolio']}
+            size="mega"
             delay={0.15}
-            lineClassName="text-fg [&:last-child]:text-accent"
+            lineClassName="text-fg"
           />
         </div>
 
