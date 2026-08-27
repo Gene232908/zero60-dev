@@ -11,7 +11,7 @@
  * See BLOCKERS.md for the full register.
  */
 
-export const PLACEHOLDER_NOTICE = 'PLACEHOLDER — awaiting final asset from client';
+export const PLACEHOLDER_NOTICE = 'PLACEHOLDER — awaiting final asset from sir marco';
 
 export type PlaceholderImage = {
   src: string;
@@ -64,7 +64,7 @@ export const PLACEHOLDER_IMAGES: Record<string, PlaceholderImage> = {
 export const SOCIETY_PLACEHOLDER = {
   name: '063 Society',
   mood: 'Elegant',
-  blurb: 'PLACEHOLDER — 063 Society positioning copy, not yet supplied by client.',
+  blurb: 'PLACEHOLDER — 063 Society positioning copy, not yet supplied by sir marco.',
   intro:
     'PLACEHOLDER — 063 Society introduction. Service categories (weddings, corporate, event programme support, music & entertainment, AV/production) and final copy arrive in Milestone 2.',
 };
@@ -78,7 +78,7 @@ export const SOCIETY_PLACEHOLDER = {
  */
 export const FOOTER_CREDIT_PLACEHOLDER = {
   prefix: 'Developed by',
-  agencyName: 'PLACEHOLDER — agency name (provisionally Crest Services, unconfirmed)',
+  agencyName: 'Creservices Beyond Strategy',
   href: null as string | null, // TODO/BLOCKER: destination URL not yet supplied
   logoSrc: null as string | null, // TODO/BLOCKER: agency logo asset not yet supplied
 };

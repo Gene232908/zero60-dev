@@ -125,6 +125,24 @@ export function Navbar() {
             <ul className="hidden items-center gap-7 lg:flex">
               {NAV_ITEMS.map((item) => {
                 const active = pathname === item.href;
+
+                // Disabled items (currently just "063 Society") render as inert
+                // text — visible in the nav, but not a link, not focusable, and
+                // not marked current — per client direction: keep the label on
+                // screen without it being reachable yet.
+                if (item.disabled) {
+                  return (
+                    <li key={item.href}>
+                      <span
+                        aria-disabled="true"
+                        className="inline-block cursor-default select-none py-1 text-[0.68rem] uppercase tracking-[0.18em] text-fg-faint"
+                      >
+                        {item.label}
+                      </span>
+                    </li>
+                  );
+                }
+
                 return (
                   <li key={item.href}>
                     <Link

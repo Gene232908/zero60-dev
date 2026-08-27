@@ -24,6 +24,12 @@ export const metadata: Metadata = pageMetadata(PAGE_SEO.portfolio);
  *
  * Order is deliberate: the work first, the reel second, the words about the work
  * last. Testimonials land after the evidence rather than before it.
+ *
+ * SHOWTIME — signature system (see globals.css). "The story so far": the
+ * eyebrow arms with a cue-dot, then "so far" runs the three-pass neon warm-up
+ * once the headline settles (delay 0.15 + 2 words * STAGGER.tight, entrance
+ * DUR.slow ≈ 1.1s — the CSS default --signal-delay). Fits a portfolio's own
+ * job — evidence of work already done — ahead of the gallery and reel below it.
  */
 
 export default function PortfolioPage() {
@@ -31,8 +37,11 @@ export default function PortfolioPage() {
     <>
       <Section space="flush" className="pb-[var(--space-lg)] pt-32 md:pt-44">
         <Reveal variant="fade" weight="tertiary">
-          <div className="flex items-baseline justify-between border-b border-line pb-4">
-            <p className="eyebrow">04 — Portfolio</p>
+          <div className="flex items-center justify-between border-b border-line pb-4">
+            <span className="flex items-center gap-2.5">
+              <span aria-hidden="true" className="cue-dot" />
+              <p className="eyebrow">04 — Portfolio</p>
+            </span>
             <p className="eyebrow">{BRAND.suffix}</p>
           </div>
         </Reveal>
@@ -40,10 +49,11 @@ export default function PortfolioPage() {
         <div className="pt-[var(--space-lg)]">
           <KineticHeading
             as="h1"
-            lines={['Portfolio']}
+            lines={['The story', 'so far']}
             size="mega"
             delay={0.15}
             lineClassName="text-fg"
+            lineClassNames={[undefined, 'neon-ignite']}
           />
         </div>
 

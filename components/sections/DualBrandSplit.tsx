@@ -32,6 +32,12 @@ type Panel = {
   blurb: string;
   href: string;
   image: { src: string; alt: string };
+  /**
+   * Same "visible, not reachable" treatment as the 063 Society nav item — see
+   * the disabled doc on NavItem in content/nav.ts. Client direction: the
+   * Society panel stays on screen (photo, name, blurb) but is not a link.
+   */
+  disabled?: boolean;
 };
 
 const PRODUCTIONS: Panel = {
@@ -48,36 +54,35 @@ const SOCIETY: Panel = {
   blurb: SOCIETY_PLACEHOLDER.blurb,
   href: '/society',
   image: SOCIETY_MEDIA.main,
+  disabled: true,
 };
 
 function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
-  return (
-    <Link
-      href={panel.href}
-      data-cursor="Open"
-      // Every motion value here resolves through the brand token map this panel
-      // sits under, so the SAME markup moves rugged on the left and restrained
-      // on the right. --ease-brand, --press-scale and --hover-lift each differ
-      // per data-brand; nothing below is hardcoded to one mood.
-      className={cn(
-        // `isolate` is load-bearing. BrandProvider paints a solid bg-bg, and this
-        // Link was only `relative` — which does NOT create a stacking context on
-        // its own — so the -z-10 image layer below rendered BEHIND that
-        // background and was invisible. The panels have never actually shown
-        // their photograph. isolate scopes the negative z-index to this Link.
-        'group relative isolate flex min-h-[70svh] flex-col justify-between overflow-hidden p-[var(--gutter)] lg:min-h-[92svh]',
-        'transition-transform duration-[var(--dur-fast)] ease-[var(--ease-brand)]',
-        'hover:translate-y-[var(--hover-lift)]',
-        'active:scale-[var(--press-scale)] active:ease-[var(--ease-press)]',
-        'focus-visible:outline-none',
-      )}
-    >
+  const className = cn(
+    // `isolate` is load-bearing. BrandProvider paints a solid bg-bg, and this
+    // Link was only `relative` — which does NOT create a stacking context on
+    // its own — so the -z-10 image layer below rendered BEHIND that
+    // background and was invisible. The panels have never actually shown
+    // their photograph. isolate scopes the negative z-index to this Link.
+    'group relative isolate flex min-h-[70svh] flex-col justify-between overflow-hidden p-[var(--gutter)] lg:min-h-[92svh]',
+    !panel.disabled && [
+      'transition-transform duration-[var(--dur-fast)] ease-[var(--ease-brand)]',
+      'hover:translate-y-[var(--hover-lift)]',
+      'active:scale-[var(--press-scale)] active:ease-[var(--ease-press)]',
+      'focus-visible:outline-none',
+    ],
+  );
+
+  const content = (
+    <>
       {/* Keyboard focus gets the panel's own accent frame — a blanket outline
           on a full-bleed panel reads as a browser artefact, not as design. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-3 z-20 border border-accent opacity-0 transition-opacity duration-[var(--dur-micro)] group-focus-visible:opacity-100"
-      />
+      {!panel.disabled && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-3 z-20 border border-accent opacity-0 transition-opacity duration-[var(--dur-micro)] group-focus-visible:opacity-100"
+        />
+      )}
       {/* Image sits behind the type and drifts on scroll. */}
       <div className="absolute inset-0 -z-10 opacity-60 transition-opacity duration-[var(--dur-slow)] ease-[var(--ease-brand)] group-hover:opacity-80">
         <Parallax strength="subtle" className="h-full">
@@ -103,21 +108,41 @@ function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
         {/* The arrow nudge is the most-copied hover on the web. Here the rule
             draws out from under the label and the arrow rides its full length —
             one connected gesture instead of a 6px twitch, and it travels on the
-            panel's own brand curve. */}
-        <span className="relative mt-8 inline-flex items-center gap-3 overflow-hidden pr-10 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-fg">
-          Enter
-          <span
-            aria-hidden="true"
-            className="absolute bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-[var(--dur-base)] ease-[var(--ease-brand)] group-focus-visible:scale-x-100 group-hover:scale-x-100"
-          />
-          <span
-            aria-hidden="true"
-            className="inline-block transition-transform duration-[var(--dur-base)] ease-[var(--ease-brand)] group-focus-visible:translate-x-6 group-hover:translate-x-6"
-          >
-            &#8594;
+            panel's own brand curve. Dropped entirely on the disabled panel —
+            an "Enter" affordance on something that doesn't go anywhere is
+            worse than no affordance at all. */}
+        {!panel.disabled && (
+          <span className="relative mt-8 inline-flex items-center gap-3 overflow-hidden pr-10 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-fg">
+            Enter
+            <span
+              aria-hidden="true"
+              className="absolute bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-[var(--dur-base)] ease-[var(--ease-brand)] group-focus-visible:scale-x-100 group-hover:scale-x-100"
+            />
+            <span
+              aria-hidden="true"
+              className="inline-block transition-transform duration-[var(--dur-base)] ease-[var(--ease-brand)] group-focus-visible:translate-x-6 group-hover:translate-x-6"
+            >
+              &#8594;
+            </span>
           </span>
-        </span>
+        )}
       </div>
+    </>
+  );
+
+  // Same "visible, not reachable" treatment as the nav — a plain div instead
+  // of a Link when disabled, so the panel is neither a link nor focusable.
+  if (panel.disabled) {
+    return (
+      <div aria-disabled="true" className={className}>
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link href={panel.href} data-cursor="Open" className={className}>
+      {content}
     </Link>
   );
 }

@@ -17,8 +17,15 @@ export function ServiceTicker() {
     <section aria-label="Services overview" className="border-y border-line py-8 md:py-10">
       {/* The two tracks used to switch on together, which read as one banner
           fading in. The loud track now arrives first and the fine one follows
-          half a beat behind — the seam assembles rather than appears. */}
-      <Reveal variant="lead" weight="secondary">
+          half a beat behind — the seam assembles rather than appears.
+
+          Measured: track 1 lands ~0.7s and track 2 ~0.9s, which is a good
+          sequence. What it lacked was WEIGHT — both simply faded up, so between
+          the hero's slam and the manifesto's wipe this seam was the one flat
+          moment on the page. `snap` gives the loud track an actual arrival, and
+          the fine track is pushed to 0.34s so the gap between them is felt
+          rather than merely present. */}
+      <Reveal variant="snap" weight="secondary">
         <Marquee duration={38} pauseOnHover>
           {SERVICE_RAIL.map((item) => (
             <span key={`a-${item}`} className="group/item flex items-center">
@@ -36,7 +43,7 @@ export function ServiceTicker() {
         </Marquee>
       </Reveal>
 
-      <Reveal variant="settle" weight="tertiary" delay={0.22}>
+      <Reveal variant="settle" weight="tertiary" delay={0.34}>
         <Marquee duration={52} direction="right" repeat={3} className="mt-3 opacity-45">
           {SERVICE_RAIL.map((item) => (
             <span key={`b-${item}`} className="flex items-center">

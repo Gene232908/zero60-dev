@@ -243,25 +243,48 @@ body {
   mix-blend-mode: multiply;
 }
 
+/* CENTRED COMPOSITION. This wash used to be left-weighted, because the wordmark
+   ran down the left two-thirds and an image cluster sat on the right. Both of
+   those are gone — the wordmark is now dead centre and the frame is otherwise
+   empty — so an asymmetric scrim would read as a lighting mistake: one side of
+   a symmetric composition mysteriously darker than the other.
+
+   The replacement is a radial vignette plus a vertical wash. The vignette keeps
+   the centre of the plate the OPEN part (the rig stays visible behind the type,
+   which is the whole point of shooting it) and closes the corners down hard, so
+   the eye is pushed to the middle and held there. */
 .hero-scrim {
   background:
-    /* Left-weighted wash: the wordmark runs down the left two-thirds, so the
-       plate is nearly solid there and opens up on the right where the rig and
-       the image cluster are worth seeing. */
-    linear-gradient(
-      to right,
-      rgb(0 0 0 / 0.82) 0%,
-      rgb(0 0 0 / 0.7) 34%,
-      rgb(0 0 0 / 0.4) 62%,
-      rgb(0 0 0 / 0.28) 100%
+    /* Vignette — corners closed, centre left comparatively open. */
+    radial-gradient(
+      ellipse 78% 68% at 50% 46%,
+      rgb(0 0 0 / 0.34) 0%,
+      rgb(0 0 0 / 0.58) 46%,
+      rgb(0 0 0 / 0.84) 78%,
+      rgb(0 0 0 / 0.94) 100%
     ),
+    /* Vertical wash — anchors the type block and hands off to the page below. */
     linear-gradient(
       to top,
-      rgb(0 0 0 / 0.9) 0%,
-      rgb(0 0 0 / 0.56) 26%,
-      rgb(0 0 0 / 0.26) 55%,
-      rgb(0 0 0 / 0.6) 100%
+      rgb(0 0 0 / 0.88) 0%,
+      rgb(0 0 0 / 0.5) 24%,
+      rgb(0 0 0 / 0.3) 52%,
+      rgb(0 0 0 / 0.66) 100%
     );
+}
+
+/* The pool of light the wordmark stands in. A vignette alone darkens the edges
+   but leaves the centre merely *less dark*; this adds an actual soft source
+   behind the type so the letterforms sit IN a lit space rather than on top of a
+   dim one. Screened, so it lifts the photograph instead of washing it out. */
+.hero-spotlight {
+  background: radial-gradient(
+    ellipse 52% 46% at 50% 44%,
+    color-mix(in srgb, var(--accent) 9%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 4%, transparent) 38%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
 }
 
 /* The lighting rig in the photograph is pointed at the stage. These are the
@@ -288,27 +311,47 @@ body {
   will-change: transform, opacity;
 }
 
+/* Mirrored either side of centre, angled INWARD so the pair converges on the
+   wordmark. Previously these sat at 52%/8% to dodge the image cluster; with the
+   composition centred, two beams crossing over the type is the cinematic move —
+   it reads as a rig aimed at a performer, which is exactly what the company
+   does. */
 .hero-beams::before {
-  left: 52%;
-  transform: rotate(14deg);
+  left: 18%;
+  transform: rotate(13deg);
   animation: zs-beam-drift 14s var(--ease-in-out) infinite alternate;
 }
 
 .hero-beams::after {
-  right: 8%;
-  transform: rotate(-11deg);
-  opacity: 0.7;
-  animation: zs-beam-drift 19s var(--ease-in-out) infinite alternate-reverse;
+  right: 18%;
+  transform: rotate(-13deg);
+  opacity: 0.85;
+  animation: zs-beam-drift-mirror 19s var(--ease-in-out) infinite alternate-reverse;
 }
 
 @keyframes zs-beam-drift {
   from {
-    transform: rotate(14deg) translate3d(0, 0, 0);
+    transform: rotate(13deg) translate3d(0, 0, 0);
     opacity: 0.4;
   }
   to {
-    transform: rotate(10deg) translate3d(1.5vw, 0, 0);
+    transform: rotate(9deg) translate3d(1.5vw, 0, 0);
     opacity: 0.75;
+  }
+}
+
+/* The right-hand beam's mirror. It needs its own keyframes rather than sharing
+   the one above: a keyframe `transform` overrides the rule's own, so reusing
+   zs-beam-drift would snap the mirrored beam back to +13deg the moment the
+   animation applied, and both shafts would lean the same way. */
+@keyframes zs-beam-drift-mirror {
+  from {
+    transform: rotate(-13deg) translate3d(0, 0, 0);
+    opacity: 0.4;
+  }
+  to {
+    transform: rotate(-9deg) translate3d(-1.5vw, 0, 0);
+    opacity: 0.72;
   }
 }
 
@@ -320,6 +363,444 @@ body {
     0 1px 2px rgb(0 0 0 / 0.9),
     0 4px 18px rgb(0 0 0 / 0.75),
     0 8px 44px rgb(0 0 0 / 0.55);
+}
+
+/* -----------------------------------------------------------------------------
+   NEON ACTIVATION — the hero's third line (THREE).
+
+   Plays ONCE. The word starts with NOTHING drawn at all — no white type, no
+   fill, no outline, fully transparent — then EDGE-FIRST BUILDS across three
+   passes: pass 1 sketches a faint outline (the tube with no gas in it yet),
+   pass 2 starts filling that outline in, pass 3 completes the fill and
+   carries straight through to full neon green, where it stays permanently.
+   No flicker after that, no blackout, no loop.
+
+   WHY EDGE-FIRST FROM NOTHING (client feedback, third round): a version that
+   started from plain white body type and only shifted colour read as "a light
+   passing over text that was already there" rather than as the word itself
+   being built. The fix is to remove the white state entirely — the glyphs
+   have zero presence until the sequence starts drawing them — and to draw
+   them the way neon is actually fabricated: the glass tube (stroke) is bent
+   into shape before the gas (fill) inside it is lit. Three visible attempts,
+   each filling in a little more of the letterform than the last, sells
+   "being built" in a way a colour-only ramp cannot.
+
+   THE SHAPE (2s to full-lit, then permanent — client asked to speed this up
+   from an earlier 4s pass without losing the three-pass build)
+     0.0-0.2s    NOTHING — opacity 0, no stroke, no fill, no glow. The word
+                 is not on the page yet.
+     0.2-0.7s    PASS 1 — a faint outline appears (stroke only, fill still
+                 near-transparent): the letterform's EDGE sketches itself in,
+                 dim, then fades back down almost to nothing. A near-miss.
+     0.7-1.25s   PASS 2 — the outline returns brighter and the fill starts
+                 visibly creeping in behind it; fades back but leaves more
+                 outline standing than pass 1 did — the sketch is starting to
+                 hold.
+     1.25-2.0s   PASS 3 — the strike. Fill completes, climbs straight through
+                 100% opacity and full neon intensity, and unlike passes 1
+                 and 2 does NOT fade back down: it carries into the held
+                 final keyframe instead.
+     2.0s on     FULL NEON GREEN, fully opaque, permanent.
+
+   `animation-fill-mode: forwards` is what makes the last keyframe stick.
+
+   OPACITY now does real work here (earlier versions held it at 1 throughout,
+   because there was always a white letterform underneath to hold steady —
+   there no longer is one, so opacity is what makes "nothing" actually read as
+   nothing rather than as invisible white-on-white).
+
+   ONE COLOUR ONLY past the outline stage. Every lit state is the brand lime —
+   no white flash, no colour shift, only how much of the glyph is drawn and
+   how brightly it glows.
+
+   HOW THE EDGE LEADS THE FILL. Neon is a glass tube: it is bent into shape
+   (the stroke) before the gas inside it is lit (the fill). Two independently
+   animated properties give that — `-webkit-text-stroke-color` sketches first
+   and stays ahead of `color` on every pass, not just the final one, so even
+   the two false starts read as the same phenomenon rather than a different
+   effect.
+
+   PERFORMANCE. `color`, `-webkit-text-stroke-color`, `opacity` and
+   `text-shadow` are paint-only — no layout, no `filter`, no blur, one line of
+   type rather than per-glyph animation. One-shot: nothing paints after 2s.
+   -------------------------------------------------------------------------- */
+@keyframes zs-neon-activate {
+  /* ---- 0.0-0.2s · NOTHING, HELD ----
+     Not "white type waiting to change colour" — genuinely undrawn. */
+  0%,
+  10% {
+    opacity: 0;
+    color: transparent;
+    -webkit-text-stroke-color: transparent;
+    text-shadow: none;
+  }
+
+  /* ---- PASS 1 (0.2-0.7s) · outline sketches in, dim, then fades back ---- */
+  21% {
+    opacity: 1;
+    color: transparent;
+    -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    text-shadow: 0 0 6px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  31% {
+    opacity: 0.6;
+    color: transparent;
+    -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 18%, transparent);
+    text-shadow: 0 0 2px color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  /* ---- PASS 2 (0.7-1.25s) · outline returns, fill starts creeping in ---- */
+  43% {
+    opacity: 1;
+    color: color-mix(in srgb, var(--accent) 40%, transparent);
+    -webkit-text-stroke-color: var(--accent);
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--accent) 44%, transparent),
+      0 0 28px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  53% {
+    opacity: 0.85;
+    color: color-mix(in srgb, var(--accent) 22%, transparent);
+    -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    text-shadow: 0 0 5px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  /* ---- PASS 3 (1.25-2.0s) · the strike, fill completes, no fade-back ---- */
+  67% {
+    opacity: 1;
+    color: color-mix(in srgb, var(--accent) 65%, transparent);
+    -webkit-text-stroke-color: var(--accent);
+    text-shadow:
+      0 0 14px color-mix(in srgb, var(--accent) 60%, transparent),
+      0 0 44px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  82% {
+    opacity: 1;
+    color: color-mix(in srgb, var(--accent) 90%, transparent);
+    -webkit-text-stroke-color: var(--accent);
+    text-shadow:
+      0 0 16px color-mix(in srgb, var(--accent) 84%, transparent),
+      0 0 54px color-mix(in srgb, var(--accent) 46%, transparent),
+      0 0 120px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  /* ---- 2.0s onward · FULL NEON, PERMANENT ----
+     Held by `forwards`. Three glow layers (tight core, medium bloom, wide
+     spill) rather than one large blur, so the letterforms stay sharp while
+     the light radiates outward. This is the only keyframe that does NOT
+     fade back — the third pass carries straight into it. */
+  100% {
+    opacity: 1;
+    color: var(--accent);
+    -webkit-text-stroke-color: var(--accent);
+    text-shadow:
+      0 0 16px var(--accent),
+      0 0 56px color-mix(in srgb, var(--accent) 60%, transparent),
+      0 0 140px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+}
+
+.neon-activate {
+  /* The stroke must exist at all times for its colour to be animatable. Only
+     the COLOUR and OPACITY change, never the stroke WIDTH, so the letterform's
+     metrics never shift and the line never reflows. Fully transparent and
+     invisible to start — the word has no presence at all before the sequence
+     begins, so there is no white flash to remove later. */
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: transparent;
+  color: transparent;
+  opacity: 0;
+  will-change: opacity, color, text-shadow;
+  /* Once, then hold the final frame.
+     2.45s: THREE is the third line of a 0.34s-staggered entrance, so it does not
+     finish arriving until ~2.16s. The old 1.9s delay started the ignition BEFORE
+     the line had landed, so the blur-in and the light-up ran over each other and
+     neither read clearly. This waits for the line to settle, then lights it.
+     Duration is 2s (three-pass, edge-first-build version — see the block
+     comment above). */
+  animation: zs-neon-activate 2s ease-in-out 2.45s 1 forwards;
+}
+
+/* Reduced motion gets the destination directly: same lit state, no transition. */
+@media (prefers-reduced-motion: reduce) {
+  .neon-activate {
+    animation: none;
+    opacity: 1;
+    color: var(--accent);
+    -webkit-text-stroke-color: var(--accent);
+    text-shadow:
+      0 0 16px var(--accent),
+      0 0 56px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   NEON IGNITE, SINGLE — every non-home hero (About, Services, Portfolio,
+   Collaborations, Contact, 063 Society).
+
+   The three-pass, edge-first-build zs-neon-activate sequence, applied to a
+   whole line/phrase at once rather than staggered word-by-word — every
+   non-home hero's signature title builds in together as one unit. About used
+   to stagger ZERO / SIXTY / THREE as three separate ignitions; it now runs
+   the same single-line device as every other page, so there is exactly one
+   signature effect across the whole site rather than a special case for one
+   page.
+   -------------------------------------------------------------------------- */
+.neon-ignite {
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: transparent;
+  color: transparent;
+  opacity: 0;
+  will-change: opacity, color, text-shadow;
+  animation: zs-neon-activate 2s ease-in-out var(--signal-delay, 1.1s) 1 forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-ignite {
+    animation: none;
+    opacity: 1;
+    color: var(--accent);
+    -webkit-text-stroke-color: var(--accent);
+    text-shadow:
+      0 0 16px var(--accent),
+      0 0 56px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   ABOUT PLATE — the About page opening.
+
+   The section was plain flat black with static white type: same visual weight
+   as a body-copy paragraph, on a page whose entire job is to introduce the
+   brand's real name. It needed presence, not more contrast tricks reused from
+   the hero.
+
+   Deliberately NOT a copy of .hero-scrim/.hero-spotlight:
+
+     · LEFT-weighted, not centred — this heading sits left-aligned against the
+       shell, so a centred vignette would darken exactly where the type is and
+       light up empty space on the right.
+     · No beams. The hero already owns "rig with light shafts crossing it";
+       reusing that here would make the second thing you see on the site look
+       like the first thing you saw again rather than a new page announcing
+       itself.
+     · Darker overall — this is a supporting section, not the page's one
+       moment, so the plate recedes further and lets the ignite sequence (see
+       NEON AUTO-IGNITE above) supply the light instead of the background doing
+       it for free.
+   -------------------------------------------------------------------------- */
+/* Tints the plate toward the brand's lime before the scrim darkens it — the
+   same soft-light device .hero-duotone uses, so the still-unlit background
+   already hints at the colour the wordmark is about to strike into. */
+.about-duotone {
+  background-color: var(--accent);
+  mix-blend-mode: soft-light;
+  opacity: 0.08;
+}
+
+.about-scrim {
+  background:
+    /* Vignette held toward the left, where the wordmark actually sits.
+       LIGHTENED from an 0.88 peak — the first pass was heavy enough that the
+       photo read as barely-there texture rather than a visible stage; the eye
+       needs to actually register a rig and a crowd behind the type, not just
+       infer "there's probably a photo under here". */
+    radial-gradient(
+      ellipse 66% 84% at 24% 42%,
+      rgb(0 0 0 / 0.12) 0%,
+      rgb(0 0 0 / 0.4) 52%,
+      rgb(0 0 0 / 0.72) 100%
+    ),
+    linear-gradient(to right, rgb(0 0 0 / 0.62) 0%, rgb(0 0 0 / 0.18) 55%, rgb(0 0 0 / 0.5) 100%),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.35) 0%, rgb(0 0 0 / 0.05) 30%, rgb(0 0 0 / 0.5) 100%);
+}
+
+/* -----------------------------------------------------------------------------
+   CLOSING CTA PLATE — the page's last frame.
+
+   The hero opens on a lit rig; this closes on the pool of light left behind on
+   an empty stage. Same family, lower key: one accent glow rising from the lower
+   third, one vignette closing the corners.
+
+   The glow drifts on a very long cycle (26s). Slow enough that you never catch
+   it moving, present enough that the section is not a static black rectangle —
+   an outro should breathe, not pulse. Only `transform` and `opacity` animate, so
+   it stays on the compositor.
+   -------------------------------------------------------------------------- */
+.cta-glow {
+  background: radial-gradient(
+    ellipse 70% 52% at 50% 92%,
+    color-mix(in srgb, var(--accent) 15%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 6%, transparent) 38%,
+    transparent 72%
+  );
+  will-change: transform, opacity;
+  animation: zs-cta-breathe 26s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes zs-cta-breathe {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.75;
+  }
+  to {
+    transform: translate3d(0, -2%, 0) scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* Closes the corners so the type sits in the middle of a frame rather than on an
+   open field — the same job .hero-scrim does, at lower strength because there is
+   no photograph here to fight. */
+.cta-vignette {
+  background: radial-gradient(
+    ellipse 82% 74% at 50% 50%,
+    transparent 0%,
+    rgb(0 0 0 / 0.22) 62%,
+    rgb(0 0 0 / 0.5) 100%
+  );
+}
+
+/* -----------------------------------------------------------------------------
+   HERO HAZE — type that sits INSIDE the atmosphere rather than on top of it.
+
+   The effect wanted here is the one stage lighting gives you for free: a word
+   read through the haze in the air, softened and lit from within rather than
+   printed over the photograph.
+
+   Plain `opacity: 0.5` does not do it — that just makes grey text, which reads
+   as washed out rather than as atmospheric. Three things together do:
+
+     1. a mid-strength fill, so it recedes without turning to mud
+     2. a WIDE, very soft white bloom, which is what light scattering through
+        haze actually looks like (many photons, low intensity, far spread)
+     3. a tight dark shadow underneath, so it still separates from the plate and
+        stays legible instead of dissolving
+
+   No `filter: blur()` — that repaints and would reintroduce the lag the
+   wordmark entrance was just rebuilt to avoid. text-shadow is painted once.
+   -------------------------------------------------------------------------- */
+.hero-haze {
+  color: color-mix(in srgb, var(--fg) 62%, transparent);
+  text-shadow:
+    0 0 1px rgb(0 0 0 / 0.5),
+    0 2px 10px rgb(0 0 0 / 0.6),
+    0 0 22px rgb(255 255 255 / 0.16),
+    0 0 55px rgb(255 255 255 / 0.1),
+    0 0 90px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* -----------------------------------------------------------------------------
+   HERO WORDMARK LIGHT SWEEP — the beat that closes the entrance.
+
+   The per-letter rush (CinematicWord) lands around 1.8s. This fires once,
+   after it, and runs a narrow band of light across the letterforms — the same
+   move as a follow spot crossing a stage, which is the thing the photograph
+   behind it is already showing.
+
+   It is a background-clip: text sweep rather than an overlay so it lights the
+   GLYPHS and not the box around them. `background-size: 220%` gives the band
+   somewhere to travel from and to, and the animation runs `forwards` and stops:
+   a looping shimmer would turn a cinematic beat into a novelty.
+
+   Layered UNDER the halo — text-shadow paints behind the fill, so the letters
+   keep their separation from the photograph throughout.
+   -------------------------------------------------------------------------- */
+.hero-sweep {
+  background-image: linear-gradient(
+    100deg,
+    var(--fg) 0%,
+    var(--fg) 38%,
+    color-mix(in srgb, var(--accent) 92%, white) 47%,
+    color-mix(in srgb, var(--accent) 70%, white) 53%,
+    var(--fg) 62%,
+    var(--fg) 100%
+  );
+  background-size: 220% 100%;
+  background-position: 130% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: zs-hero-sweep 1.5s var(--ease-in-out) 2.05s forwards;
+}
+
+@keyframes zs-hero-sweep {
+  to {
+    background-position: -30% 0;
+  }
+}
+
+/* The sweep paints the fill, so a text-shadow would draw the glyph silhouette
+   as a solid blob behind transparent text. The halo therefore has to be
+   suppressed here.
+
+   It CANNOT be replaced with a drop-shadow filter on this element: `filter`
+   creates a containing block and flattens 3D descendants, which would kill the
+   per-letter z-rush this heading is built around (and fight the letters' own
+   blur animation besides). The separation the halo was providing comes from
+   .hero-scrim and .hero-spotlight underneath instead, which is where a
+   full-bleed photographic plate should be handling contrast anyway. */
+.hero-sweep.text-halo {
+  text-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-sweep {
+    animation: none;
+    /* No sweep, but the letters must still be legible — hand the fill back. */
+    background-image: none;
+    color: var(--fg);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   KINETIC WORD HOVER — the hero wordmark responds per word, not per block.
+
+   Hovering the whole heading and moving all three lines together would read as
+   a hover state on a button. Per word, it reads as the type being LIT — you run
+   the pointer across it and each word catches the light in turn, which is the
+   same idea as the beams overhead.
+
+   Applied by KineticHeading only when `interactive` is set, and only after the
+   entrance clip is released (a lift mid-reveal would push the word out through
+   the mask edge).
+
+   `hover: hover` keeps it off touch devices, where :hover sticks after a tap.
+   The transition is on transform/text-shadow/color only — never `all`, which
+   would drag the entrance's own transform into a competing transition.
+   -------------------------------------------------------------------------- */
+@media (hover: hover) {
+  .kinetic-word {
+    transition:
+      transform var(--dur-fast) var(--ease-signature),
+      text-shadow var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .kinetic-word:hover {
+    /* Small. The letterforms are ~8vw tall, so even 4px of travel is plainly
+       visible — anything more and the line visibly breaks apart. */
+    transform: translate3d(0, -0.028em, 0);
+    color: var(--accent);
+    text-shadow:
+      0 1px 2px rgb(0 0 0 / 0.85),
+      0 4px 20px rgb(0 0 0 / 0.6),
+      0 0 32px color-mix(in srgb, var(--accent) 62%, transparent),
+      0 0 80px color-mix(in srgb, var(--accent) 34%, transparent);
+  }
+
+  /* The sweep lives on the LINE and clips its gradient to the text, which means
+     the line is painting the glyphs and any `color` an individual letter sets
+     underneath it is invisible. So a hovered letter has to opt back out of the
+     inherited clip and paint itself again.
+     `background-image: none` is what actually releases it — resetting only
+     background-clip would leave the gradient filling the letter's own box. */
+  .hero-sweep .kinetic-word:hover {
+    background-image: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    color: var(--accent);
+  }
 }
 
 /* The accent line gets the same separation plus a lime bloom — the one place on
@@ -462,6 +943,62 @@ body {
   padding-inline: var(--gutter);
   margin-inline: 0;
   max-width: none;
+}
+
+/* -----------------------------------------------------------------------------
+   SHOWTIME — the signature system for every non-home hero's first section.
+
+   063's own craft is literally warming a signal up before it's live. This is
+   the recurring device that ties About/Services/Portfolio/Collaborations/
+   Contact/063 Society together as one experience, without touching the home
+   hero, which stays exclusive to Hero.tsx.
+
+   One piece used on every page's opening eyebrow row, paired with the ignite
+   on the headline itself:
+
+     .cue-dot       a small tally light beside the eyebrow. Dark and hollow at
+                    rest ("no signal"), then fires solid --accent with a brief
+                    bloom once — the beat BEFORE the headline ignites.
+
+     .neon-ignite   the three-pass, edge-first-build warm-up (see
+                    zs-neon-activate above) applied to a WHOLE line. Every
+                    non-home hero headline shares this one ignite device.
+
+   Both read --accent, so 063 Society's warmer/softer accent remap under
+   [data-brand="society"] carries through automatically at that brand's own
+   temperature, not as a separate effect.
+   -------------------------------------------------------------------------- */
+.cue-dot {
+  position: relative;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg-faint);
+  box-shadow: none;
+  animation: zs-cue-arm 0.9s var(--ease-out) forwards;
+}
+
+@keyframes zs-cue-arm {
+  0%,
+  40% {
+    background: var(--fg-faint);
+    box-shadow: none;
+  }
+  100% {
+    background: var(--accent);
+    box-shadow:
+      0 0 6px var(--accent),
+      0 0 16px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue-dot {
+    animation: none;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+  }
 }
 
 /* -----------------------------------------------------------------------------

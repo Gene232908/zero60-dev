@@ -47,6 +47,18 @@ import { NAV_ITEMS } from '@/content/nav';
  * past 100svh.
  *
  * Copy is PLACEHOLDER (BLOCKER B4).
+ *
+ * SHOWTIME — signature system (see globals.css). Same device as every other
+ * non-home hero, retuned for Society's own quieter register: the cue-dot on
+ * the meta rail and .neon-ignite both read var(--accent), so Society's
+ * softer/warmer accent remap under [data-brand="society"] carries the effect
+ * at this brand's own temperature rather than needing a separate implementation.
+ * The three-pass warm-up runs on the wordmark's second (italic) line —
+ * "Society" itself, since the wordmark is the brand name and is not reworded
+ * the way the other pages' taglines are — timed to begin after KineticHeading's
+ * own delay (0.32s) plus its word-stagger settles, passed explicitly via
+ * --signal-delay since this hero's timing band runs later than the 1.1s CSS
+ * default.
  */
 
 const SOCIETY_NAV = NAV_ITEMS.find((item) => item.href === '/society');
@@ -83,10 +95,13 @@ export function SocietyHero() {
         immediate
         className="hero-bleed relative z-30"
       >
-        <div className="flex items-baseline justify-between border-b border-line-strong pb-4">
-          <p className="eyebrow hero-label text-halo-paper">
-            {SOCIETY_NAV ? `${SOCIETY_NAV.index} — ${SOCIETY_NAV.label}` : SOCIETY_BRAND.name}
-          </p>
+        <div className="flex items-center justify-between border-b border-line-strong pb-4">
+          <span className="flex items-center gap-2.5">
+            <span aria-hidden="true" className="cue-dot" />
+            <p className="eyebrow hero-label text-halo-paper">
+              {SOCIETY_NAV ? `${SOCIETY_NAV.index} — ${SOCIETY_NAV.label}` : SOCIETY_BRAND.name}
+            </p>
+          </span>
           {/* NOT hero-label-accent. Lime as a block of filled text is a bigger
               use of the accent than "a hairline", which is Society's own stated
               rule (content/society.ts SOCIETY_NOTES). Lime and paper also sit
@@ -108,14 +123,17 @@ export function SocietyHero() {
         <div className="grid w-full grid-cols-12 items-center gap-y-12">
           {/* -- wordmark + supporting copy -- */}
           <div className="col-span-12 lg:col-span-9 lg:row-start-1">
-            <KineticHeading
-              as="h1"
-              lines={SOCIETY_BRAND.wordmark}
-              size="xl"
-              delay={0.32}
-              className="text-halo-paper"
-              lineClassName="text-fg [&:last-child]:italic [&:last-child]:pl-[8vw]"
-            />
+            <div style={{ '--signal-delay': '1.5s' } as React.CSSProperties}>
+              <KineticHeading
+                as="h1"
+                lines={SOCIETY_BRAND.wordmark}
+                size="xl"
+                delay={0.32}
+                className="text-halo-paper"
+                lineClassName="text-fg [&:last-child]:italic [&:last-child]:pl-[8vw]"
+                lineClassNames={[undefined, 'neon-ignite']}
+              />
+            </div>
 
             <div className="mt-10 grid grid-cols-12 gap-y-6 md:mt-14">
               <Reveal

@@ -20,6 +20,12 @@ export const metadata: Metadata = pageMetadata(PAGE_SEO.collaborations);
  * empty pending BLOCKER B8, so the page leads with what collaboration actually
  * means here — the disciplines 063 brings to a job — and routes the reader on to
  * the work and the enquiry form rather than dead-ending on a blank section.
+ *
+ * SHOWTIME — signature system (see globals.css). "Better, together": a
+ * partnership is separate crews landing on the same cue, so the arm-then-
+ * ignite device still reads naturally here. Cue-dot on the eyebrow, "together"
+ * runs the three-pass neon warm-up once the line settles (default
+ * --signal-delay ≈ 1.1s already matches a 0.15s base + tight stagger).
  */
 
 export default function CollaborationsPage() {
@@ -27,8 +33,11 @@ export default function CollaborationsPage() {
     <>
       <Section space="flush" className="pb-[var(--space-lg)] pt-32 md:pt-44">
         <Reveal variant="fade" weight="tertiary">
-          <div className="flex items-baseline justify-between border-b border-line pb-4">
-            <p className="eyebrow">05 — Collaborations</p>
+          <div className="flex items-center justify-between border-b border-line pb-4">
+            <span className="flex items-center gap-2.5">
+              <span aria-hidden="true" className="cue-dot" />
+              <p className="eyebrow">05 — Collaborations</p>
+            </span>
             <p className="eyebrow">{BRAND.short}</p>
           </div>
         </Reveal>
@@ -36,10 +45,11 @@ export default function CollaborationsPage() {
         <div className="pt-[var(--space-lg)]">
           <KineticHeading
             as="h1"
-            lines={['COLLAB', 'ORATIONS']}
+            lines={['Better,', 'together']}
             size="xl"
             delay={0.15}
-            lineClassName="text-fg [&:last-child]:text-accent"
+            lineClassName="text-fg"
+            lineClassNames={[undefined, 'neon-ignite']}
           />
         </div>
 

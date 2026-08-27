@@ -4,6 +4,13 @@ import { SERVICE_RAIL } from '@/content/site';
 /**
  * ServicesHero — opening for the Services page.
  *
+ * SHOWTIME — signature system (see globals.css). "Showtime starts here": the
+ * eyebrow arms with a cue-dot before the headline lands, then the second line
+ * runs the same three-pass neon warm-up as the About page wordmark — dim,
+ * brighter, then the strike that holds — timed to begin just past
+ * KineticHeading's own word-stagger (2 words * STAGGER.tight from a 0.15s
+ * base ≈ 0.27s finish) so the climb reads as confirmation, not overlap.
+ *
  * The ticker returns here as a header device rather than a section seam: it
  * states the full capability list once, at speed, before the bento breaks it
  * down properly underneath.
@@ -14,8 +21,11 @@ export function ServicesHero() {
     <section className="pt-32 md:pt-44">
       <div className="shell">
         <Reveal variant="fade" weight="tertiary">
-          <div className="flex items-baseline justify-between border-b border-line pb-4">
-            <p className="eyebrow">03 — Services</p>
+          <div className="flex items-center justify-between border-b border-line pb-4">
+            <span className="flex items-center gap-2.5">
+              <span aria-hidden="true" className="cue-dot" />
+              <p className="eyebrow">03 — Services</p>
+            </span>
             <p className="eyebrow">Eight disciplines</p>
           </div>
         </Reveal>
@@ -23,10 +33,11 @@ export function ServicesHero() {
         <div className="py-14 md:py-20">
           <KineticHeading
             as="h1"
-            lines={['What', 'we do']}
+            lines={['Showtime', 'starts here']}
             size="mega"
             delay={0.15}
-            lineClassName="text-fg [&:last-child]:text-accent"
+            lineClassName="text-fg"
+            lineClassNames={[undefined, 'neon-ignite']}
           />
         </div>
       </div>

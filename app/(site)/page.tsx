@@ -6,12 +6,10 @@ import { Hero } from '@/components/sections/Hero';
 import { ServiceTicker } from '@/components/sections/ServiceTicker';
 import { Manifesto } from '@/components/sections/Manifesto';
 import { DualBrandSplit } from '@/components/sections/DualBrandSplit';
-import { EventIndex } from '@/components/sections/EventIndex';
 import { ServicesLedger } from '@/components/sections/ServicesLedger';
 import { FinalCTA } from '@/components/sections/FinalCTA';
 import { ServicesPreview } from '@/components/sections/ServicesPreview';
 import { AboutPreview } from '@/components/sections/AboutPreview';
-import { CTABand } from '@/components/sections/CTABand';
 import { TestimonialsTeaser } from '@/components/sections/TestimonialsTeaser';
 
 /** SEO — Milestone 4, Developer 2. Copy lives in lib/seo/pages.ts. */
@@ -28,9 +26,19 @@ export const metadata: Metadata = pageMetadata(PAGE_SEO.home);
  *   ServiceTicker   dense full-bleed seam
  *   Manifesto       near-empty, one huge statement
  *   DualBrandSplit  the two moods side by side — the signature section
- *   EventIndex      structured editorial list, imagery on hover
  *   ServicesLedger  sticky heading + dense rows, closing full-bleed visual
  *   FinalCTA        the climax
+ *
+ * EventIndex ("04 — We cater to") is deliberately NOT on this page — client
+ * direction. It still lives on /services, where "what is that like for my
+ * kind of event" is the right follow-up question to the bento above it; it
+ * was redundant here.
+ *
+ * CTABand is also removed — client direction. It duplicated the same "We
+ * cater to" event-types list plus the rotating StickerSpin badge
+ * ("063 SOCIETY · 063 PRODUCTIONS ·"), both flagged for removal. Its two CTA
+ * buttons ("Plan your event" / "Browse services") aren't lost — FinalCTA at
+ * the bottom of this same page already covers that conversion moment.
  *
  * All copy is the client's own, transcribed from the live site into
  * content/site.ts. Imagery is still labelled placeholder (BLOCKER B2).
@@ -44,12 +52,12 @@ export const metadata: Metadata = pageMetadata(PAGE_SEO.home);
  *
  *   ServicesPreview  what we do — full-bleed service rail, then editorial rows
  *   AboutPreview     who we are — layered parallax collage against the real copy
- *   CTABand          the mid-page conversion band, in Society mode
  *   TestimonialsTeaser  the lead testimonial, routing on to /portfolio (M2)
  *
  * They are interleaved rather than appended: each one lands between two of
  * Developer 1's sections so the page alternates dense → open → dense all the way
- * down, and the reader meets a next step (CTABand) before the closing climax.
+ * down. CTABand, the mid-page conversion band that used to sit here, is
+ * removed — see the note above.
  */
 
 export default function HomePage() {
@@ -61,8 +69,6 @@ export default function HomePage() {
       <ServicesPreview />
       <DualBrandSplit />
       <AboutPreview />
-      <EventIndex />
-      <CTABand />
       <TestimonialsTeaser />
       <ServicesLedger />
       <FinalCTA />

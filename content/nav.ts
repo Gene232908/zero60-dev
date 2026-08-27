@@ -11,6 +11,14 @@ export type NavItem = {
   index: string;
   /** Brand mood the destination runs in. */
   brand: 'productions' | 'society';
+  /**
+   * Present in the nav as a label but not a link — client asked for
+   * "063 Society" to stay visible without being clickable. Navbar and
+   * MobileMenu both render this item as inert text instead of a <Link> when
+   * true; `href` is kept on the record anyway so the field never needs
+   * removing to re-enable it later, just this flag flipped back off.
+   */
+  disabled?: boolean;
 };
 
 export const NAV_ITEMS: NavItem[] = [
@@ -19,7 +27,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Services', href: '/services', index: '03', brand: 'productions' },
   { label: 'Portfolio', href: '/portfolio', index: '04', brand: 'productions' },
   { label: 'Collaborations', href: '/collaborations', index: '05', brand: 'productions' },
-  { label: '063 Society', href: '/societysixty', index: '06', brand: 'society' },
+  { label: '063 Society', href: '/societysixty', index: '06', brand: 'society', disabled: true },
   { label: 'Contact', href: '/contact', index: '07', brand: 'productions' },
 ];
 

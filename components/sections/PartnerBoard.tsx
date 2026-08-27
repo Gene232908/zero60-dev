@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Marquee, Reveal } from '@/components/motion';
 import { Col, Divider, Grid, Section, SectionHeading } from '@/components/ui';
-import { PARTNERS, PARTNERS_PLACEHOLDER } from '@/content/collaborations';
+import { PARTNERS, PARTNERS_PLACEHOLDER, SAMPLE_PARTNERS } from '@/content/collaborations';
 
 /**
  * PartnerBoard — the collaborations marquee and project board.
@@ -9,11 +9,14 @@ import { PARTNERS, PARTNERS_PLACEHOLDER } from '@/content/collaborations';
  * Milestone 2 · Developer 2 · Task Division Rev 2, p.3:
  * "partner-logo marquee and the linked project photos (bulletin-board feel)".
  *
- * Built complete and driven entirely by PARTNERS. That list is empty because
- * BLOCKER B8 is open — no logos, no project mapping, and no written permission
- * to display any partner's mark. Rendering an invented collaborator would put a
- * third party's name on the client's site without consent, which is a worse
- * outcome than an honest empty state.
+ * Built complete and driven entirely by PARTNERS, currently wired to
+ * SAMPLE_PARTNERS (see content/collaborations.ts) — generic "Partner One /
+ * Two / Three" placeholders using the client's own event photography, so the
+ * client can review the marquee + project-board LAYOUT while BLOCKER B8
+ * (real logos, project mapping, written display permission) stays open.
+ * Rendering an invented REAL collaborator would put a third party's name on
+ * the client's site without consent; a clearly labelled sample avoids that
+ * while still answering "what will this look like".
  *
  * A partner without `displayPermission` is deliberately excluded even once the
  * list is populated: permission is per partner, not blanket.
@@ -22,6 +25,7 @@ import { PARTNERS, PARTNERS_PLACEHOLDER } from '@/content/collaborations';
 export function PartnerBoard() {
   const displayable = PARTNERS.filter((p) => p.displayPermission);
   const hasPartners = displayable.length > 0;
+  const isSample = PARTNERS === SAMPLE_PARTNERS;
 
   return (
     <Section id="partners" space="loose" divided>
@@ -35,6 +39,19 @@ export function PartnerBoard() {
 
       {hasPartners ? (
         <>
+          {isSample ? (
+            <Reveal variant="fade" weight="tertiary" className="mt-[var(--space-md)] block">
+              <div className="border border-dashed border-line-strong px-[var(--space-sm)] py-[var(--space-xs)]">
+                <p className="eyebrow text-accent">Sample preview — not real partners</p>
+                <p className="mt-1 text-[length:var(--text-sm)] leading-relaxed text-fg-muted">
+                  Names and logos below are placeholders (generic labels, no invented
+                  companies) so you can review the layout. Real partner names, logos and
+                  written display permission are still needed — see {PARTNERS_PLACEHOLDER.blocker}.
+                </p>
+              </div>
+            </Reveal>
+          ) : null}
+
           {/* Logo ticker — the bulletin-board seam. */}
           <div className="mt-[var(--space-lg)]">
             <Marquee duration={40} repeat={3} pauseOnHover className="border-y border-line py-[var(--space-sm)]">

@@ -85,6 +85,21 @@ export function MobileMenu({ id, open, onClose }: MobileMenuProps) {
             <ul>
               {NAV_ITEMS.map((item, i) => {
                 const active = pathname === item.href;
+                // Same "visible, not reachable" treatment as the desktop bar —
+                // see the .disabled doc on NavItem in content/nav.ts.
+                const inner = (
+                  <>
+                    <span className="eyebrow w-8 shrink-0">{item.index}</span>
+                    <span
+                      className={cn(
+                        'display text-[clamp(2rem,10vw,3.5rem)]',
+                        item.disabled ? 'text-fg-faint' : active ? 'text-accent' : 'text-fg',
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                  </>
+                );
                 return (
                   <li key={item.href} className="border-b border-line">
                     <span className="block overflow-hidden">
@@ -98,22 +113,23 @@ export function MobileMenu({ id, open, onClose }: MobileMenuProps) {
                           delay: reduced ? 0 : 0.12 + i * STAGGER.tight,
                         }}
                       >
-                        <Link
-                          href={item.href}
-                          onClick={onClose}
-                          aria-current={active ? 'page' : undefined}
-                          className="flex items-baseline gap-4 py-4"
-                        >
-                          <span className="eyebrow w-8 shrink-0">{item.index}</span>
+                        {item.disabled ? (
                           <span
-                            className={cn(
-                              'display text-[clamp(2rem,10vw,3.5rem)]',
-                              active ? 'text-accent' : 'text-fg',
-                            )}
+                            aria-disabled="true"
+                            className="flex select-none items-baseline gap-4 py-4"
                           >
-                            {item.label}
+                            {inner}
                           </span>
-                        </Link>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            onClick={onClose}
+                            aria-current={active ? 'page' : undefined}
+                            className="flex items-baseline gap-4 py-4"
+                          >
+                            {inner}
+                          </Link>
+                        )}
                       </motion.span>
                     </span>
                   </li>

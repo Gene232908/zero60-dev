@@ -29,6 +29,17 @@ const LINE_COUNT = SOCIETYSIXTY_HERO.lines.length;
  * opacity crossfades between them, kept on the compositor. Reduced motion: no
  * pin, no crossfade — every line and the first background render at rest,
  * most-emphasised line only.
+ *
+ * SHOWTIME — signature system (see globals.css). This hero already runs its
+ * own version of the device natively: each numbered line sits dim until it
+ * becomes active, then lights to the rose accent as you scroll — the exact
+ * dim-to-lit beat every other page's cue-dot/neon-ignite pair is standing in
+ * for elsewhere. Rather than layer the generic .neon-ignite on top of a
+ * bespoke effect that already does the job, only a small tally dot (in this
+ * page's own rose, not the Productions/Society accent tokens, since this
+ * component hardcodes its flyer palette rather than reading CSS custom
+ * properties) joins the eyebrow — the same arming beat, at this page's own
+ * temperature.
  */
 export function SocietySixtyHero() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -102,8 +113,14 @@ export function SocietySixtyHero() {
           style={{ background: 'linear-gradient(160deg, #F3ECE0 0%, #E7DDCB 55%, #DCD0BA 100%)' }}
         >
           <Reveal variant="fade" weight="tertiary" delay={0.1} immediate>
-            <div className="flex items-baseline justify-between gap-4 border-b border-[#1A1714]/10 pb-4">
-              <p className="eyebrow text-[#B18A83]">{SOCIETYSIXTY_HERO.eyebrow}</p>
+            <div className="flex items-center justify-between gap-4 border-b border-[#1A1714]/10 pb-4">
+              <span className="flex items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-[#B18A83] shadow-[0_0_6px_rgba(177,138,131,0.7)]"
+                />
+                <p className="eyebrow text-[#B18A83]">{SOCIETYSIXTY_HERO.eyebrow}</p>
+              </span>
               <p className="eyebrow hidden text-[#B18A83] sm:block">Est. SocietySixty</p>
             </div>
           </Reveal>
@@ -251,8 +268,11 @@ function StaticHero({ activeIndex }: { activeIndex: number }) {
         className="flex w-full flex-1 flex-col justify-between border-t border-[#1A1714]/10 px-[var(--gutter)] py-10 lg:w-1/2 lg:border-l lg:border-t-0 lg:py-14"
         style={{ background: 'linear-gradient(160deg, #F3ECE0 0%, #E7DDCB 55%, #DCD0BA 100%)' }}
       >
-        <div className="flex items-baseline justify-between gap-4 border-b border-[#1A1714]/10 pb-4">
-          <p className="eyebrow text-[#B18A83]">{SOCIETYSIXTY_HERO.eyebrow}</p>
+        <div className="flex items-center justify-between gap-4 border-b border-[#1A1714]/10 pb-4">
+          <span className="flex items-center gap-2.5">
+            <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-[#B18A83]" />
+            <p className="eyebrow text-[#B18A83]">{SOCIETYSIXTY_HERO.eyebrow}</p>
+          </span>
           <p className="eyebrow hidden text-[#B18A83] sm:block">Est. SocietySixty</p>
         </div>
 
