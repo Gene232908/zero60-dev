@@ -466,14 +466,14 @@ body {
     color: color-mix(in srgb, var(--accent) 40%, transparent);
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
-      0 0 10px color-mix(in srgb, var(--accent) 44%, transparent),
+      0 0 calc(var(--neon-glow-1) * 0.625) color-mix(in srgb, var(--accent) 44%, transparent),
       0 0 calc(var(--neon-glow-2) * 0.5) color-mix(in srgb, var(--accent) 18%, transparent);
   }
   53% {
     opacity: 0.85;
     color: color-mix(in srgb, var(--accent) 22%, transparent);
     -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 55%, transparent);
-    text-shadow: 0 0 5px color-mix(in srgb, var(--accent) 18%, transparent);
+    text-shadow: 0 0 calc(var(--neon-glow-1) * 0.3) color-mix(in srgb, var(--accent) 18%, transparent);
   }
 
   /* ---- PASS 3 (1.25-2.0s) · the strike, fill completes, no fade-back ---- */
@@ -482,7 +482,7 @@ body {
     color: color-mix(in srgb, var(--accent) 65%, transparent);
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
-      0 0 14px color-mix(in srgb, var(--accent) 60%, transparent),
+      0 0 calc(var(--neon-glow-1) * 0.875) color-mix(in srgb, var(--accent) 60%, transparent),
       0 0 calc(var(--neon-glow-2) * 0.78) color-mix(in srgb, var(--accent) 30%, transparent);
   }
   82% {
@@ -490,7 +490,7 @@ body {
     color: color-mix(in srgb, var(--accent) 90%, transparent);
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
-      0 0 16px color-mix(in srgb, var(--accent) 84%, transparent),
+      0 0 var(--neon-glow-1) color-mix(in srgb, var(--accent) 84%, transparent),
       0 0 calc(var(--neon-glow-2) * 0.96) color-mix(in srgb, var(--accent) 46%, transparent),
       0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 20%, transparent);
   }
@@ -505,7 +505,7 @@ body {
     color: var(--accent);
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
-      0 0 16px var(--accent),
+      0 0 var(--neon-glow-1) var(--accent),
       0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent),
       0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 30%, transparent);
   }
@@ -540,7 +540,7 @@ body {
     color: var(--accent);
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
-      0 0 16px var(--accent),
+      0 0 var(--neon-glow-1) var(--accent),
       0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent);
   }
 }
@@ -573,7 +573,7 @@ body {
     color: var(--accent);
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
-      0 0 16px var(--accent),
+      0 0 var(--neon-glow-1) var(--accent),
       0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent);
   }
 }
@@ -1044,15 +1044,26 @@ body {
   }
 }
 
-/* Narrower glow on phones — see the --neon-glow-2/3 doc in styles/tokens.css.
+/* Narrower glow on phones — see the --neon-glow-1/2/3 doc in styles/tokens.css.
    40rem matches Tailwind's own `sm` breakpoint declared in globals.css's
    @theme block, so this and every `sm:` utility agree on where "mobile" ends.
    Scaled down (not eliminated) so the neon still reads as neon, just sized to
-   letterforms that are themselves smaller on a phone than on desktop. */
+   letterforms that are themselves smaller on a phone than on desktop.
+
+   CUT FURTHER (client feedback, second mobile round): the first pass (16/56/
+   140 → 8/22/46) was still reported as "too bright" on an actual iPhone.
+   iOS Safari's `text-shadow` blur reads noticeably wider than the same radius
+   on desktop Chrome — the same numeric value produces more spread on-device
+   than it does in a desktop devtools mobile emulator, which is why this
+   needed a second, much steeper cut rather than a small nudge. Ratios between
+   the three layers are kept roughly the same as desktop's, just at a smaller
+   absolute scale, so the tight-core/bloom/spill structure still reads as
+   neon rather than becoming a single flat halo. */
 @media (max-width: 40rem) {
   :root {
-    --neon-glow-2: 22px;
-    --neon-glow-3: 46px;
+    --neon-glow-1: 5px;
+    --neon-glow-2: 11px;
+    --neon-glow-3: 20px;
   }
 }
 
