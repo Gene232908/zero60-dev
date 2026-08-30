@@ -20,9 +20,11 @@ import { cn } from '@/lib/utils/cn';
  *     the wordmark the room to run at `mega` and be centred, and the background
  *     plate is already a photograph — the section was carrying three competing
  *     images at once.
- *   · the wordmark is dead centre, at `mega`, and it is INTERACTIVE: each word
- *     lifts and catches the accent under the pointer (see .kinetic-word). It is
- *     the centrepiece, so it is the thing that responds to you.
+ *   · the wordmark is dead centre, at `mega`, and it is STATIC once it has
+ *     landed. It used to lift and catch the accent per word under the pointer;
+ *     the client asked for that removed, so ZERO and SIXTY stay white and the
+ *     mark has no hover state. It is the centrepiece by scale and position, not
+ *     by reacting to you.
  *   · PRODUCTIONS is realigned — centred directly beneath, on a rule that opens
  *     out either side of it, so the two elements read as one locked-up mark
  *     rather than a heading with a caption under it.
@@ -38,9 +40,8 @@ import { cn } from '@/lib/utils/cn';
  * column is right for reading and wrong for the opening composition, which
  * should own the whole viewport.
  *
- * All of it collapses to a single readable column under `lg`, every moving part
- * is a Reveal (which renders its finished state under reduced motion), and the
- * hover is pointer-only so touch never gets a stuck state.
+ * All of it collapses to a single readable column under `lg` and every moving
+ * part is a Reveal, which renders its finished state under reduced motion.
  */
 
 /**
@@ -141,7 +142,6 @@ export function Hero() {
             // against photographs is just noise.
             size="mega"
             delay={0.28}
-            interactive
             // Graduated line sizes + a scale-push entrance, instead of the house
             // masked word slide. Hero only: the wordmark is the one thing on the
             // page that should stop you, and it cannot do that wearing the same
@@ -154,8 +154,11 @@ export function Hero() {
             // Centred, and every line takes the same treatment — the old layout
             // stepped the last line right and gave only that one the accent, to
             // push the block across the frame. A centred lockup wants symmetry,
-            // so the accent moves to the hover state instead: the type is white
-            // at rest and lights up lime under the pointer, line by line.
+            // so ZERO and SIXTY simply stay white. They used to recolour lime
+            // under the pointer (KineticHeading's old `interactive` prop); the
+            // client asked for that removed, so the wordmark now has no hover
+            // state at all and the only lime in the lockup is THREE, which
+            // lights itself on entrance.
             //
             // `hero-sweep` runs the follow-spot band across the letterforms once,
             // timed to land just after the entrance settles.
@@ -192,8 +195,23 @@ export function Hero() {
             <div className="flex items-center gap-4 md:gap-6">
               <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-transparent to-line-strong" />
               {/* `hero-haze` sits it back into the plate — see globals.css. The
-                  wordmark above is the subject; this is atmosphere behind it. */}
-              <p className="display hero-haze shrink-0 text-[clamp(0.8rem,1.9vw,1.5rem)] tracking-[0.42em]">
+                  wordmark above is the subject; this is atmosphere behind it.
+
+                  OPTICAL CENTRING — `ml-[0.42em]` is not a nudge, it is the
+                  exact correction for the tracking. `letter-spacing` adds its
+                  space AFTER every letter including the last, so the text box
+                  is 0.42em wider on the right than the ink inside it. The two
+                  flex-1 rules centre the BOX, which left the word itself
+                  sitting 0.21em to the left of the wordmark above — small, but
+                  on a lockup whose whole point is symmetry it read as a
+                  mistake, which is what was reported.
+
+                  The margin is taken out of the same free space the rules
+                  divide, so it moves the box right by half of itself and lands
+                  the ink dead centre. em, not rem: it has to track the clamped
+                  font-size the letter-spacing is measured against, or the
+                  correction would drift at every viewport width. */}
+              <p className="display hero-haze ml-[0.42em] shrink-0 text-[clamp(0.8rem,1.9vw,1.5rem)] tracking-[0.42em]">
                 {BRAND.suffix}
               </p>
               <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-l from-transparent to-line-strong" />

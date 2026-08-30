@@ -58,24 +58,9 @@ import { cn } from '@/lib/utils/cn';
 function Word({
   children,
   delay,
-  interactive = false,
 }: {
   children: ReactNode;
   delay: number;
-  /**
-   * Opt-in per-word hover. Off everywhere except the hero, because on a normal
-   * section heading a word that lifts under the pointer reads as a broken link
-   * rather than as a flourish.
-   *
-   * The lift is a TRANSFORM on the inner span, which is already the animated
-   * element — so it composites on the same layer the entrance used and costs
-   * nothing extra. It is deliberately gated on `landed`: while the word is still
-   * clipped, a hover translate would push it out through the mask edge.
-   *
-   * Pointer-only (`@media (hover: hover)`, applied via the `hover-lift` utility)
-   * so a touch device never gets a stuck hover state after a tap.
-   */
-  interactive?: boolean;
 }) {
   const [landed, setLanded] = useState(false);
 
@@ -101,9 +86,6 @@ function Word({
           // No clip-path here. The outer box is the mask; a second clip riding
           // along with the text only added another edge to be cut by.
           !landed && 'will-change-transform [text-shadow:none]',
-          // Only once the entrance has finished and the clip is released — see
-          // the prop doc above.
-          interactive && landed && 'kinetic-word',
         )}
         variants={{ hidden: { y: '110%' }, shown: { y: '0%' } }}
         transition={{ duration: DUR.slow, ease: EASE.entrance, delay }}
@@ -256,7 +238,6 @@ function CinematicWord({
   index,
   baseDelay,
   immediate,
-  interactive,
   mode,
   wordClassNames,
 }: {
@@ -273,7 +254,6 @@ function CinematicWord({
    * element in the hero already passes.
    */
   immediate: boolean;
-  interactive: boolean;
   /** Which cinematic entrance to run — see CINEMATIC_MODES. */
   mode: CinematicMode;
   /**
@@ -315,7 +295,6 @@ function CinematicWord({
         // the instant the line lands — leaving it on would pin a compositor
         // layer for the whole session for no benefit.
         !landed && 'will-change-[transform,opacity,filter]',
-        interactive && landed && 'kinetic-word',
       )}
       initial={spec.from}
       {...(immediate
@@ -395,12 +374,14 @@ export interface KineticHeadingProps {
   drift?: number;
   /** Delay before the first word enters, in seconds. */
   delay?: number;
-  /**
-   * Per-word hover response (lift + accent bloom). Off by default — see the
-   * `Word` prop doc. Intended for the hero wordmark, where the heading IS the
-   * interactive centrepiece rather than a label for the content below it.
+  /*
+   * NOTE: an `interactive` prop used to sit here. It applied `.kinetic-word` to
+   * every word once its entrance landed, which gave the hero wordmark a lift and
+   * an accent recolour under the pointer. Removed on client direction: the
+   * wordmark stays white and static, and hover is not a state it has. Nothing
+   * else on the site ever set it, so the prop, its plumbing and the CSS behind
+   * it are all gone rather than left switched off.
    */
-  interactive?: boolean;
   /**
    * Run one of the per-line cinematic entrances instead of the default per-word
    * mask slide — see `CINEMATIC_MODES` for what each one does and when to reach
@@ -463,7 +444,6 @@ export function KineticHeading({
   sizeClassName,
   drift = 0,
   delay = 0,
-  interactive = false,
   cinematic = false,
   immediate = false,
   className,
@@ -567,7 +547,6 @@ export function KineticHeading({
                 index={li}
                 baseDelay={delay}
                 immediate={immediate}
-                interactive={interactive}
                 mode={mode}
                 wordClassNames={wordClassNames}
               />
@@ -591,10 +570,7 @@ export function KineticHeading({
           >
             {words.map((word, wi) => (
               <span key={`${word}-${wi}`} className={wordClassNames?.[word]}>
-                <Word
-                  delay={delay + (lineStartIndex[li] + wi) * STAGGER.tight}
-                  interactive={interactive}
-                >
+                <Word delay={delay + (lineStartIndex[li] + wi) * STAGGER.tight}>
                   {word}
                 </Word>
                 {/* The gap between words has to be OUTSIDE Word's own

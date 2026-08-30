@@ -58,7 +58,22 @@ export default function PortfolioPage() {
         </div>
 
         <Reveal variant="rise" weight="secondary" delay={0.24}>
-          <p className="zs-measure mt-[var(--space-md)] text-[length:var(--text-lg)] leading-relaxed text-fg-muted">
+          {/* BIGGER — client direction. --text-lg (1.0625→1.375rem) up to
+              --text-xl (1.25→2rem), the next step on the shared scale in
+              styles/responsive.css rather than a one-off pixel value, so it
+              still tracks the viewport and still agrees with the rest of the
+              site's type.
+
+              `zs-measure` is doing the work that keeps this from becoming a
+              wall: it caps the line at 62ch, and ch is relative to the font
+              size, so the measure grows WITH the type and the line length in
+              characters does not change. Bigger text, same reading rhythm.
+
+              text-fg-muted → text-fg as well. At --text-lg this was supporting
+              copy under the headline; at --text-xl it is large enough to read
+              as a lead, and 58% white at that size looks like it failed to
+              load rather than like a deliberate hierarchy. */}
+          <p className="zs-measure mt-[var(--space-md)] text-[length:var(--text-xl)] leading-relaxed text-fg">
             {BRAND.tagline}
           </p>
           <div className="mt-[var(--space-md)] flex flex-wrap gap-[var(--space-xs)]">

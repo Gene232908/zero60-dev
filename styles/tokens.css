@@ -83,9 +83,9 @@
      a solid green blob once the letterforms themselves are a fraction of
      their desktop size, especially on iOS Safari which blurs `text-shadow`
      more aggressively than Chrome does at the same radius. */
-  --neon-glow-1: 16px;
-  --neon-glow-2: 56px;
-  --neon-glow-3: 140px;
+  --neon-glow-1: 12px;
+  --neon-glow-2: 38px;
+  --neon-glow-3: 92px;
 }
 
 /* =============================================================================

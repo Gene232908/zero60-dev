@@ -15,8 +15,14 @@ import { cn } from '@/lib/utils/cn';
  * visible: the two halves render the SAME markup, and the only difference is the
  * data-brand attribute each one sits under (docs/plan.md §2.2).
  *
- *   left  → data-brand="productions"  black ground, heavy grotesque, grain, loud lime
- *   right → data-brand="society"      paper ground, high-contrast serif, air, hairline lime
+ *   left  → data-brand="productions"              heavy grotesque, grain, loud lime
+ *   right → data-brand="society" data-surface="dark"  high-contrast serif, air, hairline lime
+ *
+ * The Society half runs on the DARK stage here rather than on its usual paper
+ * ground — client direction, reasoned about at the BrandProvider below. The
+ * demonstration still holds, and arguably holds better: identical markup, one
+ * attribute apart, and the two halves still read as two different houses on
+ * type, rhythm and motion rather than on background colour alone.
  *
  * Aligned, but distinct — proving the token system works before Milestone 2
  * builds the full 063 Society page on top of it.
@@ -53,7 +59,19 @@ const SOCIETY: Panel = {
   mood: SOCIETY_PLACEHOLDER.mood,
   blurb: SOCIETY_PLACEHOLDER.blurb,
   href: '/society',
-  image: SOCIETY_MEDIA.main,
+  // Was SOCIETY_MEDIA.main — the wedding table setting. Client direction: that
+  // frame did not belong on this page. It is lit warm and bright, and its
+  // subject is pink roses, gold vases and candlelight on white linen, so
+  // dropping it into a black landing page put the single lightest, most
+  // saturated object on the site directly beside the black Productions panel.
+  // It read as a different website showing through a window.
+  //
+  // `tall` is the cinematic one of the three supplied Society frames: a single
+  // hard side light, deep falloff, most of the frame in shadow, and — the part
+  // that matters for the layout — its dark mass sits at the TOP, which is
+  // where the eyebrow row lands. Same client photography, same elegant
+  // subject, graded like the rest of the page instead of against it.
+  image: SOCIETY_MEDIA.tall,
   disabled: true,
 };
 
@@ -83,27 +101,42 @@ function BrandPanel({ panel, index }: { panel: Panel; index: string }) {
           className="pointer-events-none absolute inset-3 z-20 border border-accent opacity-0 transition-opacity duration-[var(--dur-micro)] group-focus-visible:opacity-100"
         />
       )}
-      {/* Image sits behind the type and drifts on scroll. */}
-      <div className="absolute inset-0 -z-10 opacity-60 transition-opacity duration-[var(--dur-slow)] ease-[var(--ease-brand)] group-hover:opacity-80">
+      {/* Image sits behind the type and drifts on scroll.
+          NO HOVER TREATMENT — client direction. The opacity used to lift
+          60 → 80 under the pointer and .photo-mono desaturated back to full
+          colour alongside it, so the panel brightened twice at once and the
+          type sitting on it lost contrast at exactly the moment someone was
+          reading it. Both are gone: one held grade, hovered or not. */}
+      <div className="absolute inset-0 -z-10 opacity-90">
         <Parallax strength="subtle" className="h-full">
           <Image
             src={panel.image.src}
             alt={panel.image.alt}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="photo-mono object-cover"
+            className="photo-still object-cover"
           />
         </Parallax>
       </div>
 
+      {/* Shapes the darkness toward the top and bottom edges, where the words
+          are. Outside the Parallax on purpose — a scrim that drifts with the
+          photograph stops covering the thing it was put there to cover. */}
+      <div aria-hidden="true" className="panel-scrim pointer-events-none absolute inset-0 -z-10" />
+
       <div className="flex items-start justify-between">
-        <span className="eyebrow">{index}</span>
-        <span className="eyebrow text-accent">{panel.mood}</span>
+        <span className="eyebrow text-halo panel-label">{index}</span>
+        <span className="eyebrow text-halo panel-label-accent">{panel.mood}</span>
       </div>
 
       <div className="pt-24">
-        <KineticHeading lines={[panel.name]} size="md" className="mb-6" />
-        <p className="max-w-[42ch] text-sm leading-relaxed text-fg-muted">{panel.blurb}</p>
+        <KineticHeading
+          lines={[panel.name]}
+          size="md"
+          className="mb-6"
+          lineClassName="text-halo"
+        />
+        <p className="text-halo max-w-[42ch] text-sm leading-relaxed text-fg-muted">{panel.blurb}</p>
 
         {/* The arrow nudge is the most-copied hover on the web. Here the rule
             draws out from under the label and the arrow rides its full length —
@@ -167,7 +200,24 @@ export function DualBrandSplit() {
           </Reveal>
         </BrandProvider>
 
-        <BrandProvider brand="society">
+        {/* `surface="dark"` — see the [data-brand="society"][data-surface="dark"]
+            map in styles/tokens.css, which exists for exactly this case: an
+            elegant section sitting inside a dark page.
+
+            Society's default ground is --paper with near-black ink type, and
+            that is right on /society, which is a light page. Here it was
+            wrong twice over. It put a bright panel in the middle of a black
+            landing page, and it made the client's own instruction impossible
+            to carry out — "darken the picture so the text becomes visible"
+            inverts on a light panel, where darkening the photograph is what
+            makes dark type disappear.
+
+            On the dark stage the same instruction resolves cleanly: paper type
+            over a darkened photograph, contrast rising as the image goes down.
+            The two houses stay plainly distinct — serif against grotesque,
+            restrained motion against the snap, --motion-scale still 0.62 —
+            they now differ in voice rather than in wattage. */}
+        <BrandProvider brand="society" surface="dark">
           <Reveal variant="settle" weight="primary" delay={0.18} className="h-full">
             <BrandPanel panel={SOCIETY} index="02" />
           </Reveal>

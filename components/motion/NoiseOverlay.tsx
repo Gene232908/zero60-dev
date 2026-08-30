@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducedMotionSafe } from './use-reduced-motion';
+import { useMinWidth, useReducedMotionSafe } from './use-reduced-motion';
 import { cn } from '@/lib/utils/cn';
 
 /**
@@ -27,7 +27,37 @@ export interface NoiseOverlayProps {
 
 export function NoiseOverlay({ className, contained = false }: NoiseOverlayProps) {
   const reduced = useReducedMotionSafe();
+  // 48rem = the `md` breakpoint from globals.css's @theme block.
+  const wide = useMinWidth('48rem');
+
   if (reduced) return null;
+
+  /*
+    PHONES DO NOT GET THE GRAIN (performance — reported scroll lag).
+
+    The header above is right that the grain costs nothing to FETCH — it is an
+    inline data-URI, no request, no animation. The cost is not the image, it is
+    `mix-blend-overlay` on a `fixed inset-0` element.
+
+    A blended layer has to be composited against whatever is behind it. This one
+    is fixed and the page scrolls underneath it, so "whatever is behind it" is
+    different on every single frame of every scroll — the browser re-blends the
+    entire viewport, continuously, for as long as the page is moving. It is the
+    one effect on the site whose cost is a function of viewport AREA rather than
+    of how many elements are on screen, which is why the lag shows up at both
+    ends of the range at once.
+
+    Dropping it below `md` costs almost nothing visually, and that is a property
+    of the blend mode rather than a judgement call: `overlay` resolves to
+    2 x backdrop x source where the backdrop is dark, so on this site's black
+    ground the grain already contributes almost exactly zero. It reads only over
+    photographs and over Society's paper — both of which are small, few, and
+    scaled down on a phone in the first place.
+
+    Desktop keeps it untouched: the effect is part of the Productions mood, and
+    a desktop GPU can afford the blend.
+  */
+  if (!wide) return null;
 
   return (
     <div

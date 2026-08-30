@@ -72,9 +72,24 @@ export function EventIndex() {
           // markup and costs the list its semantics in a screen reader.
           <li key={event.index}>
             <Reveal variant="settle" weight="tertiary" delay={i * 0.055}>
+              {/* NO `data-cursor` here — client direction, and the two features
+                  were working against each other.
+
+                  `data-cursor="View"` expands CustomCursor from a 10px dot into
+                  an 88px lime disc with the word VIEW in it, pinned to the
+                  pointer. ImageHoverPreview then renders the event photograph
+                  at the same pointer. So on the one row you were actually
+                  pointing at, the label covered the middle of the picture it
+                  had just brought up — the image was there, you just could not
+                  see it behind the badge.
+
+                  The affordance is not lost: the row already answers with an
+                  accent rule drawn under it, the number stepping left, the
+                  title advancing right, and every other row dimming to 35%.
+                  That is four signals that this is the live row, none of which
+                  sit on top of the photograph. */}
               <Link
                 href="/services"
-                data-cursor="View"
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
                 onBlur={() => setActive(null)}

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { ImageHoverPreview, KineticHeading, Parallax, Reveal } from '@/components/motion';
-import { Col, Divider, Grid, Section } from '@/components/ui';
-import { GALLERY_FRAMES, GALLERY_PLACEHOLDER } from '@/content/portfolio';
+import { Col, Grid, Section } from '@/components/ui';
+import { GALLERY_FRAMES } from '@/content/portfolio';
 
 /**
  * PortfolioGallery — the maximalist layered / pinned gallery.
@@ -26,8 +26,12 @@ import { GALLERY_FRAMES, GALLERY_PLACEHOLDER } from '@/content/portfolio';
  * hand-rolled here (Task Division Rev 2: no second animation approach).
  *
  * BLOCKER B7: these are the client's own frames recovered from the live site at
- * screen resolution. Nothing is enlarged past its native size, and the shortfall
- * is stated on the page rather than hidden.
+ * screen resolution. Nothing is enlarged past its native size — that constraint
+ * is still honoured by the layout, and B7 is still open in BLOCKERS.md. What
+ * changed is that the page no longer PRINTS the notice: the closing
+ * "BLOCKER B7 / awaiting final asset from sir marco" block came out on client
+ * direction, because an internal ticket id and an internal name do not belong
+ * on a public portfolio. See the note where it used to render, below.
  */
 
 /** Parallax strengths cycled across the collage so no two columns drift alike. */
@@ -111,13 +115,22 @@ export function PortfolioGallery() {
           ))}
         </Grid>
 
-        {/* The shortfall is stated, not hidden — BLOCKER B7. */}
-        <Divider label={GALLERY_PLACEHOLDER.blocker} meta={GALLERY_PLACEHOLDER.notice} space="lg" />
-        <Reveal variant="fade" weight="tertiary">
-          <p className="zs-measure-wide text-[length:var(--text-sm)] leading-relaxed text-fg-faint">
-            {GALLERY_PLACEHOLDER.body}
-          </p>
-        </Reveal>
+        {/* The B7 notice that used to close this section is REMOVED — client
+            direction. It rendered a Divider reading "BLOCKER B7 · PLACEHOLDER —
+            awaiting final asset from sir marco" plus a paragraph explaining the
+            missing high-resolution originals.
+
+            That was the right call while this was an internal build and the
+            wrong one now: it is an internal ticket reference and an internal
+            name, printed on a public page, directly under the client's own
+            work. B7 is not being hidden — it is still open and still tracked in
+            BLOCKERS.md, and GALLERY_PLACEHOLDER is still exported from
+            content/portfolio.ts with the note attached, so the register does
+            not quietly lose the item just because the page stopped shouting it.
+
+            The engineering promise it was making holds regardless: nothing in
+            this gallery is enlarged past its native size, which is enforced by
+            the layout above rather than by the paragraph that described it. */}
       </Section>
     </>
   );

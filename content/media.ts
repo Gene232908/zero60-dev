@@ -88,9 +88,16 @@ export const HERO = {
  * content/placeholders.ts because no Society imagery had ever been supplied
  * (BLOCKER B4). Management has now provided all three.
  *
- * SOCIETY.main deliberately serves BOTH the Two Houses panel on the landing
- * page and the Society page hero — one picture, two placements. Supply a
- * separate society-hero source if they should ever differ.
+ * SOCIETY.main used to serve BOTH the Two Houses panel on the landing page and
+ * the Society page hero. It no longer does: the landing panel now takes
+ * SOCIETY.tall (client direction — see the note on the SOCIETY panel in
+ * components/sections/DualBrandSplit.tsx). `main` is warm, bright and
+ * saturated, which is correct on /society's paper ground and wrong on a black
+ * landing page; `tall` is the low-key frame of the three and holds its dark
+ * mass at the top, where that panel sets its type.
+ *
+ * Both are still the client's own photography — this is a re-placement, not a
+ * replacement, and no slot lost its picture.
  */
 export const SOCIETY = {
   main: m('society-main', 1200, 1500, 'Table setting with roses and glassware at an elegant event'),

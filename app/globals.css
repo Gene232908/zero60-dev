@@ -181,6 +181,67 @@ body {
 }
 
 /* -----------------------------------------------------------------------------
+   PHOTO — HELD GRADE (no hover reveal).
+
+   Client direction on the Two Houses panels: leave the photograph at whatever
+   grade it is at and stop it changing under the pointer, then take it DARKER so
+   the type on top of it becomes readable.
+
+   This is a separate class rather than a modifier on .photo-mono, and that is
+   deliberate. .photo-mono's hover reveal is claimed by four selectors, two of
+   them brand-scoped at (0,3,0) — cancelling those from a companion class means
+   re-declaring every one of them at higher specificity, which is a rule that
+   breaks the next time someone adds a brand. A photograph either resolves on
+   approach or it does not, so this opts out of the whole mechanism instead:
+   nothing here matches those selectors, so there is nothing to fight.
+
+   brightness(0.58) is doing the work the client asked for — it is the "darker
+   version" itself, not a scrim on top of one. Pair it with .panel-scrim below,
+   which shapes that darkness toward the corners the text actually occupies.
+   -------------------------------------------------------------------------- */
+.photo-still {
+  filter: grayscale(1) contrast(1.08) brightness(0.58);
+}
+
+/* The shaped half of the same job. brightness() darkens evenly, which protects
+   the type but flattens the photograph into a grey field; this puts the weight
+   back where the words are — heavy along the bottom under the name and the
+   blurb, a lighter band across the top under the eyebrow row — and leaves the
+   middle of the frame comparatively open so the picture still reads AS a
+   picture. Same reasoning as .hero-scrim, at panel scale.
+   Gradients only: no filter over a 92svh area, nothing that repaints on
+   scroll. */
+.panel-scrim {
+  background:
+    linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.9) 0%,
+      rgb(0 0 0 / 0.72) 26%,
+      rgb(0 0 0 / 0.4) 58%,
+      rgb(0 0 0 / 0.34) 82%,
+      rgb(0 0 0 / 0.58) 100%
+    );
+}
+
+/* The panel's small labels — same trap the hero hit, same fix.
+
+   `.eyebrow` sets its own `color` and is declared OUTSIDE any @layer, while
+   every Tailwind `text-*` utility lives inside `@layer utilities`. Unlayered
+   CSS beats layered CSS no matter the specificity, so `text-accent` on an
+   `.eyebrow` has never done anything — the "Rugged" / "Elegant" mood label has
+   been rendering at --fg-faint this whole time, not in the accent, and the 01 /
+   02 index with it. Flat black hid it; a photograph will not.
+
+   Declared after `.eyebrow`, so equal specificity resolves on source order. */
+.panel-label {
+  color: var(--fg-muted);
+}
+
+.panel-label-accent {
+  color: var(--accent);
+}
+
+/* -----------------------------------------------------------------------------
    HERO PLATE — legible display type over a photographic background.
 
    The supplied frame (truss, movers, flight cases) is busy edge to edge and has
@@ -355,6 +416,56 @@ body {
   }
 }
 
+/* -----------------------------------------------------------------------------
+   BEAMS ON PHONES — same beams, held still (performance).
+
+   Desktop is untouched. This is only about what the pair costs on a phone,
+   which is more than it looks: each beam is a large element carrying a 30px
+   blur, the container above them is `mix-blend-screen`, and both beams animate
+   on an infinite loop. An animating, blurred layer under a blend mode is the
+   one combination a compositor cannot cache its way out of — it has to re-blur
+   and re-blend across the whole hero, every frame, for as long as the hero is
+   on screen. Which, since this is the top of the landing page, is the entire
+   first impression on the slowest device the site will ever run on.
+
+   Freezing the drift is what actually fixes it. Once nothing inside the layer
+   is moving, the blurred result rasterises ONCE and the compositor reuses that
+   texture for the rest of the page's life — the blend stops being per-frame
+   work and becomes a cached layer. The blur is also pulled to 18px, since the
+   beams are proportionally wider on a narrow viewport and a 30px spread there
+   is closer to a wash than to a shaft.
+
+   `will-change` is dropped along with the animation, and that is the point of
+   dropping it rather than an afterthought: it exists to warn the compositor
+   about an upcoming transform, and holding a promoted layer for a blurred
+   full-height element that is never going to move again is pure GPU memory on
+   the device with the least of it.
+
+   The beams still read exactly as beams — crossed, lime, soft-edged. They just
+   no longer sway, which is a 14-second cycle nobody has ever noticed on a
+   phone. -------------------------------------------------------------------- */
+@media (max-width: 40rem) {
+  .hero-beams::before,
+  .hero-beams::after {
+    animation: none;
+    filter: blur(18px);
+    will-change: auto;
+  }
+
+  /* The keyframes were also supplying the opacity — both beams sit at 0.4 at
+     the `from` end, and without the animation running they would otherwise
+     render at full strength. Restated here at roughly the midpoint of the
+     cycle they used to travel through, so a still beam looks like a paused one
+     rather than a brighter one. */
+  .hero-beams::before {
+    opacity: 0.58;
+  }
+
+  .hero-beams::after {
+    opacity: 0.55;
+  }
+}
+
 /* Type sitting directly on photography. The halo is several soft dark shadows
    stacked rather than one hard one, so it reads as the letterform separating
    itself from the image rather than as an outline drawn around it. */
@@ -385,22 +496,27 @@ body {
    each filling in a little more of the letterform than the last, sells
    "being built" in a way a colour-only ramp cannot.
 
-   THE SHAPE (2s to full-lit, then permanent — client asked to speed this up
-   from an earlier 4s pass without losing the three-pass build)
-     0.0-0.2s    NOTHING — opacity 0, no stroke, no fill, no glow. The word
-                 is not on the page yet.
-     0.2-0.7s    PASS 1 — a faint outline appears (stroke only, fill still
-                 near-transparent): the letterform's EDGE sketches itself in,
+   THE SHAPE, written as fractions of the animation's own duration — two classes
+   share these keyframes on different clocks: .neon-activate (the home hero's
+   THREE) runs them in 1.25s, .neon-ignite (every other page's title) in 2s. The
+   absolute times in brackets are the home hero's. The client has asked twice for
+   this to be quicker, most recently 2s -> 1.25s, and the three-pass build has
+   survived both cuts because it is expressed proportionally rather than in
+   hardcoded seconds.
+     0-10%       NOTHING — opacity 0, no stroke, no fill, no glow. The word
+     (0-0.13s)   is not on the page yet.
+     10-31%      PASS 1 — a faint outline appears (stroke only, fill still
+     (0.13-0.39) near-transparent): the letterform's EDGE sketches itself in,
                  dim, then fades back down almost to nothing. A near-miss.
-     0.7-1.25s   PASS 2 — the outline returns brighter and the fill starts
-                 visibly creeping in behind it; fades back but leaves more
+     31-53%      PASS 2 — the outline returns brighter and the fill starts
+     (0.39-0.66) visibly creeping in behind it; fades back but leaves more
                  outline standing than pass 1 did — the sketch is starting to
                  hold.
-     1.25-2.0s   PASS 3 — the strike. Fill completes, climbs straight through
-                 100% opacity and full neon intensity, and unlike passes 1
+     53-100%     PASS 3 — the strike. Fill completes, climbs straight through
+     (0.66-1.25) 100% opacity and full neon intensity, and unlike passes 1
                  and 2 does NOT fade back down: it carries into the held
                  final keyframe instead.
-     2.0s on     FULL NEON GREEN, fully opaque, permanent.
+     after that  FULL NEON GREEN, fully opaque, permanent.
 
    `animation-fill-mode: forwards` is what makes the last keyframe stick.
 
@@ -422,7 +538,8 @@ body {
 
    PERFORMANCE. `color`, `-webkit-text-stroke-color`, `opacity` and
    `text-shadow` are paint-only — no layout, no `filter`, no blur, one line of
-   type rather than per-glyph animation. One-shot: nothing paints after 2s.
+   type rather than per-glyph animation. One-shot: nothing paints once the
+   sequence has held its last frame.
 
    MOBILE GLOW SCALE (client feedback, fourth round): on a phone the glyphs
    render far smaller than on desktop, but a hardcoded `56px`/`140px` blur
@@ -482,8 +599,8 @@ body {
     color: color-mix(in srgb, var(--accent) 65%, transparent);
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
-      0 0 calc(var(--neon-glow-1) * 0.875) color-mix(in srgb, var(--accent) 60%, transparent),
-      0 0 calc(var(--neon-glow-2) * 0.78) color-mix(in srgb, var(--accent) 30%, transparent);
+      0 0 calc(var(--neon-glow-1) * 0.875) color-mix(in srgb, var(--accent) 50%, transparent),
+      0 0 calc(var(--neon-glow-2) * 0.78) color-mix(in srgb, var(--accent) 22%, transparent);
   }
   82% {
     opacity: 1;
@@ -491,8 +608,8 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 var(--neon-glow-1) color-mix(in srgb, var(--accent) 84%, transparent),
-      0 0 calc(var(--neon-glow-2) * 0.96) color-mix(in srgb, var(--accent) 46%, transparent),
-      0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 20%, transparent);
+      0 0 calc(var(--neon-glow-2) * 0.96) color-mix(in srgb, var(--accent) 36%, transparent),
+      0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 14%, transparent);
   }
 
   /* ---- 2.0s onward · FULL NEON, PERMANENT ----
@@ -506,8 +623,8 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 var(--neon-glow-1) var(--accent),
-      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent),
-      0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 30%, transparent);
+      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 48%, transparent),
+      0 0 var(--neon-glow-3) color-mix(in srgb, var(--accent) 20%, transparent);
   }
 }
 
@@ -523,13 +640,20 @@ body {
   opacity: 0;
   will-change: opacity, color, text-shadow;
   /* Once, then hold the final frame.
-     2.45s: THREE is the third line of a 0.34s-staggered entrance, so it does not
-     finish arriving until ~2.16s. The old 1.9s delay started the ignition BEFORE
-     the line had landed, so the blur-in and the light-up ran over each other and
-     neither read clearly. This waits for the line to settle, then lights it.
-     Duration is 2s (three-pass, edge-first-build version — see the block
-     comment above). */
-  animation: zs-neon-activate 2s ease-in-out 2.45s 1 forwards;
+
+     SPED UP (client direction): THREE was taking too long to arrive. It used to
+     wait 2.45s and then build over 2s, so the word was not fully lit until
+     ~4.45s — long enough that the hero reads as unfinished while you are looking
+     straight at it. Now 1.5s + 1.25s, fully lit at ~2.75s. The three-pass build
+     is intact, it just runs at pace.
+
+     Why 1.5s and not less: THREE is the third line of a 0.34s-staggered
+     entrance, so it is still travelling until ~2.16s. At 1.5s the first two
+     passes — a faint outline, barely on screen — run under the tail of that
+     travel and the strike lands just as the line settles, so the two effects
+     still read in sequence rather than on top of each other. That is what the
+     old 1.9s delay got wrong in the other direction. */
+  animation: zs-neon-activate 1.25s ease-in-out 1.5s 1 forwards;
 }
 
 /* Reduced motion gets the destination directly: same lit state, no transition. */
@@ -541,7 +665,7 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 var(--neon-glow-1) var(--accent),
-      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent);
+      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 48%, transparent);
   }
 }
 
@@ -574,7 +698,7 @@ body {
     -webkit-text-stroke-color: var(--accent);
     text-shadow:
       0 0 var(--neon-glow-1) var(--accent),
-      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 60%, transparent);
+      0 0 var(--neon-glow-2) color-mix(in srgb, var(--accent) 48%, transparent);
   }
 }
 
@@ -641,8 +765,8 @@ body {
 .cta-glow {
   background: radial-gradient(
     ellipse 70% 52% at 50% 92%,
-    color-mix(in srgb, var(--accent) 15%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 6%, transparent) 38%,
+    color-mix(in srgb, var(--accent) 11%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 4%, transparent) 38%,
     transparent 72%
   );
   will-change: transform, opacity;
@@ -698,7 +822,7 @@ body {
     0 2px 10px rgb(0 0 0 / 0.6),
     0 0 22px rgb(255 255 255 / 0.16),
     0 0 55px rgb(255 255 255 / 0.1),
-    0 0 90px color-mix(in srgb, var(--accent) 12%, transparent);
+    0 0 70px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 /* -----------------------------------------------------------------------------
@@ -797,54 +921,24 @@ body {
 }
 
 /* -----------------------------------------------------------------------------
-   KINETIC WORD HOVER — the hero wordmark responds per word, not per block.
+   KINETIC WORD HOVER — REMOVED (client direction).
 
-   Hovering the whole heading and moving all three lines together would read as
-   a hover state on a button. Per word, it reads as the type being LIT — you run
-   the pointer across it and each word catches the light in turn, which is the
-   same idea as the beams overhead.
+   A `@media (hover: hover) { .kinetic-word … }` block used to live here. It gave
+   the hero wordmark a per-word hover: each word lifted ~0.028em and repainted
+   itself lime with two accent bloom layers, and a companion rule released the
+   sweep's `background-clip: text` so the recolour could show through on ZERO and
+   SIXTY.
 
-   Applied by KineticHeading only when `interactive` is set, and only after the
-   entrance clip is released (a lift mid-reveal would push the word out through
-   the mask edge).
+   The client asked for it gone: the wordmark stays WHITE and does not react to
+   the pointer. That is the whole requirement, so the rules are deleted rather
+   than trimmed to a lift — a wordmark that still moved under the pointer would
+   be the same effect at lower volume, and the class had exactly one consumer.
 
-   `hover: hover` keeps it off touch devices, where :hover sticks after a tap.
-   The transition is on transform/text-shadow/color only — never `all`, which
-   would drag the entrance's own transform into a competing transition.
+   KineticHeading's `interactive` prop, which was the only thing that ever
+   applied `.kinetic-word`, is gone with it. The lockup's one piece of lime is
+   THREE, which lights itself on entrance (.neon-activate) and is not a hover
+   state at all.
    -------------------------------------------------------------------------- */
-@media (hover: hover) {
-  .kinetic-word {
-    transition:
-      transform var(--dur-fast) var(--ease-signature),
-      text-shadow var(--dur-fast) var(--ease-out),
-      color var(--dur-fast) var(--ease-out);
-  }
-
-  .kinetic-word:hover {
-    /* Small. The letterforms are ~8vw tall, so even 4px of travel is plainly
-       visible — anything more and the line visibly breaks apart. */
-    transform: translate3d(0, -0.028em, 0);
-    color: var(--accent);
-    text-shadow:
-      0 1px 2px rgb(0 0 0 / 0.85),
-      0 4px 20px rgb(0 0 0 / 0.6),
-      0 0 32px color-mix(in srgb, var(--accent) 62%, transparent),
-      0 0 80px color-mix(in srgb, var(--accent) 34%, transparent);
-  }
-
-  /* The sweep lives on the LINE and clips its gradient to the text, which means
-     the line is painting the glyphs and any `color` an individual letter sets
-     underneath it is invisible. So a hovered letter has to opt back out of the
-     inherited clip and paint itself again.
-     `background-image: none` is what actually releases it — resetting only
-     background-clip would leave the gradient filling the letter's own box. */
-  .hero-sweep .kinetic-word:hover {
-    background-image: none;
-    -webkit-background-clip: border-box;
-    background-clip: border-box;
-    color: var(--accent);
-  }
-}
 
 /* The accent line gets the same separation plus a lime bloom — the one place on
    the page where the brand colour behaves like an actual light source. */
@@ -852,8 +946,8 @@ body {
   text-shadow:
     0 1px 2px rgb(0 0 0 / 0.85),
     0 4px 20px rgb(0 0 0 / 0.6),
-    0 0 28px color-mix(in srgb, var(--accent) 55%, transparent),
-    0 0 70px color-mix(in srgb, var(--accent) 30%, transparent);
+    0 0 22px color-mix(in srgb, var(--accent) 38%, transparent),
+    0 0 54px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 /* -----------------------------------------------------------------------------
@@ -1031,8 +1125,8 @@ body {
   100% {
     background: var(--accent);
     box-shadow:
-      0 0 6px var(--accent),
-      0 0 16px color-mix(in srgb, var(--accent) 55%, transparent);
+      0 0 5px var(--accent),
+      0 0 12px color-mix(in srgb, var(--accent) 38%, transparent);
   }
 }
 
@@ -1040,7 +1134,7 @@ body {
   .cue-dot {
     animation: none;
     background: var(--accent);
-    box-shadow: 0 0 6px var(--accent);
+    box-shadow: 0 0 5px var(--accent);
   }
 }
 
@@ -1058,12 +1152,67 @@ body {
    needed a second, much steeper cut rather than a small nudge. Ratios between
    the three layers are kept roughly the same as desktop's, just at a smaller
    absolute scale, so the tight-core/bloom/spill structure still reads as
-   neon rather than becoming a single flat halo. */
+   neon rather than becoming a single flat halo.
+
+   THIRD ROUND — iOS ONLY (client feedback: "magkaiba ang tingkad ng kulay sa
+   iphone at android").
+
+   That report is the whole diagnosis, and it rules out the two knobs the
+   previous rounds used. The glow radii below are correct: Android phones show
+   the effect at the intended strength, and the client is explicit that the
+   hero glow itself must not change. Cutting the radius again, or dimming
+   across `max-width: 40rem`, would fix the iPhone by breaking the Android —
+   the same value is already right on one and wrong on the other.
+
+   So the difference is not the CSS, it is the display pipeline. iOS composites
+   in the device's wide gamut (Display P3) on an OLED panel, so #ADFF2A —
+   already a ~92% relative-luminance colour — renders visibly more saturated
+   and brighter there than the same sRGB value does on a typical Android
+   screen. Nothing in the stylesheet can read that, so the correction has to be
+   addressed at the platform.
+
+   `-webkit-touch-callout` is the feature detect for it: supported by WebKit on
+   iOS (and therefore by every browser on iPhone, since they all run WebKit),
+   and NOT by Chrome on Android or by Safari on macOS. Paired with the phone
+   width query it lands on iPhones and nothing else — Android, tablets, laptops
+   and desktops all skip this block entirely and keep the effect byte for byte
+   as it is today.
+
+   What it changes: `--accent` is re-declared on the two neon classes only.
+   Every text-shadow in zs-neon-activate reads through `var(--accent)`, so one
+   declaration dims the letterform fill and all three glow layers together and
+   in proportion — the effect, its timing and its shape are untouched, it is
+   only turned down. Mixing toward --ink-900 rather than lowering opacity keeps
+   the hue exactly where it is, so the lime still reads as the brand lime.
+   -------------------------------------------------------------------------- */
 @media (max-width: 40rem) {
   :root {
-    --neon-glow-1: 5px;
-    --neon-glow-2: 11px;
-    --neon-glow-3: 20px;
+    --neon-glow-1: 4px;
+    --neon-glow-2: 9px;
+    --neon-glow-3: 15px;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 40rem) {
+    /* Scoped to the neon lines, so every other lime element on the page
+       (rules, eyebrows, buttons, the cue dot) keeps the confirmed brand
+       colour untouched. --brand-lime, not --accent, is the base: a custom
+       property that references itself is a cycle and resolves to nothing. */
+    .neon-activate,
+    .neon-ignite {
+      --accent: color-mix(in srgb, var(--brand-lime) 72%, var(--ink-900));
+    }
+
+    /* The same lime bloom, on lines that are not themselves neon. Left at full
+       strength it would sit brighter than the neon it is meant to support. */
+    .text-halo-accent {
+      text-shadow:
+        0 1px 2px rgb(0 0 0 / 0.85),
+        0 4px 20px rgb(0 0 0 / 0.6),
+        0 0 22px color-mix(in srgb, var(--accent) 26%, transparent),
+        0 0 54px color-mix(in srgb, var(--accent) 12%, transparent);
+    }
   }
 }
 

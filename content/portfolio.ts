@@ -73,8 +73,23 @@ export const GALLERY_FRAMES: GalleryFrame[] = [
   // in a gallery is exactly where that shows.
   { media: PORTFOLIO_FRAMES[0], caption: 'Live performance' },
   { media: PORTFOLIO_FRAMES[1], caption: 'Crowd and stage wash' },
-  { media: SCENES.videoCamera, caption: 'Videography' },
-  { media: SCENES.photoLens, caption: 'Photography' },
+  // REMOVED — client direction: the Videography (SCENES.videoCamera) and
+  // Photography (SCENES.photoLens) frames come out of the portfolio.
+  //
+  // Removed from the DATA, not just from the "In the room" collage the client
+  // pointed at, and that is a deliberate reading of the request rather than a
+  // literal one. This one array feeds both movements of the gallery: the
+  // typographic index at the top, and the collage below it. Dropping the two
+  // frames from the collage alone would have left their rows in the index,
+  // where pointing at one still raises the same photograph under the cursor
+  // via ImageHoverPreview — the picture the client asked to remove would have
+  // gone on appearing, in the one place they were most likely to look next.
+  //
+  // Everything downstream counts off this array, so "8 frames" in the Divider
+  // and the section header became 6 on their own. Nothing else needed editing.
+  //
+  // TO RESTORE either one, put its line back — the images themselves are
+  // untouched in content/media.ts and still in use elsewhere on the site.
 ];
 
 /** Shown alongside the gallery so the missing originals are never mistaken for the final state. */
